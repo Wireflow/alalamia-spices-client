@@ -74,3 +74,6 @@
     @apply bg-background text-foreground;
   }
 }
+body{
+  background-color: rgb(219, 219, 219);
+}

@@ -1,35 +1,27 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/electron-vite.animate.svg";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { Button } from "./components/ui/button";
+import CheckoutBar from "./components/CheckoutBar";
+import Sidebar from "./components/Sidebar";
+import Inventory from "./components/Pages/Inventory";
+import Transactions from "./components/Pages/Transactions";
+import Members from "./components/Pages/Members";
+import Financials from "./components/Pages/Financials";
+import CheckOutPage from "./components/Pages/CheckOutPage";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div className="">
-        <a href="https://electron-vite.github.io" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="flex  gap-2 "> 
+       <Sidebar />
+        <Routes>
+          <Route path="/" element={<CheckoutBar/>}/>
+          <Route path="/Inventory" element={<Inventory/>}/>
+          <Route path="/Transactions" element={<Transactions/>}/>
+          <Route path="/Members" element={<Members/>}/>
+          <Route path="/financials" element={<Financials/>}/>
+          <Route path="/checkOutPage" element={<CheckOutPage/>}/>
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card bg-red-500">
-        <Button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }
