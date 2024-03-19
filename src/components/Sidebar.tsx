@@ -34,7 +34,7 @@ const Sidebar = () => {
                     }`}
                   >
                     <Home size={25} />
-                    <p className=" text-sm font-normal ">Home</p>
+                    <p className=" text-sm font-medium ">Home</p>
                   </div>
                 </Link>
                 <Link to={"Inventory"}>
@@ -46,7 +46,7 @@ const Sidebar = () => {
                     }`}
                   >
                     <ShoppingCart size={25} />
-                    <p className=" text-sm font-normal">Inventory</p>
+                    <p className=" text-sm font-medium">Inventory</p>
                   </div>
                 </Link>
                 <Link to={"Transactions"}>
@@ -58,7 +58,7 @@ const Sidebar = () => {
                     }`}
                   >
                     <WalletMinimal size={25} />
-                    <p className=" text-sm font-normal">Transactions</p>
+                    <p className=" text-sm font-medium">Transactions</p>
                   </div>
                 </Link>
                 <Link to={"Members"}>
@@ -70,7 +70,7 @@ const Sidebar = () => {
                     }`}
                   >
                     <UsersRound size={25} />
-                    <p className=" text-sm font-normal">Members</p>
+                    <p className=" text-sm font-medium">Members</p>
                   </div>
                 </Link>
                 <Link to={"financials"}>
@@ -82,7 +82,7 @@ const Sidebar = () => {
                     }`}
                   >
                     <CandlestickChart size={25} />
-                    <p className=" text-sm font-normal">Financials</p>
+                    <p className=" text-sm font-medium">Financials</p>
                   </div>
                 </Link>
               </div>
