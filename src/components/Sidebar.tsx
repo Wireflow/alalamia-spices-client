@@ -17,7 +17,7 @@ const Sidebar = () => {
   return (
     <>
       <div className="">
-          <div className="bg-white   h-screen flex flex-col gap-5   shadow-black shadow-lg justify-between pb-10">
+          <div className="bg-white  h-screen  flex flex-col gap-5   shadow-black shadow-lg justify-between ">
             <div>
               <Link to={"/"}>
                 <div className="shadow-md p-3 cursor-pointer">
@@ -29,7 +29,7 @@ const Sidebar = () => {
                   <div
                     className={`flex flex-col items-center   p-3 cursor-pointer ${
                       isActiveLink("/")
-                        ? "rounded-l-full bg-zinc-800 text-white"
+                        ? "rounded-l-full bg-[#302111] text-white"
                         : ""
                     }`}
                   >
@@ -41,7 +41,7 @@ const Sidebar = () => {
                   <div
                     className={`flex flex-col items-center   p-3 cursor-pointer ${
                       isActiveLink("/Inventory")
-                        ? "rounded-l-full bg-zinc-800 text-white"
+                        ? "rounded-l-full bg-[#302111] text-white"
                         : ""
                     }`}
                   >
@@ -53,7 +53,7 @@ const Sidebar = () => {
                   <div
                     className={`flex flex-col items-center   p-3 cursor-pointer ${
                       isActiveLink("/Transactions")
-                        ? "rounded-l-full bg-zinc-800 text-white"
+                        ? "rounded-l-full bg-[#302111] text-white"
                         : ""
                     }`}
                   >
@@ -65,7 +65,7 @@ const Sidebar = () => {
                   <div
                     className={`flex flex-col items-center   p-3 cursor-pointer ${
                       isActiveLink("/Members")
-                        ? "rounded-l-full bg-zinc-800 text-white"
+                        ? "rounded-l-full bg-[#302111] text-white"
                         : ""
                     }`}
                   >
@@ -77,12 +77,12 @@ const Sidebar = () => {
                   <div
                     className={`flex flex-col items-center gap-1  p-3 cursor-pointer ${
                       isActiveLink("/financials")
-                        ? "rounded-l-full bg-zinc-800 text-white"
+                        ? "rounded-l-full bg-[#302111] text-white"
                         : ""
                     }`}
                   >
                     <CandlestickChart size={25} />
-                    <p className=" text-sm font-medium">Financials</p>
+                    <p className="text-sm font-medium">Financials</p>
                   </div>
                 </Link>
               </div>

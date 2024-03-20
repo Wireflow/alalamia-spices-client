@@ -6,20 +6,18 @@ import Inventory from "./components/Pages/Inventory";
 import Transactions from "./components/Pages/Transactions";
 import Members from "./components/Pages/Members";
 import Financials from "./components/Pages/Financials";
-import CheckOutPage from "./components/Pages/CheckOutPage";
 
 function App() {
   return (
     <>
-      <div className="flex  gap-2 "> 
-       <Sidebar />
+      <div className="flex max-h-[1300px] overflow-y-hidden gap-2 ">
+        <Sidebar />
         <Routes>
-          <Route path="/" element={<CheckoutBar/>}/>
-          <Route path="/Inventory" element={<Inventory/>}/>
-          <Route path="/Transactions" element={<Transactions/>}/>
-          <Route path="/Members" element={<Members/>}/>
-          <Route path="/financials" element={<Financials/>}/>
-          <Route path="/checkOutPage" element={<CheckOutPage/>}/>
+          <Route path="/" element={<CheckoutBar />} />
+          <Route path="/Inventory" element={<Inventory />} />
+          <Route path="/Transactions" element={<Transactions />} />
+          <Route path="/Members" element={<Members />} />
+          <Route path="/financials" element={<Financials />} />
         </Routes>
       </div>
     </>
