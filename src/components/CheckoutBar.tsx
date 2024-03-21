@@ -5,7 +5,6 @@ import HomeImage from "../assets/HomeImage.png";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,

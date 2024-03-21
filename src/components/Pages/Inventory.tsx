@@ -1,7 +1,17 @@
 import { Pencil, Plus } from "lucide-react";
 import Header from "../Header";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../../services/axiosInstance";
+import { useEffect } from "react";
 
 const Inventory = () => {
+  useEffect(() => {
+    async function getInventory() {
+      return await api.get("/products");
+    }
+    getInventory();
+  }, []);
+
   return (
     <div className="w-full ">
       <div className="flex flex-col gap-5">
