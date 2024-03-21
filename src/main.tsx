@@ -1,21 +1,23 @@
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { BrowserRouter as Router} from 'react-router-dom'
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { BrowserRouter as Router } from "react-router-dom";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
+const queryClient = new QueryClient();
 
-
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Router>
-    <App />
-  </Router>,
-)
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <QueryClientProvider client={queryClient}>
+    <Router>
+      <App />
+    </Router>
+  </QueryClientProvider>
+);
 
 // Remove Preload scripts loading
-postMessage({ payload: 'removeLoading' }, '*')
+postMessage({ payload: "removeLoading" }, "*");
 
 // Use contextBridge
-window.ipcRenderer.on('main-process-message', (_event, message) => {
-  console.log(message)
-})
+window.ipcRenderer.on("main-process-message", (_event, message) => {
+  console.log(message);
+});

@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// FOR TYPE SAFETY USE ONLY, DATABASE IS HOSTED ON A SERVER.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("NULL")
+  relationMode = "prisma"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
+
+enum PaymentMethod {
+  CASH
+  CHECK
+  CARD
+}
+
+model Member {
+  id          String        @id @default(cuid())
+  name        String
+  address     String        @unique
+  city        String
+  state       String
+  zipCode     String
+  phoneNumber String        @unique
+  owedBalance Float?
+  transaction Transaction[]
+}
+
+model Transaction {
+  id            String        @id @default(cuid())
+  totalAmount   Float
+  orderNumber   Int           @unique @default(autoincrement())
+  paymentMethod PaymentMethod
+  member        Member?       @relation(fields: [memberId], references: [id])
+  memberId      String?
+  checkNumber   Int?
+  checkAmount   Int?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  transactionId String?
+  products      Product[]     @relation("TransactionToProduct")
+
+  @@index([memberId])
+}
+
+model Product {
+  id           String        @id @default(cuid())
+  name         String
+  description  String?
+  price        Float
+  boxQuantity  Int?
+  quantity     Int?
+  grams        Int?
+  sku          String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  supplier     Supplier?     @relation(fields: [supplierId], references: [id])
+  supplierId   String?
+  transactions Transaction[] @relation("TransactionToProduct")
+
+  @@index([supplierId])
+}
+
+model Supplier {
+  id          String    @id @default(cuid())
+  name        String
+  owedBalance Float?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
