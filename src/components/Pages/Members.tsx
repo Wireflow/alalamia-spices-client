@@ -1,7 +1,16 @@
 import { Pencil, Plus } from "lucide-react";
 import Header from "../Header";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useEffect } from "react";
+import { api } from "../../services/axiosInstance";
 
 const Members = () => {
+  const { data, isFetching } = useQuery({
+    queryKey: ["members"],
+    queryFn: () => api.get("/products"),
+  });
+
   return (
     <div className="w-full ">
       <div className="flex flex-col gap-5">
@@ -17,7 +26,7 @@ const Members = () => {
           />
         </div>
       </div>
-      <div className="py-1 m-5 border rounded h-[750px] border-black flex flex-col gap-5 overflow-y-scroll">
+      <div className="py-1 px-2 m-5 border rounded h-[750px] border-black flex flex-col gap-5 overflow-y-scroll">
         <div className="flex items-center justify-between p-4 border-b bg-white ">
           <p className="text-lg font-medium">Member Name</p>
           <p className="text-lg font-medium">Address</p>
