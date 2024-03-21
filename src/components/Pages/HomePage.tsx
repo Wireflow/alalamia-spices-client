@@ -1,8 +1,11 @@
 import { ShoppingBasket } from "lucide-react";
 import Header from "../Header";
 import ProductCard from "../ProductCard";
+import { useGetInventory } from "@/hooks/useGetInventory";
+import { Product } from "@prisma/client";
 
 const HomePage = () => {
+  const {data} = useGetInventory()
   return (
     <div className="w-full ">
       <div className="flex flex-col gap-5  ">
@@ -18,58 +21,15 @@ const HomePage = () => {
         </div>
         <div className="rounded-xl ">
           <div className=" rounded-lg p-4 grid 2xl:grid-cols-6 overflow-y-scroll  xl:grid-cols-4 lg:grid-cols-3 grid-cols-1 gap-5 h-[830px]">
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            {data?.map((product:Product)=>{
+              return(
+                <>
+                 <ProductCard key={product.id}  name={product.name} price={product.price} boxes={product.boxQuantity}/>
+                </>
+              )
+            })}
+           
+           
           </div>
         </div>
       </div>

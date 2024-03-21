@@ -1,17 +1,13 @@
 import { Pencil, Plus } from "lucide-react";
 import Header from "../Header";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "../../services/axiosInstance";
-import { useEffect } from "react";
+import { Product } from "@prisma/client";
+import { useGetInventory } from "@/hooks/useGetInventory";
 
 const Inventory = () => {
-  useEffect(() => {
-    async function getInventory() {
-      return await api.get("/products");
-    }
-    getInventory();
-  }, []);
+  const { data } = useGetInventory();
+  if (!data) return <div>No Data</div>;
 
+  const inventory = data;
   return (
     <div className="w-full ">
       <div className="flex flex-col gap-5">
@@ -28,26 +24,40 @@ const Inventory = () => {
           />
         </div>
       </div>
-      <div className="py-1 m-5 border rounded h-[750px] border-black flex flex-col gap-5 overflow-y-scroll">
-        <div className="flex items-center justify-between p-4 border-b bg-white ">
-          <p className="text-lg font-medium">Product Name</p>
-          <p className="text-lg font-medium">Boxes</p>
-          <p className="text-lg font-medium">Quantity</p>
-          <p className="text-lg font-medium">Grams</p>
-          <p className="text-lg font-medium">Supplier</p>
-          <p className="text-lg font-medium pr-5">Edit</p>
-        </div>
-        <div>
-          <div className="flex items-center justify-between p-4 border-b bg-white ">
-            <p className="text-sm font-normal">Product Name</p>
-            <p className="text-sm font-normal">Boxes</p>
-            <p className="text-sm font-normal">Quantity</p>
-            <p className="text-sm font-normal">Grams</p>
-            <p className="text-sm font-normal">Supplier</p>
-            <p className="text-sm font-normal pr-5">
-              <Pencil size={20} />
-            </p>
+      <div className="py-1 m-5 border rounded h-[750px]  border-black flex flex-col gap-5 ">
+        <div className="grid grid-cols-8 gap-10 p-4 border-b bg-white ">
+          <p className="text-sm font-medium">Product Name</p>
+          <p className="text-sm font-medium">Boxes</p>
+          <p className="text-sm font-medium">Boxes</p>
+          <p className="text-sm font-medium">Quantity</p>
+          <p className="text-sm font-medium">Grams</p>
+          <p className="text-sm font-medium">SKU</p>
+          <p className="text-sm font-medium">Supplier</p>
+          <div className="">
+            <p className="text-sm font-medium pr-5 ">Edit</p>
           </div>
+        </div>
+        <div className="overflow-y-scroll">
+          {inventory.map((product: Product) => {
+            return (
+              <>
+                <div key={product.id}>
+                  <div className="grid grid-cols-8 gap-10 p-4 border-b bg-white ">
+                    <p className="text-sm font-normal ">{product.name}</p>
+                    <p className="text-sm font-normal">{product.price}</p>
+                    <p className="text-sm font-normal">{product.boxQuantity}</p>
+                    <p className="text-sm font-normal">{product.quantity}</p>
+                    <p className="text-sm font-normal">{product.grams}</p>
+                    <p className="text-sm font-normal">{product.sku}</p>
+                    <p className="text-sm font-normal">{product.supplierId}</p>
+                    <p className="text-sm font-normal pr-5">
+                      <Pencil size={18} />
+                    </p>
+                  </div>
+                </div>
+              </>
+            );
+          })}
         </div>
       </div>
     </div>

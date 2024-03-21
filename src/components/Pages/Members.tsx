@@ -1,4 +1,4 @@
-import { Pencil, Plus } from "lucide-react";
+import {  Plus } from "lucide-react";
 import Header from "../Header";
 import MembersTable from "../MembersTable";
 
@@ -20,30 +20,6 @@ const Members = () => {
       </div>
       <div className="py-1 px-2 m-5 border rounded h-[750px] border-black flex flex-col gap-5 overflow-y-scroll">
         <MembersTable />
-        <div className="flex items-center justify-between p-4 border-b bg-white ">
-          <p className="text-lg font-medium">Member Name</p>
-          <p className="text-lg font-medium">Address</p>
-          <p className="text-lg font-medium">Phone #</p>
-          <p className="text-lg font-medium">Balance</p>
-          <p className="text-lg font-medium">Invoices</p>
-          <p className="text-lg font-medium pr-5">Edit</p>
-        </div>
-        <div>
-          <div className="flex items-center justify-between p-4 border-b bg-white ">
-            <p className="text-sm font-normal">Mustafa</p>
-            <p className="text-sm font-normal">
-              4700b white plains road,
-              <br />
-              Bronx NY 10470
-            </p>
-            <p className="text-sm font-normal">3476159904</p>
-            <p className="text-sm font-normal">$600</p>
-            <p className="text-sm font-normal">View</p>
-            <p className="text-sm font-normal pr-5">
-              <Pencil size={20} />
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );
