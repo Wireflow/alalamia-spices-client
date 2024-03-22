@@ -1,13 +1,24 @@
-
+import SignInForm from "../forms/SignInForm";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 
 const SignIn = () => {
-
   return (
     <div className="flex justify-center flex-col h-[700px]  items-center ">
-      <h2 className="text-2xl font-semibold pb-5">Sign in to your account</h2>
-      <div className=" border border-gray-300 rounded-lg  h-[400px] w-[400px]">
-        
-      </div>
+      <Card className="w-full max-w-[400px]">
+        <CardHeader>
+          <CardTitle>Welcome back!</CardTitle>
+          <CardDescription>Sign in to your account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <SignInForm />
+        </CardContent>
+      </Card>
     </div>
   );
 };

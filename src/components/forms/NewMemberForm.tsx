@@ -12,7 +12,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import submitNewMember from "../use-cases/submitNewMember";
+import submitNewMember from "../../use-cases/submitNewMember";
 
 type NewMemberFormProps = {
   setOpen: (isOpen: boolean) => void;
