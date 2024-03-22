@@ -1,10 +1,13 @@
 import { Plus } from "lucide-react";
+import { Button } from "./ui/button";
+
 
 type ProductProps = {
-  name: string,
-  price: number,
-  boxes: number | null
-}
+  name: string;
+  price: number;
+  boxes: number | null;
+  addToCart: () => void;
+};
 
 const ProductCard = (Products: ProductProps) => {
   return (
@@ -12,8 +15,12 @@ const ProductCard = (Products: ProductProps) => {
       <p className="text-md font-medium ">{Products.name}</p>
       <p>{Products.price}</p>
       <p>{Products.boxes}</p>
-      <div className="absolute right-0 bottom-0 bg-[#4a392c] p-4 rounded-tl-lg"><Plus color="white"/></div>
-   
+      <Button
+        onClick={Products.addToCart}
+        className="absolute right-0 bottom-0 bg-[#4a392c] p-4 rounded-tl-lg"
+      >
+        <Plus color="white" />
+      </Button>
     </div>
   );
 };
