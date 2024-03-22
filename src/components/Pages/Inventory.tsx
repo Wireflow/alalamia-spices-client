@@ -11,7 +11,6 @@ const Inventory = () => {
   return (
     <div className="w-full ">
       <div className="flex flex-col gap-5">
-        <Header />
         <h2 className="text-2xl font-medium px-5">Manage Inventory</h2>
         <div className="flex justify-between items-center px-5">
           <div className="flex  items-center gap-2 bg-[#896a3c] text-white py-2 px-3 rounded-full">

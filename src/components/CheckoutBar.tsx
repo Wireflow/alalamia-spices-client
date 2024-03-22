@@ -1,6 +1,6 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
-import HomePage from "./Pages/HomePage";
+import HomePage from "./pages/HomePage";
 import HomeImage from "../assets/HomeImage.png";
 import { useCart, useTotal } from "@/State/store";
 import { Product } from "@prisma/client";
