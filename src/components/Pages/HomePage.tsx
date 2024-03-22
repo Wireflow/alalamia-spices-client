@@ -3,12 +3,11 @@ import Header from "../Header";
 import ProductCard from "../ProductCard";
 import { useGetInventory } from "@/hooks/useGetInventory";
 import { Product } from "@prisma/client";
-import { useAmount, useCart } from "@/State/store";
+import { useCart } from "@/State/store";
 
 const HomePage = () => {
   const { data } = useGetInventory();
   const { cart, setCart } = useCart();
-  const {amount, setAmount} = useAmount();
 
   const addToCart = (product: Product, id: string) => {
     const newItem = { ...product, amount: 1 };
@@ -32,8 +31,7 @@ const HomePage = () => {
     <div className="w-full">
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-5">
-          <Header />
-          <div className="px-1  flex justify-between gap-10 items-center">
+          <div className="px-1  flex justify-between gap-10 items-center mt-5">
             <h2 className="xl:text-5xl text-2xl font-bold flex items-center gap-1">
               {" "}
               <ShoppingBasket size={50} /> Menu

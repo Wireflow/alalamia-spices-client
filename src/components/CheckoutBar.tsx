@@ -1,14 +1,13 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
-import HomePage from "./pages/HomePage";
 import HomeImage from "../assets/HomeImage.png";
-import { useCart, useTotal } from "@/State/store";
+import { useCart, } from "@/State/store";
 import { Product } from "@prisma/client";
-import { useEffect } from "react";
+import HomePage from "./Pages/HomePage";
 
 const CheckoutBar = () => {
   const { cart, setCart } = useCart();
-  const { total, setTotal } = useTotal();
+
 
 
 
@@ -39,7 +38,7 @@ const CheckoutBar = () => {
                   <p className="text-lg font-semibold">{cartItem.name}</p>
                   <div className="flex gap-2 items-center">
                     <Button
-                      onClick={() => increaseQuantity(cartItem.id)}
+                      
                       className="font-medium bg-zinc-600 p-1 rounded-full "
                     >
                       <Plus color="white" size={15} />

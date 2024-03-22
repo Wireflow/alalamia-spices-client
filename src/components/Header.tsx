@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 
 const Header = () => {
@@ -7,10 +8,12 @@ const Header = () => {
         <div>
           <p className="text-xl text-white font-medium">Welcome, <span className="font-black">Jamal</span></p>
         </div>
-        <Avatar className="w-[40px] h-[40px]">
-          <AvatarImage src="" />
-          <AvatarFallback>AS</AvatarFallback>
-        </Avatar>
+        <Link to={'/signIn'} >
+          <Avatar className="w-[40px] h-[40px]">
+            <AvatarImage src="" />
+            <AvatarFallback>AS</AvatarFallback>
+          </Avatar>
+        </Link>
       </div>
     </div>
   );
