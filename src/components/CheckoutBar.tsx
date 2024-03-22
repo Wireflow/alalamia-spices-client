@@ -1,6 +1,6 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
-import HomePage from "./Pages/HomePage";
+import HomePage from "./pages/HomePage";
 import HomeImage from "../assets/HomeImage.png";
 import {
   Sheet,
@@ -155,24 +155,22 @@ const CheckoutBar = () => {
             <Sheet>
               <SheetTrigger className="bg-[#896a3c] w-full rounded-full mt-4 py-4">
                 {" "}
-           
-                  <p className="text-white  text-center text-xl">Check Out</p>
-              
+                <p className="text-white  text-center text-xl">Check Out</p>
               </SheetTrigger>
-              <SheetContent className="w-full" >
+              <SheetContent className="w-full">
                 <SheetHeader>
                   <SheetTitle>Checkout</SheetTitle>
-               <div className="grid grid-cols-3 gap-5">
-                <div className="bg-black p-5 rounded-xl">
-                  <p className="text-white text-2xl text-center">Cash</p>
-                </div>
-                <div className="bg-black p-5 rounded-xl">
-                  <p className="text-white text-2xl text-center">Cash</p>
-                </div>
-                <div className="bg-black p-5 rounded-xl">
-                  <p className="text-white text-2xl text-center">Cash</p>
-                </div>
-               </div>
+                  <div className="grid grid-cols-3 gap-5">
+                    <div className="bg-black p-5 rounded-xl">
+                      <p className="text-white text-2xl text-center">Cash</p>
+                    </div>
+                    <div className="bg-black p-5 rounded-xl">
+                      <p className="text-white text-2xl text-center">Cash</p>
+                    </div>
+                    <div className="bg-black p-5 rounded-xl">
+                      <p className="text-white text-2xl text-center">Cash</p>
+                    </div>
+                  </div>
                 </SheetHeader>
               </SheetContent>
             </Sheet>

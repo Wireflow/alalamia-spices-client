@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox } from "./ui/checkbox";
 import {
   Table,
@@ -22,9 +22,28 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import { useMembersStore } from "@/store/useMembersStore";
 
 const MembersTable = () => {
   const { data } = useGetMembers();
+  const {
+    setMembers,
+    filteredMembers,
+    filterMembers,
+    search,
+    setFilteredMembers,
+  } = useMembersStore();
+
+  useEffect(() => {
+    if (data) {
+      setMembers(data);
+      setFilteredMembers(data);
+    }
+  }, [data, setMembers, setFilteredMembers]);
+
+  useEffect(() => {
+    filterMembers();
+  }, [search, filterMembers]);
 
   const columns: ColumnDef<Member>[] = [
     {
@@ -89,7 +108,7 @@ const MembersTable = () => {
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
-    data,
+    data: filteredMembers,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -146,7 +165,12 @@ const MembersTable = () => {
         ) : (
           <TableRow>
             <TableCell colSpan={columns.length} className="h-24 text-center">
-              No results.
+              {search && (
+                <div>
+                  <span className="font-bold">{search}</span>
+                </div>
+              )}
+              <p>No results found.</p>
             </TableCell>
           </TableRow>
         )}

@@ -1,9 +1,7 @@
-import Header from "../Header"
+import Header from "../Header";
 
 const Financials = () => {
-  return (
-    <div className="text-center w-full"><Header/></div>
-  )
-}
+  return <div className="text-center w-full"></div>;
+};
 
-export default Financials
+export default Financials;
