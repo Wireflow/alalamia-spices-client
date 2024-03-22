@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import CheckoutBar from "./components/CheckoutBar";
+
 import Sidebar from "./components/Sidebar";
 import Inventory from "./components/Pages/Inventory";
 import Transactions from "./components/Pages/Transactions";
@@ -17,10 +18,11 @@ function App() {
         <div className="w-full h-full">
           <Header />
           <Routes>
-            <Route path="/" element={<CheckoutBar />} />
-            <Route path="/Inventory" element={<Inventory />} />
-            <Route path="/Transactions" element={<Transactions />} />
-            <Route path="/Members" element={<Members />} />
+            <Route path="/" element={<SignIn />} />
+            <Route path="/home" element={<CheckoutBar />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/members" element={<Members />} />
             <Route path="/financials" element={<Financials />} />
             <Route path="/expenses" element={<Expenses />} />
           </Routes>
