@@ -3,17 +3,16 @@ import { Member } from "@prisma/client";
 import {
   ColumnDef,
   ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useState } from "react";
-import { Checkbox } from "./ui/checkbox";
+import React from "react";
+import FilterMembersColumns from "./FilterMembersColumns";
+import SearchMembers from "./SearchMembers";
+import EditMemberDialog from "./dialogs/EditMemberDialog";
+import NewMemberDialog from "./dialogs/NewMemberDialog";
 import {
   Table,
   TableBody,
@@ -22,49 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { useMembersStore } from "@/store/useMembersStore";
 
 const MembersTable = () => {
-  const { data } = useGetMembers();
-  const {
-    setMembers,
-    filteredMembers,
-    filterMembers,
-    search,
-    setFilteredMembers,
-  } = useMembersStore();
-
-  useEffect(() => {
-    if (data) {
-      setMembers(data);
-      setFilteredMembers(data);
-    }
-  }, [data, setMembers, setFilteredMembers]);
-
-  useEffect(() => {
-    filterMembers();
-  }, [search, filterMembers]);
+  const { data, isLoading } = useGetMembers();
 
   const columns: ColumnDef<Member>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        />
-      ),
-
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-        />
-      ),
-    },
     {
       accessorKey: "name",
       header: "Name",
@@ -100,82 +61,91 @@ const MembersTable = () => {
         return <div className="capitalize">{formattedAmount}</div>;
       },
     },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        return <EditMemberDialog member={row.original} />;
+      },
+    },
   ];
 
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
 
   const table = useReactTable({
-    data: filteredMembers,
+    data: data || [],
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
-      sorting,
       columnFilters,
-      columnVisibility,
-      rowSelection,
     },
   });
 
-  if (!data) return <div>No Data</div>;
+  if (!data?.length) return <div>No Members</div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
-    <Table>
-      <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => {
-              return (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
+    <div>
+      <div className="flex items-center py-4">
+        <SearchMembers table={table} />
+        <div className="w-full flex gap-2">
+          <FilterMembersColumns table={table} />
+          <NewMemberDialog />
+        </div>
+      </div>
+
+      <div className="rounded-lg border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
                       )}
-                </TableHead>
-              );
-            })}
-          </TableRow>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              data-state={row.getIsSelected() && "selected"}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center relative"
+                >
+                  <p>No results found.</p>
                 </TableCell>
-              ))}
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              {search && (
-                <div>
-                  <span className="font-bold">{search}</span>
-                </div>
-              )}
-              <p>No results found.</p>
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
   );
 };
 

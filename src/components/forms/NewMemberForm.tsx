@@ -13,16 +13,24 @@ import {
 import { Input } from "../ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import submitNewMember from "../../use-cases/submitNewMember";
+import updateMember from "@/use-cases/updateMember";
+import { Member } from "@prisma/client";
 
 type NewMemberFormProps = {
   setOpen: (isOpen: boolean) => void;
+  isEdit?: boolean;
+  member: Member;
 };
 
-const NewMemberForm = ({ setOpen }: NewMemberFormProps) => {
+const NewMemberForm = ({
+  setOpen,
+  isEdit = false,
+  member,
+}: NewMemberFormProps) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: submitNewMember,
+    mutationFn: isEdit ? updateMember : submitNewMember,
     onSuccess: () => {
       setOpen(false);
       return queryClient.invalidateQueries({ queryKey: ["members"] });
@@ -32,13 +40,14 @@ const NewMemberForm = ({ setOpen }: NewMemberFormProps) => {
   const form = useForm<MemberType>({
     resolver: zodResolver(MemberSchema),
     defaultValues: {
-      name: undefined,
-      address: undefined,
-      city: undefined,
-      state: undefined,
-      zipCode: undefined,
-      phoneNumber: undefined,
-      owedBalance: undefined,
+      name: member?.name ? member.name : undefined,
+      address: member?.address ? member.address : undefined,
+      city: member?.city ? member.city : undefined,
+      state: member?.state ? member.state : undefined,
+      zipCode: member?.zipCode ? member.zipCode : undefined,
+      phoneNumber: member?.phoneNumber ? member.phoneNumber : undefined,
+      owedBalance: member?.owedBalance ? member.owedBalance : undefined,
+      id: member?.id ? member.id : undefined,
     },
   });
 
@@ -163,7 +172,13 @@ const NewMemberForm = ({ setOpen }: NewMemberFormProps) => {
             )}
           />
           <Button className="w-full mt-4" disabled={isPending}>
-            {isPending ? "Adding..." : "Add"}
+            {isPending
+              ? isEdit
+                ? "Saving..."
+                : "Adding..."
+              : isEdit
+              ? "Save Changes"
+              : "Add"}
           </Button>
         </div>
       </form>

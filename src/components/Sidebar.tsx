@@ -12,7 +12,7 @@ import { signOut } from "@/hooks/useAuth";
 
 const Sidebar = () => {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const isActiveLink = (path: string) => {
     return location.pathname === path;
   };
@@ -89,10 +89,14 @@ const Sidebar = () => {
                 </div>
               </Link>
             </div>
-            <Button onClick={() => {
-              signOut()
-              navigate('/')
-              }}>Log Out</Button>
+            <Button
+              onClick={() => {
+                signOut();
+                navigate("/");
+              }}
+            >
+              Log Out
+            </Button>
           </div>
         </div>
       </div>

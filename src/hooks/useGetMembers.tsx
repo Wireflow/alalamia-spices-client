@@ -1,10 +1,11 @@
+import { Member } from "@prisma/client";
 import { api } from "../services/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetMembers = () => {
   return useQuery({
     queryKey: ["members"],
-    queryFn: async () => {
+    queryFn: async (): Promise<Member[]> => {
       const { data } = await api.get("/members");
 
       return data.data;
