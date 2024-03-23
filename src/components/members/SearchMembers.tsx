@@ -1,13 +1,13 @@
 import { Member } from "@prisma/client";
 import { Table } from "@tanstack/react-table";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -20,7 +20,7 @@ const FILTER_TYPES: FilterTypes[] = ["address", "name", "phoneNumber"];
 
 const SearchMembers = ({ table }: SearchMembersType) => {
   const [filterBy, setFilterBy] = useState<FilterTypes>("address");
-  const renderFilterBy = filterBy === "phoneNumber" ? "phone number" : filterBy;
+  const renderFilterBy = filterBy === "phoneNumber" ? "phone" : filterBy;
 
   return (
     <div className="flex gap-2 w-full">
@@ -31,6 +31,7 @@ const SearchMembers = ({ table }: SearchMembersType) => {
           table.getColumn(filterBy)?.setFilterValue(event.target.value);
         }}
         className="max-w-sm"
+        type={filterBy === "phoneNumber" ? "number" : "text"}
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -50,7 +51,7 @@ const SearchMembers = ({ table }: SearchMembersType) => {
                 setFilterBy(filter);
               }}
             >
-              {filter}
+              {filter === "phoneNumber" ? "Phone" : filter}
             </DropdownMenuCheckboxItem>
           ))}
         </DropdownMenuContent>

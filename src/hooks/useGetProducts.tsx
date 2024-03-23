@@ -1,7 +1,7 @@
 import { api } from "../services/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetInventory = () => {
+export const useGetProducts = () => {
   return useQuery({
     queryKey: ["products"],
     queryFn: async () => {

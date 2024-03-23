@@ -19,7 +19,7 @@ import { Member } from "@prisma/client";
 type NewMemberFormProps = {
   setOpen: (isOpen: boolean) => void;
   isEdit?: boolean;
-  member: Member;
+  member?: Member;
 };
 
 const NewMemberForm = ({

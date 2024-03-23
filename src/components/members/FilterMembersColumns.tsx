@@ -1,13 +1,13 @@
 import { Member } from "@prisma/client";
 import { Table } from "@tanstack/react-table";
 import { ChevronDownIcon } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 
 type FilterMembersColumnsType = {
   table: Table<Member>;

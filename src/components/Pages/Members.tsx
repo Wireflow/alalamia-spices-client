@@ -1,4 +1,4 @@
-import MembersTable from "../MembersTable";
+import MembersTable from "../members/MembersTable";
 
 const Members = () => {
   return (

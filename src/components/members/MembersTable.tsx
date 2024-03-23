@@ -11,8 +11,8 @@ import {
 import React from "react";
 import FilterMembersColumns from "./FilterMembersColumns";
 import SearchMembers from "./SearchMembers";
-import EditMemberDialog from "./dialogs/EditMemberDialog";
-import NewMemberDialog from "./dialogs/NewMemberDialog";
+import EditMemberDialog from "../dialogs/EditMemberDialog";
+import NewMemberDialog from "../dialogs/NewMemberDialog";
 import {
   Table,
   TableBody,
@@ -20,7 +20,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
+} from "../ui/table";
 
 const MembersTable = () => {
   const { data, isLoading } = useGetMembers();
