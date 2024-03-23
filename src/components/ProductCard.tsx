@@ -16,9 +16,9 @@ const ProductCard = (product: ProductProps) => {
   return (
     <div className="bg-[#e8e6e6] relative h-40 rounded-xl p-5 m">
       {product.isAddedToCart ? (
-        <div>
+        <div className="absolute top-2 right-2">
           
-          <ShoppingCart color="green" />
+          <ShoppingCart color="brown"/>
 
          
           {/* <span >{product.quantity||1}</span> */}
