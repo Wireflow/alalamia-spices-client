@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const MemberSchema = z.object({
+  id: z.string().optional(),
   name: z.string({ required_error: "Name is required!" }),
   address: z.string({ required_error: "Address is required!" }),
   city: z.string({ required_error: "City is required!" }),

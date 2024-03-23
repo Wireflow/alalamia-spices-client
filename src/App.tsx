@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import CheckoutBar from "./components/CheckoutBar";
 import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/layout/Sidebar";
 import Financials from "./components/Pages/Financials";
 import Inventory from "./components/Pages/Inventory";
 import Members from "./components/Pages/Members";
@@ -14,13 +14,12 @@ import { useNavigate } from "react-router-dom";
 
 function App() {
   const session = getSession();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(!session){
       navigate('/')
     }
-  
   }, [session, navigate]);
 
   return (

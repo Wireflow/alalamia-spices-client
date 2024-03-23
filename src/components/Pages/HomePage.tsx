@@ -1,31 +1,27 @@
-import { ShoppingBasket } from "lucide-react";
-import Header from "../Header";
-import ProductCard from "../ProductCard";
-import { useGetInventory } from "@/hooks/useGetInventory";
-import { Product } from "@prisma/client";
 import { useCart } from "@/State/store";
+import { useGetProducts } from "@/hooks/useGetProducts";
+import { Product } from "@prisma/client";
+import { ShoppingBasket } from "lucide-react";
+import ProductCard from "../ProductCard";
 
 const HomePage = () => {
-  const { data } = useGetInventory();
+  const { data } = useGetProducts();
   const { cart, setCart } = useCart();
 
   const addToCart = (product: Product, id: string) => {
     const newItem = { ...product, amount: 1 };
-  
+
     const cartItem = cart.find((item) => item.id === id);
     if (cartItem) {
       const newCart = cart.map((item) =>
         item.id === id ? { ...item, amount: item.amount + 1 } : item
       );
       setCart(newCart);
-      console.log(newCart)
+      console.log(newCart);
     } else {
       setCart([...cart, newItem]);
     }
   };
-  
-
-
 
   return (
     <div className="w-full">
