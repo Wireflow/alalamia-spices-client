@@ -27,7 +27,7 @@ const CheckoutBar = () => {
           </div>
           <div className="flex px-4 py-3 justify-between items-end">
             <h2 className="text-4xl font-semibold">Cart</h2>
-            <Button onClick={() => setCart([])} className="bg-[#896a3c] flex gap-1 rounded-full">
+            <Button onClick={() => setCart([])} className=" flex gap-1 rounded-full">
               Clear <Trash2 color="white" size={15} />
             </Button>
           </div>

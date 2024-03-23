@@ -1,6 +1,7 @@
 import { Session, Token } from "@/hooks/useAuth";
 import { api } from "@/services/axiosInstance";
 import { SignInType } from "@/types/user";
+import { toast } from "sonner";
 
 type UserSignInReturnType = {
   token: Token;
@@ -13,7 +14,6 @@ const signInUser = async (
 ): Promise<UserSignInReturnType | null> => {
   try {
     const response = await api.post("/auth/login", User);
-
     return response.data;
   } catch (error) {
     console.error("Failed to login Successfully", error);

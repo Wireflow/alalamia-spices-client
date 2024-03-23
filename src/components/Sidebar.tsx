@@ -7,16 +7,19 @@ import {
 } from "lucide-react";
 import logo from "../assets/Logo.png";
 import { Link, useLocation } from "react-router-dom";
+import { Button } from "./ui/button";
+import { signOut } from "@/hooks/useAuth";
 
 const Sidebar = () => {
   const location = useLocation();
+
   const isActiveLink = (path: string) => {
     return location.pathname === path;
   };
 
   return (
     <>
-      <div className="">
+      <div>
         <div className="bg-white  h-screen  flex flex-col gap-5   shadow-black shadow-lg justify-between ">
           <div>
             <Link to={"/home"}>
@@ -87,6 +90,7 @@ const Sidebar = () => {
               </Link>
             </div>
           </div>
+         
         </div>
       </div>
     </>

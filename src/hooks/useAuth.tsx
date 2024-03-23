@@ -19,7 +19,7 @@ const setToken = (token: Token) => {
   Cookies.set(TOKEN_KEY, token, { secure: true, sameSite: "Strict" });
 };
 
-export const getToken = () => {
+export const getToken = (): Token => {
   const token = Cookies.get(TOKEN_KEY);
   return token || "";
 };
