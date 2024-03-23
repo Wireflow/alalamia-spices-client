@@ -9,6 +9,7 @@ import Members from "./components/Pages/Members";
 import Financials from "./components/Pages/Financials";
 import Expenses from "./components/Pages/Expenses/ExpensesList";
 import Header from "./components/Header";
+import SignIn from "./components/Pages/SignIn";
 
 function App() {
   return (

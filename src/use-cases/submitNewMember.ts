@@ -4,6 +4,7 @@ import { Member } from "@prisma/client";
 
 const submitNewMember = async (member: MemberType): Promise<Member | null> => {
   try {
+    console.log(member);
     const response = await api.post("/members", member);
 
     return response.data.data;

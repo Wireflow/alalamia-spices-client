@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-// import AddEditViewExpense from "../Pages/Expenses/AddEditViewExpense";
+import AddExpense from "../Pages/Expenses/AddExpense";
 
 const NewExpenseDialog = () => {
   const [open, setOpen] = useState(false);
@@ -23,12 +23,12 @@ const NewExpenseDialog = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add a New Expense</DialogTitle>
+          <DialogTitle>Add</DialogTitle>
           <DialogDescription>
             Fill out the form below to add new expenses!
           </DialogDescription>
         </DialogHeader>
-        {/* <AddEditViewExpense setOpen={setOpen} /> */}
+        <AddExpense setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );

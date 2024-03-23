@@ -15,7 +15,7 @@ const HomePage = () => {
     const cartItem = cart.find((item) => item.id === id);
     if (cartItem) {
       const newCart = cart.map((item) =>
-        item.id === id ? { ...item, amount: item.amount + 1 } : item
+        item.id === id ? { ...item, amount: item.price + 1 } : item
       );
       setCart(newCart);
       console.log(newCart)
