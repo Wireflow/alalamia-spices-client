@@ -25,10 +25,10 @@ const HomePage = () => {
 
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col ">
         <div className="flex flex-col gap-5">
-          <div className="px-1  flex justify-between gap-10 items-center mt-5">
-            <h2 className="xl:text-5xl text-2xl font-bold flex items-center gap-1">
+          <div className="px-1  flex justify-between gap-10 items-center mt-2">
+            <h2 className="text-3xl px-5 font-bold flex items-center gap-1">
               {" "}
               <ShoppingBasket size={50} /> Menu
             </h2>

@@ -17,8 +17,8 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!session){
-      navigate('/')
+    if (!session) {
+      navigate("/");
     }
   }, [session, navigate]);
 
