@@ -16,6 +16,7 @@ import { Input } from "../ui/input";
 import { getSession, signIn } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 const SignInForm = () => {
   const navigate = useNavigate();
@@ -25,9 +26,15 @@ const SignInForm = () => {
     onSuccess: (data) => {
       if (data?.token && data?.session) {
         signIn({ token: data.token, session: data.session });
+        toast("Signed in Successfully")
+
       }
     },
+    onError: (error) => {
+    toast.error('Error Logging in')
+    }
   });
+  
 
   const form = useForm<SignInType>({
     resolver: zodResolver(UserSchema),
