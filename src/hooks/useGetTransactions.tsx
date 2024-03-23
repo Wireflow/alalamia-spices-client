@@ -5,7 +5,8 @@ export const useGetTransactions = () => {
   return useQuery({
     queryKey: ["transactions"],
     queryFn: async () => {
-      const { data } = await api.get("/transactions/products=true");
+      const { data } = await api.get("/transactions?products=true");
+
       return data.data;
     },
   });
