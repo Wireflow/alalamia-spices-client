@@ -11,6 +11,7 @@ import Transactions from "./components/Pages/Transactions";
 import { getSession } from "./hooks/useAuth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Expenses from "./components/Pages/Expenses/ExpensesList";
 
 function App() {
   const session = getSession();
