@@ -6,10 +6,13 @@ import {
   WalletMinimal,
 } from "lucide-react";
 import logo from "../assets/Logo.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import { signOut } from "@/hooks/useAuth";
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate()
   const isActiveLink = (path: string) => {
     return location.pathname === path;
   };
@@ -86,6 +89,10 @@ const Sidebar = () => {
                 </div>
               </Link>
             </div>
+            <Button onClick={() => {
+              signOut()
+              navigate('/')
+              }}>Log Out</Button>
           </div>
         </div>
       </div>
