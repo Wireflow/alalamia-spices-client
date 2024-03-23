@@ -9,18 +9,21 @@ const HomePage = () => {
   const { cart, setCart } = useCart();
 
   const addToCart = (product: Product, id: string) => {
-    const newItem = { ...product, amount: 1 };
+    const newItem = { ...product, quantity: 1 };
 
     const cartItem = cart.find((item) => item.id === id);
     if (cartItem) {
       const newCart = cart.map((item) =>
-        item.id === id ? { ...item, amount: item.price + 1 } : item
+        item.id === id ? { ...item, quantity: (item.quantity || 0) + 1 } : item
       );
       setCart(newCart);
       console.log(newCart);
     } else {
       setCart([...cart, newItem]);
     }
+  };
+  const isProductInCart = (productId:string) => {
+    return cart.some((item) => item.id === productId);
   };
 
   return (
@@ -48,6 +51,7 @@ const HomePage = () => {
                   price={product.price}
                   boxes={product.boxQuantity}
                   addToCart={() => addToCart(product, product.id)}
+                  isAddedToCart = { isProductInCart(product.id)}
                 />
               );
             })}
