@@ -13,6 +13,7 @@ import FilterExpensesColumns from "./FilterExpensesColumns";
 // import SearchExpenses from "./SearchExpenses";
 // import EditMemberDialog from "../dialogs/EditMemberDialog";
 // import NewMemberDialog from "../dialogs/NewMemberDialog";
+import NewExpenseDialog from "@/components/dialogs/AddExpenseDialog";
 import {
   Table,
   TableBody,
@@ -22,7 +23,6 @@ import {
   TableRow,
 } from "@components/ui/table";
 import SearchExpenses from "./SearchExpenses";
-import NewExpenseDialog from "@/components/dialogs/AddExpenseDialog";
 
 // import SearchExpenses from "./SearchExpenses";
 
@@ -37,7 +37,7 @@ const ExpensesTable = () => {
         <div className="capitalize">{row.getValue("name")}</div>
       ),
     },
-    
+
     {
       accessorKey: "amount",
       header: "Amount",
@@ -55,9 +55,9 @@ const ExpensesTable = () => {
     {
       id: "actions",
       enableHiding: false,
-    //   cell: ({ row }) => {
-    //     return <EditMemberDialog member={row.original} />;
-    //   },
+      //   cell: ({ row }) => {
+      //     return <EditMemberDialog member={row.original} />;
+      //   },
     },
   ];
 
@@ -81,7 +81,6 @@ const ExpensesTable = () => {
 
   return (
     <div>
-      
       <div className="flex items-center py-4">
         <SearchExpenses table={table} />
         <div className="w-full flex gap-2">
