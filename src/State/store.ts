@@ -1,56 +1,77 @@
-import { create } from "zustand";
+import { PaymentMethodsType } from "@/constants/cart";
+import { PurchasedProductType } from "@/types/transaction";
 import { Product } from "@prisma/client";
+import { create } from "zustand";
 
-type CounterStore = {
-  count: number;
-  increment: () => void;
-  decrement: () => void;
+type CartStoreType = {
+  cart: PurchasedProductType[];
+  memberId: string;
+  setMember: (memberId: string) => void;
+  setCart: (newCart: PurchasedProductType[]) => void;
+  clearCart: () => void;
+  addItemToCart: (product: Product) => void;
+  removeItemFromCart: (product: PurchasedProductType) => void;
+  updateItemQuantity: (product: PurchasedProductType, quantity: number) => void;
+  isProductInCart: (productId: string) => boolean;
+  selectedPaymentMethod: PaymentMethodsType;
+  setSelectedPaymentMethod: (selectedPaymentMethod: PaymentMethodsType) => void;
 };
 
-export const useCounterStore = create<CounterStore>((set) => ({
-  count: 0,
-  increment: () => {
-    set((state) => ({ count: state.count + 1 }));
+export const useCart = create<CartStoreType>((set, get) => ({
+  cart: [],
+  setCart: (newCart) => set({ cart: newCart }),
+  clearCart: () => set({ cart: [] }),
+  addItemToCart: (product) => {
+    const purchasedProduct: PurchasedProductType = {
+      name: product.name,
+      price: product.price,
+      productId: product.id,
+      purchaseQuantity: 1,
+    };
+
+    const cartItem = get().cart.find(
+      (item) => item.productId === purchasedProduct.productId
+    );
+
+    if (cartItem) {
+      const newCart = get().cart.map((item) =>
+        item.productId === purchasedProduct.productId
+          ? { ...item, purchaseQuantity: (item.purchaseQuantity || 0) + 1 }
+          : item
+      );
+
+      set({ cart: newCart });
+    } else {
+      set({ cart: [...get().cart, purchasedProduct] });
+    }
   },
-  decrement: () => {
-    set((state) => ({ count: state.count - 1 }));
+  removeItemFromCart: (product) => {
+    const updatedCart = get().cart.filter(
+      (item) => item.productId !== product.productId
+    );
+    set({ cart: updatedCart });
   },
+  updateItemQuantity: (product, quantity) => {
+    if (quantity === 0) {
+      return get().removeItemFromCart(product);
+    }
+    const updatedCart = get().cart.map((item) =>
+      item.productId === product.productId
+        ? { ...item, purchaseQuantity: quantity }
+        : item
+    );
+
+    set({ cart: updatedCart });
+  },
+
+  isProductInCart: (productId) => {
+    return get().cart.some((item) => item.productId === productId);
+  },
+
+  selectedPaymentMethod: "CASH",
+  setSelectedPaymentMethod: (selectedPaymentMethod) =>
+    set({ selectedPaymentMethod }),
+
+  memberId: "",
+  setMember: (memberId) => set({ memberId }),
 }));
-
-
-
-type CartStore = {
-    cart: Product[];
-    setCart: (newCart: Product[]) => void;
-  };
-  
-  export const useCart = create<CartStore>((set) => ({
-    cart: [],
-    setCart: (newCart) => set({ cart: newCart }),
-  }));
-
-
-
-
-
-  type AmountStore = {
-    amount: number;
-    setAmount: (newAmount: number) => void
-  }
- 
-  export const useAmount = create<AmountStore>((set) => ({
-    amount: 0,
-    setAmount: (newAmount) => set({ amount: newAmount })
-  }));
-
-
-  type TotalStore = {
-    total: number ;
-    setTotal: (newTotal: number) => void
-  }
-
-  export const useTotal = create<TotalStore>((set) => ({
-    total: 0,
-    setTotal: (newTotal) => set({total: newTotal})
-  }))
-  

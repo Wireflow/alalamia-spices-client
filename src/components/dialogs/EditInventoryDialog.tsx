@@ -7,38 +7,37 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Edit, Plus } from "lucide-react";
 import { useState } from "react";
-import NewMemberForm from "../forms/NewMemberForm";
+import NewProductForm from "../forms/NewProductForm";
+import { Product } from "@prisma/client";
 
 type Props = {
-  isVisible: boolean;
-  isOpen?: boolean;
-};
+    product: Product;
+  };
+  
 
-const NewMemberDialog = ({ isVisible = true, isOpen }: Props) => {
+const EditInventoryDialog = ({product}: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        {isVisible ? (
-          <Button size={"lg"}>
-            Add New Member <Plus className="w-4 h-4 ml-2" />
-          </Button>
-        ) : null}
+        <Button size={"lg"}>
+          <Edit className="w-[18px] h-[18px]" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add a New member</DialogTitle>
+          <DialogTitle>Edit product</DialogTitle>
           <DialogDescription>
-            Fill out the form below to add a new member!
+            Change any of the Product's data and hit save!
           </DialogDescription>
         </DialogHeader>
-        <NewMemberForm setOpen={setOpen} />
+        <NewProductForm setOpen={setOpen} isEdit product={product}/>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default NewMemberDialog;
+export default EditInventoryDialog;

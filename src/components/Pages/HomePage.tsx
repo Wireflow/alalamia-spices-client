@@ -1,63 +1,34 @@
 import { useCart } from "@/State/store";
+import useBarcodeScanner from "@/hooks/useBarcodeScanner";
 import { useGetProducts } from "@/hooks/useGetProducts";
-import { Product } from "@prisma/client";
 import { ShoppingBasket } from "lucide-react";
-import ProductCard from "../ProductCard";
+import HomePageProducts from "./homepage/HomePageProducts";
+import HomePageProductsSearchBox from "./homepage/HomePageProductsSearchBox";
 
 const HomePage = () => {
-  const { data } = useGetProducts();
-  const { cart, setCart } = useCart();
+  const { data: products } = useGetProducts();
+  const addToCart = useCart((state) => state.addItemToCart);
 
-  const addToCart = (product: Product, id: string) => {
-    const newItem = { ...product, quantity: 1 };
-
-    const cartItem = cart.find((item) => item.id === id);
-    if (cartItem) {
-      const newCart = cart.map((item) =>
-        item.id === id ? { ...item, quantity: (item.quantity || 0) + 1 } : item
-      );
-      setCart(newCart);
-      console.log(newCart);
-    } else {
-      setCart([...cart, newItem]);
-    }
-  };
-  const isProductInCart = (productId:string) => {
-    return cart.some((item) => item.id === productId);
-  };
+  useBarcodeScanner({
+    onComplete: (sku) => {
+      const product = products?.find((product) => product.sku === sku);
+      if (product) {
+        addToCart(product);
+      } else {
+        console.log(sku);
+      }
+    },
+  });
 
   return (
-    <div className="w-full">
-      <div className="flex flex-col ">
-        <div className="flex flex-col gap-5">
-          <div className="px-1  flex justify-between gap-10 items-center mt-2">
-            <h2 className="text-3xl px-5 font-bold flex items-center gap-1">
-              {" "}
-              <ShoppingBasket size={50} /> Menu
-            </h2>
-            <input
-              placeholder="Search Inventory"
-              className="rounded-full px-5 py-2 border shadow-2xl"
-            />
-          </div>
-        </div>
-        <div className="rounded-xl">
-          <div className=" rounded-lg p-4 grid 2xl:grid-cols-6 overflow-y-scroll  xl:grid-cols-4 lg:grid-cols-3 grid-cols-1 gap-5 h-[830px]">
-            {data?.map((product: Product) => {
-              return (
-                <ProductCard
-                  key={product.id}
-                  name={product.name}
-                  price={product.price}
-                  boxes={product.boxQuantity}
-                  addToCart={() => addToCart(product, product.id)}
-                  isAddedToCart = { isProductInCart(product.id)}
-                />
-              );
-            })}
-          </div>
-        </div>
+    <div className="flex flex-col gap-8 p-4 w-full">
+      <div className="flex justify-between gap-10 items-center mt-2">
+        <h2 className="text-3xl font-semi flex items-center gap-1">
+          Menu <ShoppingBasket className="w-8 h-8 ml-1" />
+        </h2>
+        <HomePageProductsSearchBox />
       </div>
+      <HomePageProducts />
     </div>
   );
 };

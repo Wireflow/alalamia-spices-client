@@ -10,7 +10,7 @@
 // const PaymentMethods: React.FC<PaymentMethodsProps> = ({ selectedPaymentMethod, onPaymentMethodChange }) => {
 //   const handlePaymentMethodChange = (event: ChangeEvent<HTMLInputElement>) => {
 //     const selectedValue = event.target.value;
-    
+
 //     onPaymentMethodChange(selectedValue);
 //   };
 
@@ -40,57 +40,38 @@
 // };
 
 // export default PaymentMethods;
-import React, { ChangeEvent } from 'react';
-
-interface PaymentMethodsProps {
-  selectedPaymentMethod: string;
-  onPaymentMethodChange: (value: string) => void;
-}
-
-const PaymentMethods: React.FC<PaymentMethodsProps> = ({ selectedPaymentMethod, onPaymentMethodChange }) => {
-  const handlePaymentMethodChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const selectedValue = event.target.value;
-    onPaymentMethodChange(selectedValue);
+import { useCart } from "@/State/store";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
+import { PAYMENT_METHODS, PaymentMethodsType } from "@/constants/cart";
+const PaymentMethods = () => {
+  const selectedPaymentMethod = useCart((state) => state.selectedPaymentMethod);
+  const setSelectedPaymentMethod = useCart(
+    (state) => state.setSelectedPaymentMethod
+  );
+  const handlePaymentMethodChange = (paymentMethod: PaymentMethodsType) => {
+    setSelectedPaymentMethod(paymentMethod);
   };
 
   return (
     <div className="m-2 flex justify-center">
-      <form className="flex items-center space-x-4">
-        <div>
-          <input
-            type="radio"
-            id="cash"
-            name="paymentMethod"
-            value="CASH"
-            checked={selectedPaymentMethod === 'CASH'}
-            onChange={handlePaymentMethodChange}
-          />
-          <label htmlFor="cash" className="m-2">Cash</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="check"
-            name="paymentMethod"
-            value="CHECK"
-            checked={selectedPaymentMethod === 'CHECK'}
-            onChange={handlePaymentMethodChange}
-          />
-          <label htmlFor="check" className="m-2">Check</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="card"
-            name="paymentMethod"
-            value="CARD"
-            checked={selectedPaymentMethod === 'CARD'}
-            onChange={handlePaymentMethodChange}
-            disabled
-          />
-          <label htmlFor="card" className="m-2">Card</label>
-        </div>
-      </form>
+      <div className="flex gap-3 w-full">
+        {PAYMENT_METHODS.map((paymentMethod) => (
+          <Button
+            size={"lg"}
+            className={cn(
+              "bg-accent text-primary flex-1 h-12 rounded-xl hover:text-white",
+              {
+                "bg-primary text-white":
+                  selectedPaymentMethod === paymentMethod,
+              }
+            )}
+            onClick={() => handlePaymentMethodChange(paymentMethod)}
+          >
+            {paymentMethod}
+          </Button>
+        ))}
+      </div>
     </div>
   );
 };

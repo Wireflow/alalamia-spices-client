@@ -11,3 +11,5 @@ export const api = axios.create({
     Authorization: token,
   },
 });
+
+console.log(token);

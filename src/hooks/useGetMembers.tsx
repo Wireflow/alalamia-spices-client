@@ -6,7 +6,7 @@ export const useGetMembers = () => {
   return useQuery({
     queryKey: ["members"],
     queryFn: async (): Promise<Member[]> => {
-      const { data } = await api.get("/members");
+      const { data } = await api.get("/members?pageSize=20");
 
       return data.data;
     },

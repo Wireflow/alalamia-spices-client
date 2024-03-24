@@ -26,15 +26,10 @@ import useGetTransactions from "@/hooks/useGetTransactions";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Transaction } from "@prisma/client";
 import ViewTransaction from "./ViewTransaction";
+import { formatDateToString } from "@/lib/utils";
 
 const TransactionTable = () => {
   const { data, isLoading } = useGetTransactions();
-  const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
-
-  const handleTransactionClick = (transaction: Transaction) => {
-    setSelectedTransaction(transaction);
-  };
 
   const columns: ColumnDef<Transaction>[] = [
     {
@@ -69,23 +64,22 @@ const TransactionTable = () => {
       accessorKey: "createdAt",
       header: "Transaction date",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("createdAt")}</div>
+        <div className="capitalize">
+          {formatDateToString(row.getValue("createdAt"))}
+        </div>
       ),
     },
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const transaction: Transaction = row.original;
         return (
           <Dialog>
-            <DialogTrigger onClick={() => handleTransactionClick(transaction)}>
+            <DialogTrigger>
               <Button>View</Button>
             </DialogTrigger>
             <DialogContent>
-              {selectedTransaction && (
-                <ViewTransaction transaction={selectedTransaction} />
-              )}
+              <ViewTransaction transactionId={row.original.id} />
             </DialogContent>
           </Dialog>
         );

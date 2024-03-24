@@ -2,57 +2,28 @@ import z from "zod";
 
 export const TransactionSchema = z.object({
   totalAmount: z.number(),
-  paymentMethod: z.enum(["CASH", "CARD", "CHECK"]),
+  paymentMethod: z.enum(["CASH", "CHECK", "CARD"]),
+  checkNumber: z.number().optional(),
+  checkAmount: z.number().optional(),
+  totalQuantityPurchased: z.number(),
   memberId: z.string(),
-  checkNumber : z.number(),
-  checkAmount: z.number(),
-  products: z
+  purchasedProducts: z
     .object({
-      id: z.string(),
+      productId: z.string(),
+      purchaseQuantity: z.number(),
+      price: z.number(),
+      name: z.string(),
     })
     .array(),
 });
+
+export const PurchasedProductSchema = z.object({
+  productId: z.string(),
+  purchaseQuantity: z.number(),
+  price: z.number(),
+  name: z.string(),
+});
+
+export type PurchasedProductType = z.infer<typeof PurchasedProductSchema>;
+
 export type TransactionType = z.infer<typeof TransactionSchema>;
-
-
-export const TransactionTotalAmount = z.object({
-  totalAmount: z.number({
-    required_error: "Please check the amount and try again!",
-  }),
-});
-
-export type TransactionTotalAmountType = z.infer<typeof TransactionTotalAmount>;
-
-export const PaymentMethod = z.object({
-  paymentMethod: z.string({
-    required_error: "Please check the Payment Method and try again!",
-  }),
-});
-
-export type PaymentMethodType = z.infer<typeof PaymentMethod>;
-
-
-// member id
-
-export const MemberId = z.object({
-  memberId: z.string({
-    required_error: "Please select the Member and try again!",
-  }),
-});
-
-export type MemberIdType = z.infer<typeof MemberId>;
-
-
-// check number
-export const CheckNumber = z.object({
-  checkNumber: z.number(),
-});
-
-export type CheckNumberType = z.infer<typeof CheckNumber>;
-
-// check amount
-export const CheckAmount = z.object({
-  checkAmount: z.number(),
-});
-
-export type CheckAmountType = z.infer<typeof CheckAmount>;

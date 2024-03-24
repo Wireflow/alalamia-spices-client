@@ -1,20 +1,13 @@
-import { Member } from "@prisma/client";
-import { api } from "../services/axiosInstance";
+import { Member, Transaction } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { Transaction } from "@prisma/client";
+import { api } from "../services/axiosInstance";
 
-
-
-
-export const useViewTransaction = ({id} : Transaction) => {
+export const useViewTransaction = ({ id }: { id: string }) => {
   return useQuery({
-    queryKey: ["transaction"],
-    queryFn: async (): Promise<Member[]> => {
-      const { data } = await api.get(
-        `/transactions/${id}?products=true`
-      );
-
-      return data.product;
+    queryKey: ["transaction", id],
+    queryFn: async (): Promise<Transaction> => {
+      const { data } = await api.get(`/transactions/${id}?products=true`);
+      return data.data;
     },
   });
 };
