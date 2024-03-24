@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 interface Config {
   onComplete: (code: string) => void;
   onError?: (error: string) => void;
-  timeToWait?: number; // Time in milliseconds to wait for the end of a scan
+  timeToWait?: number;
 }
 
 const useBarcodeScanner = ({
@@ -18,7 +18,6 @@ const useBarcodeScanner = ({
     const handleKeyDown = (event: KeyboardEvent) => {
       const char = String.fromCharCode(event.keyCode);
 
-      // Reset the timer and append the character to the buffer
       if (timeout.current) {
         clearTimeout(timeout.current);
       }

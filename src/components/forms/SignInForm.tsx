@@ -1,8 +1,12 @@
+import { getSession, signIn } from "@/hooks/useAuth";
 import { SignInType, UserSchema } from "@/types/user";
 import signInUser from "@/use-cases/signInUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -13,29 +17,22 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { getSession, signIn } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { Toaster } from "../ui/sonner";
 
 const SignInForm = () => {
   const navigate = useNavigate();
   const session = getSession();
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: signInUser,
     onSuccess: (data) => {
       if (data?.token && data?.session) {
         signIn({ token: data.token, session: data.session });
-        toast.success("Signed in Successfully")
-
+        toast.success("Signed in Successfully");
       }
     },
     onError: () => {
-    toast.error('Error Logging in')
-    }
+      toast.error("Error Logging in");
+    },
   });
-  
 
   const form = useForm<SignInType>({
     resolver: zodResolver(UserSchema),
@@ -50,10 +47,10 @@ const SignInForm = () => {
   };
 
   useEffect(() => {
-    if (session) {
+    if (session && isSuccess) {
       navigate("/home");
     }
-  }, [session, navigate]);
+  }, [session, navigate, isSuccess]);
 
   return (
     <Form {...form}>
@@ -98,7 +95,6 @@ const SignInForm = () => {
           </Button>
         </div>
       </form>
-     
     </Form>
   );
 };
