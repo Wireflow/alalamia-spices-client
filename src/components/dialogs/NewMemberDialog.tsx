@@ -11,15 +11,22 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import NewMemberForm from "../forms/NewMemberForm";
 
-const NewMemberDialog = () => {
+type Props = {
+  isVisible: boolean;
+  isOpen?: boolean;
+};
+
+const NewMemberDialog = ({ isVisible = true, isOpen }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button size={"lg"}>
-          Add New Member <Plus className="w-4 h-4 ml-2" />
-        </Button>
+        {isVisible ? (
+          <Button size={"lg"}>
+            Add New Member <Plus className="w-4 h-4 ml-2" />
+          </Button>
+        ) : null}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

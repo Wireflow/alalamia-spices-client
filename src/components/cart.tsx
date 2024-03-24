@@ -15,31 +15,18 @@ import {
 } from "./ui/sheet";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { currencyFormatter } from "@/lib/utils";
 
 const Cart = () => {
-  const { cart, setCart } = useCart(); // Retrieve cart and setCart from the useCart hook
+  const { cart, clearCart, updateItemQuantity, removeItemFromCart } = useCart(); // Retrieve cart and setCart from the useCart hook
 
-  const clearCart = () => {
-    setCart([]); // Clear the cart by setting it to an empty array
-  };
-
-  const updateQuantity = (product: Product, quantity: number) => {
-    const updatedCart = cart.map((item) =>
-      item.id === product.id ? { ...item, quantity } : item
-    );
-    setCart(updatedCart); // Update the cart with the new quantity
-  };
-
-  const removeFromCart = (product: Product) => {
-    const updatedCart = cart.filter((item) => item.id !== product.id);
-    setCart(updatedCart); // Remove the item from the cart
-  };
   const handleCheckout = () => {
     // Logic for handling the checkout action
   };
+
   return (
     <div className="flex">
-      <div className="bg-[#fdfeff] shadow-2xl border-black shadow-black h-full 2xl:w-[450px] w-[350px]">
+      <div className="bg-[#fdfeff] border-black shadow-black h-full 2xl:w-[450px] w-[350px]">
         <div className="bg-zinc-800">
           <img
             src={HomeImage}
@@ -64,36 +51,40 @@ const Cart = () => {
               className="flex justify-between px-5 py-2 border"
             >
               <div className="flex flex-col gap-4">
-                <p className="text-lg font-semibold">{cartItem.name}</p>
+                <p className="text-lg font-bold">{cartItem.name}</p>
                 <div className="flex gap-2 items-center">
                   <Button
-                    className="font-medium bg-zinc-600 p-1 rounded-full"
+                    className="p-3 rounded-full"
                     onClick={() =>
-                      updateQuantity(cartItem, (cartItem.quantity || 1) + 1)
+                      updateItemQuantity(cartItem, (cartItem.quantity || 1) - 1)
                     }
                   >
-                    <Plus color="white" size={15} />
+                    <Minus color="white" strokeWidth={3} size={20} />{" "}
                   </Button>
-                  <p className="bg-gray-200 rounded-full font-bold px-10">
+
+                  <p className="bg-secondary py-1 border-2 rounded-full font-bold text-center w-full max-w-30">
                     {cartItem.quantity}
                   </p>
+
                   <Button
-                    className="font-medium bg-zinc-600 p-1 rounded-full"
+                    className="p-3 rounded-full"
                     onClick={() =>
-                      updateQuantity(cartItem, (cartItem.quantity || 1) - 1)
+                      updateItemQuantity(cartItem, (cartItem.quantity || 1) + 1)
                     }
                   >
-                    <Minus color="white" size={15} />{" "}
+                    <Plus color="white" strokeWidth={3} size={20} />
                   </Button>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center gap-2">
-                <p className="font-medium text-lg">{cartItem.price}</p>
+                <p className="font-medium text-lg">
+                  {currencyFormatter(cartItem.price)}
+                </p>
                 <p className="bg-gray-200 rounded-full p-3 flex justify-center  items-center">
                   <Trash2
                     color="red"
                     size={15}
-                    onClick={() => removeFromCart(cartItem)}
+                    onClick={() => removeItemFromCart(cartItem)}
                   />
                 </p>
               </div>

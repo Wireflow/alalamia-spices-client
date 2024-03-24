@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Textarea } from "@/src/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 
 type NewProductFormProps = {
   setOpen: (isOpen: boolean) => void;

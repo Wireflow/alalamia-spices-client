@@ -1,17 +1,16 @@
-import { Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import CheckoutBar from "./components/CheckoutBar";
 import Header from "./components/Header";
 import Sidebar from "./components/layout/Sidebar";
-import Financials from "./components/Pages/Financials";
-import Inventory from "./components/Pages/Inventory";
-import Members from "./components/Pages/Members";
-import SignIn from "./components/Pages/SignIn";
-import Transactions from "./components/Pages/Transactions";
+import Expenses from "./components/pages/Expenses/ExpensesList";
+import Financials from "./components/pages/Financials";
+import Inventory from "./components/pages/Inventory";
+import Members from "./components/pages/Members";
+import SignIn from "./components/pages/SignIn";
+import Transactions from "./components/pages/Transactions";
 import { getSession } from "./hooks/useAuth";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Expenses from "./components/Pages/Expenses/ExpensesList";
 
 function App() {
   const session = getSession();
@@ -25,7 +24,7 @@ function App() {
 
   return (
     <>
-      <div className="flex max-h-[1300px] overflow-y-hidden gap-2 ">
+      <div className="flex max-h-[1300px] overflow-hidden gap-2 ">
         {session ? <Sidebar /> : null}
 
         <div className="w-full h-full">

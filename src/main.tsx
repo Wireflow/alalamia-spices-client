@@ -3,6 +3,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { Toaster } from "./components/ui/toaster.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     <Router>
       <App />
+      <Toaster />
     </Router>
   </QueryClientProvider>
 );
