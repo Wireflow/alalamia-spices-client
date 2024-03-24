@@ -2,6 +2,7 @@ import { useCart } from "@/State/store";
 import useBarcodeScanner from "@/hooks/useBarcodeScanner";
 import { useGetProducts } from "@/hooks/useGetProducts";
 import { ShoppingBasket } from "lucide-react";
+import SelectMemberForm from "../forms/SelectMemberForm";
 import HomePageProducts from "./homepage/HomePageProducts";
 import HomePageProductsSearchBox from "./homepage/HomePageProductsSearchBox";
 
@@ -28,6 +29,7 @@ const HomePage = () => {
         </h2>
         <HomePageProductsSearchBox />
       </div>
+      <SelectMemberForm />
       <HomePageProducts />
     </div>
   );

@@ -14,10 +14,23 @@ import {
 const SelectMemberForm = () => {
   const [searchType, setSearchType] = useState<SearchOptions>();
   const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
-  const { data: members, isPending } = useSearchMember({
+  const [isSearching, setIsSearching] = useState(false);
+  const {
+    data: members,
+    refetch,
+    isLoading,
+  } = useSearchMember({
     address: searchType === "address" ? searchTerm : "",
     phoneNumber: searchType === "phoneNumber" ? searchTerm : "",
+    isSearching,
   });
+
+  const search = () => {
+    setIsSearching(true);
+    setTimeout(() => {
+      setIsSearching(false);
+    }, 2000);
+  };
 
   useEffect(() => {
     console.log(members);
@@ -30,9 +43,6 @@ const SelectMemberForm = () => {
         placeholder="Member Address"
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <Button className="w-full mt-4" disabled={isPending}>
-        {isPending ? "Searching..." : "Search"}
-      </Button>
       <Select
         onValueChange={(option) => setSearchType(option as SearchOptions)}
         defaultValue={"address"}
@@ -48,6 +58,13 @@ const SelectMemberForm = () => {
           ))}
         </SelectContent>
       </Select>
+      <Button
+        className="w-full mt-4"
+        disabled={isLoading}
+        onClick={() => search()}
+      >
+        {isLoading ? "Searching..." : "Search"}
+      </Button>
     </div>
   );
 };

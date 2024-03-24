@@ -1,8 +1,10 @@
 import { useCart } from "@/State/store";
 import { currencyFormatter } from "@/lib/utils";
 import { Minus, Plus, Trash2 } from "lucide-react";
+import { useEffect } from "react";
 import HomeImage from "../../assets/HomeImage.png";
 import PaymentMethods from "../PaymentMethods";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -13,9 +15,6 @@ import {
   SheetFooter,
   SheetTrigger,
 } from "../ui/sheet";
-import { useEffect } from "react";
-import { Badge } from "../ui/badge";
-import SelectMemberForm from "../forms/SelectMemberForm";
 
 const Cart = () => {
   const {
@@ -36,8 +35,8 @@ const Cart = () => {
 
   let totalPrice = 0;
   return (
-    <div className="flex h-full">
-      <div className="bg-[#fdfeff] shadow-2xl border-black shadow-black h-full 2xl:w-[450px] w-[350px]">
+    <div className="shadow-2xl flex flex-col justify-between border-black shadow-black w-[600px] h-[calc(100%-70px)]">
+      <div>
         <div className="bg-zinc-800">
           <img
             src={HomeImage}
@@ -63,123 +62,119 @@ const Cart = () => {
             Empty <Trash2 color="white" size={15} />
           </Button>
         </div>
+      </div>
 
-        <div className="bg-white border 2xl:h-[450px] h-[350px] flex flex-col gap-2 overflow-hidden overflow-y-scroll">
-          {cart.map((cartItem) => {
-            const totalQtyPrice =
-              cartItem.price * (cartItem.purchaseQuantity || 0);
-            totalPrice += totalQtyPrice;
-            return (
-              <div
-                key={cartItem.productId}
-                className="flex justify-between mt-1 mx-1 px-5 py-2 border rounded"
-              >
-                <div className="flex flex-col gap-2">
-                  <p className="text-md font-semibold">{cartItem.name}</p>
-                  <div className="flex gap-2 items-center">
-                    <Button
-                      className="p-3 rounded-full"
-                      onClick={() =>
-                        updateItemQuantity(
-                          cartItem,
-                          (cartItem.purchaseQuantity || 1) - 1
-                        )
-                      }
-                    >
-                      <Minus color="white" size={15} />{" "}
-                    </Button>
+      <div className="bg-white border 2xl:max-h-[450px] max-h-[350px] flex flex-col gap-2 overflow-hidden overflow-y-scroll">
+        {cart.map((cartItem) => {
+          const totalQtyPrice =
+            cartItem.price * (cartItem.purchaseQuantity || 0);
+          totalPrice += totalQtyPrice;
+          return (
+            <div
+              key={cartItem.productId}
+              className="flex justify-between mt-1 mx-1 px-5 py-2 border rounded"
+            >
+              <div className="flex flex-col gap-2">
+                <p className="text-md font-semibold">{cartItem.name}</p>
+                <div className="flex gap-2 items-center">
+                  <Button
+                    className="p-3 rounded-full"
+                    onClick={() =>
+                      updateItemQuantity(
+                        cartItem,
+                        (cartItem.purchaseQuantity || 1) - 1
+                      )
+                    }
+                  >
+                    <Minus color="white" size={15} />{" "}
+                  </Button>
 
-                    <p className="bg-secondary border-2 py-1 rounded-full font-bold px-10 w-full max-w-30">
-                      {cartItem.purchaseQuantity}
-                    </p>
-                    <Button
-                      className="p-3 rounded-full"
-                      onClick={() =>
-                        updateItemQuantity(
-                          cartItem,
-                          (cartItem.purchaseQuantity || 1) + 1
-                        )
-                      }
-                    >
-                      <Plus color="white" size={15} />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <p className="font-medium text-lg">
-                    {currencyFormatter(totalQtyPrice)}
+                  <p className="bg-secondary border-2 py-1 rounded-full font-bold px-10 w-full max-w-30">
+                    {cartItem.purchaseQuantity}
                   </p>
                   <Button
-                    variant={"destructive"}
-                    className="rounded-full px-3 flex justify-center  items-center"
-                    onClick={() => removeItemFromCart(cartItem)}
+                    className="p-3 rounded-full"
+                    onClick={() =>
+                      updateItemQuantity(
+                        cartItem,
+                        (cartItem.purchaseQuantity || 1) + 1
+                      )
+                    }
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Plus color="white" size={15} />
                   </Button>
                 </div>
               </div>
-            );
-          })}
-        </div>
 
+              <div className="flex flex-col items-center justify-center gap-2">
+                <p className="font-medium text-lg">
+                  {currencyFormatter(totalQtyPrice)}
+                </p>
+                <Button
+                  variant={"destructive"}
+                  className="rounded-full px-3 flex justify-center  items-center"
+                  onClick={() => removeItemFromCart(cartItem)}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div>
         <div className="flex flex-col mr-4 mt-2 text-right gap-2">
           <p className="font-medium text-lg">
             Total Amount :
             <span className="inline-block ml-2 px-2 py-1 text-lg font-semibold bg-blue-500 text-white rounded">
               {currencyFormatter(totalPrice)}
-            </span>{" "}
+            </span>
           </p>
         </div>
         <PaymentMethods />
-        <SelectMemberForm />
 
-        <div className="flex justify-center">
-          <Sheet>
-            <SheetTrigger className="p-2 w-full">
-              <div>
-                <Button
-                  size={"lg"}
-                  className="flex-1 w-full h-14 text-xl"
-                  onClick={handleCheckout}
-                >
-                  Checkout ({cart.length})
-                </Button>
+        <Sheet>
+          <SheetTrigger className="p-2 w-full">
+            <Button
+              size={"lg"}
+              className="flex-1 w-full h-14 text-xl "
+              onClick={handleCheckout}
+            >
+              Checkout ({cart.length})
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            {/* {selectedPaymentMethod == 'CASH' ? <p>cash</p> : <p>check</p>} */}
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Amount
+                </Label>
+                <Input
+                  id="totalAmount"
+                  value={totalPrice}
+                  className="col-span-3"
+                  disabled
+                />
               </div>
-            </SheetTrigger>
 
-            <SheetContent>
-              {/* {selectedPaymentMethod == 'CASH' ? <p>cash</p> : <p>check</p>} */}
-              <div className="grid gap-4 py-4">
+              {selectedPaymentMethod == "CHECK" && (
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-right">
-                    Amount
+                    Check Number :
                   </Label>
-                  <Input
-                    id="totalAmount"
-                    value={totalPrice}
-                    className="col-span-3"
-                    disabled
-                  />
+                  <Input id="checkNumber" className="col-span-3" />
                 </div>
-
-                {selectedPaymentMethod == "CHECK" && (
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="name" className="text-right">
-                      Check Number :
-                    </Label>
-                    <Input id="checkNumber" className="col-span-3" />
-                  </div>
-                )}
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
-        </div>
+              )}
+            </div>
+            <SheetFooter>
+              <SheetClose asChild>
+                <Button type="submit">Save changes</Button>
+              </SheetClose>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );

@@ -5,10 +5,11 @@ import { api } from "../services/axiosInstance";
 type SearchMemberProps = {
   address?: string;
   phoneNumber?: string;
+  isSearching: boolean;
 };
 
 export const useSearchMember = (options: SearchMemberProps) => {
-  const { address, phoneNumber } = options;
+  const { address, phoneNumber, isSearching } = options;
   const searchOption =
     address && address.length >= 3
       ? `get-by-address?address=${address}`
@@ -16,13 +17,14 @@ export const useSearchMember = (options: SearchMemberProps) => {
       ? `get-by-phone?phoneNumber=${phoneNumber}`
       : null;
 
+  const confirmSearch = searchOption ? true : false;
+
   return useQuery({
     queryKey: ["searchMember", searchOption],
     queryFn: async (): Promise<Member[]> => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       const { data } = await api.get(`/members/${searchOption}`);
       return data.data;
     },
-    enabled: Boolean(searchOption),
+    enabled: isSearching,
   });
 };
