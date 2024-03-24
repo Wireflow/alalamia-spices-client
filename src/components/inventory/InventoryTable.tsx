@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "../ui/table";
 import NewProductDialog from "../dialogs/NewProductDialog";
+import EditInventoryDialog from "../dialogs/EditInventoryDialog";
 
 const InventoryTable = () => {
   const { data, isLoading } = useGetProducts();
@@ -72,8 +73,8 @@ const InventoryTable = () => {
     {
       id: "actions",
       enableHiding: false,
-      cell: () => {
-        return <Button>View</Button>;
+      cell: ({row}) => {
+        return <EditInventoryDialog product={row.original} />;
       },
     },
   ];
