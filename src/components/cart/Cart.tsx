@@ -1,55 +1,42 @@
 import { useCart } from "@/State/store";
-import { Product } from "@prisma/client";
-import { Minus, Plus, Trash, Trash2 } from "lucide-react";
-import HomeImage from "../assets/HomeImage.png";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+import { currencyFormatter } from "@/lib/utils";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import HomeImage from "../../assets/HomeImage.png";
+import PaymentMethods from "../PaymentMethods";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
   Sheet,
   SheetClose,
   SheetContent,
   SheetFooter,
   SheetTrigger,
-} from "./ui/sheet";
-// import { PaymentMethods } from "./PaymentMethods";
-import { currencyFormatter } from "@/lib/utils";
-import { useState } from "react";
-import PaymentMethods from "./PaymentMethods";
+} from "../ui/sheet";
+import { useEffect } from "react";
+import { Badge } from "../ui/badge";
+import SelectMemberForm from "../forms/SelectMemberForm";
 
 const Cart = () => {
-  const { cart, setCart } = useCart(); // Retrieve cart and setCart from the useCart hook
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("CASH");
+  const {
+    cart,
+    removeItemFromCart,
+    updateItemQuantity,
+    clearCart,
+    selectedPaymentMethod,
+  } = useCart();
 
-  const clearCart = () => {
-    setCart([]); // Clear the cart by setting it to an empty array
-  };
-
-  const updateQuantity = (product: Product, quantity: number) => {
-    const updatedCart = cart.map((item) => {
-      return item.id === product.id ? { ...item, quantity } : item;
-    });
-
-    if (quantity <= 0) {
-      removeFromCart(product);
-    } else {
-      setCart(updatedCart); // Update the cart with the new quantity
-    }
-  };
-
-  const removeFromCart = (product: Product) => {
-    const updatedCart = cart.filter((item) => item.id !== product.id);
-    setCart(updatedCart); // Remove the item from the cart
-  };
   const handleCheckout = () => {
     // Logic for handling the checkout action
   };
-  const handlePaymentMethodChange = (value: string) => {
-    setSelectedPaymentMethod(value);
-  };
+
+  useEffect(() => {
+    console.log(cart);
+  }, [cart]);
+
   let totalPrice = 0;
   return (
-    <div className="flex">
+    <div className="flex h-full">
       <div className="bg-[#fdfeff] shadow-2xl border-black shadow-black h-full 2xl:w-[450px] w-[350px]">
         <div className="bg-zinc-800">
           <img
@@ -62,16 +49,15 @@ const Cart = () => {
           <p className="text-md font-semibold">Select a member</p>
           <Button variant={"outline"}>Add</Button>
         </div>
-        <div className="flex px-4 py-3 justify-between items-end">
-          <div className="relative">
-            <h2 className="text-4xl font-semibold">
-              Cart
-              {cart.length > 0 && (
-                <span className="inline-block ml-2 px-2 py-1 text-sm font-semibold bg-red-500 text-white rounded-full">
-                  {cart.length}
-                </span>
-              )}
-            </h2>
+        <div className="flex px-4 py-3 justify-between items-center">
+          <div className="inline-flex items-end justify-center gap-2">
+            <h2 className="text-4xl font-semibold">Cart</h2>
+            <Badge
+              variant={"destructive"}
+              className="text-lg rounded-full w-10 justify-center"
+            >
+              {cart.length}
+            </Badge>
           </div>
           <Button onClick={clearCart} className=" flex gap-1 rounded-full">
             Empty <Trash2 color="white" size={15} />
@@ -79,35 +65,43 @@ const Cart = () => {
         </div>
 
         <div className="bg-white border 2xl:h-[450px] h-[350px] flex flex-col gap-2 overflow-hidden overflow-y-scroll">
-          {cart.map((cartItem: Product) => {
-            const totalQtyPrice = cartItem.price * (cartItem.quantity || 0);
+          {cart.map((cartItem) => {
+            const totalQtyPrice =
+              cartItem.price * (cartItem.purchaseQuantity || 0);
             totalPrice += totalQtyPrice;
             return (
               <div
-                key={cartItem.id}
-                className="flex justify-between mt-1 mx-1 px-5  py-2 border rounded"
+                key={cartItem.productId}
+                className="flex justify-between mt-1 mx-1 px-5 py-2 border rounded"
               >
-                <div className="flex flex-col gap-2 ">
+                <div className="flex flex-col gap-2">
                   <p className="text-md font-semibold">{cartItem.name}</p>
                   <div className="flex gap-2 items-center">
                     <Button
-                      className="font-medium bg-zinc-600 p-1 rounded-full"
+                      className="p-3 rounded-full"
                       onClick={() =>
-                        updateQuantity(cartItem, (cartItem.quantity || 1) + 1)
-                      }
-                    >
-                      <Plus color="white" size={15} />
-                    </Button>
-                    <p className="bg-gray-200 rounded-full font-bold px-10">
-                      {cartItem.quantity}
-                    </p>
-                    <Button
-                      className="font-medium bg-zinc-600 p-1 rounded-full"
-                      onClick={() =>
-                        updateQuantity(cartItem, (cartItem.quantity || 1) - 1)
+                        updateItemQuantity(
+                          cartItem,
+                          (cartItem.purchaseQuantity || 1) - 1
+                        )
                       }
                     >
                       <Minus color="white" size={15} />{" "}
+                    </Button>
+
+                    <p className="bg-secondary border-2 py-1 rounded-full font-bold px-10 w-full max-w-30">
+                      {cartItem.purchaseQuantity}
+                    </p>
+                    <Button
+                      className="p-3 rounded-full"
+                      onClick={() =>
+                        updateItemQuantity(
+                          cartItem,
+                          (cartItem.purchaseQuantity || 1) + 1
+                        )
+                      }
+                    >
+                      <Plus color="white" size={15} />
                     </Button>
                   </div>
                 </div>
@@ -116,13 +110,13 @@ const Cart = () => {
                   <p className="font-medium text-lg">
                     {currencyFormatter(totalQtyPrice)}
                   </p>
-                  <p className="bg-gray-200 rounded-full p-3 flex justify-center  items-center">
-                    <Trash
-                      color="red"
-                      size={15}
-                      onClick={() => removeFromCart(cartItem)}
-                    />
-                  </p>
+                  <Button
+                    variant={"destructive"}
+                    className="rounded-full px-3 flex justify-center  items-center"
+                    onClick={() => removeItemFromCart(cartItem)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
             );
@@ -137,27 +131,21 @@ const Cart = () => {
             </span>{" "}
           </p>
         </div>
-        {cart.length > 0 && (
-          <PaymentMethods
-            key={selectedPaymentMethod} // Add a unique key prop
-            selectedPaymentMethod={selectedPaymentMethod}
-            onPaymentMethodChange={handlePaymentMethodChange}
-          />
-        )}
+        <PaymentMethods />
+        <SelectMemberForm />
 
         <div className="flex justify-center">
           <Sheet>
-            <SheetTrigger>
-              {cart.length > 0 && (
-                <div>
-                  <Button
-                    className=" flex gap-1 rounded-full w-full m-2 p-2"
-                    onClick={handleCheckout}
-                  >
-                    Checkout ({cart.length}) product{cart.length > 1 ? "s" : ""}
-                  </Button>
-                </div>
-              )}
+            <SheetTrigger className="p-2 w-full">
+              <div>
+                <Button
+                  size={"lg"}
+                  className="flex-1 w-full h-14 text-xl"
+                  onClick={handleCheckout}
+                >
+                  Checkout ({cart.length})
+                </Button>
+              </div>
             </SheetTrigger>
 
             <SheetContent>

@@ -21,7 +21,7 @@ const HomePage = () => {
   });
 
   return (
-    <div className="flex flex-col gap-2 p-4 w-full">
+    <div className="flex flex-col gap-8 p-4 w-full">
       <div className="flex justify-between gap-10 items-center mt-2">
         <h2 className="text-3xl font-semi flex items-center gap-1">
           Menu <ShoppingBasket className="w-8 h-8 ml-1" />

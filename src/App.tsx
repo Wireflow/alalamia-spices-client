@@ -24,7 +24,7 @@ function App() {
 
   return (
     <>
-      <div className="flex max-h-[1300px] overflow-hidden gap-2 ">
+      <div className="flex overflow-hidden gap-2 ">
         {session ? <Sidebar /> : null}
 
         <div className="w-full h-full">

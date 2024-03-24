@@ -1,5 +1,6 @@
 import { useViewTransaction } from "@/hooks/useViewTransaction";
 import { Button } from "../ui/button";
+import { formatDateToString } from "@/lib/utils";
 
 type transactionProp = {
   transactionId: string;
@@ -7,14 +8,6 @@ type transactionProp = {
 
 const ViewTransaction = ({ transactionId }: transactionProp) => {
   const { data: transaction } = useViewTransaction({ id: transactionId });
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  };
 
   if (!transaction) return <p>Unable to obtain transaction info</p>;
 
@@ -25,7 +18,7 @@ const ViewTransaction = ({ transactionId }: transactionProp) => {
       <h1 className="text-2xl font-medium">
         Invoice #{transaction?.orderNumber}
       </h1>
-      <p>Completed on {createdAtDate.toLocaleString("en-US", options)}</p>
+      <p>Completed on {formatDateToString(createdAtDate)}</p>
       <div className="flex justify-between">
         <div>
           <p className="font-semibold">

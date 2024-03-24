@@ -17,3 +17,18 @@ export const currencyFormatter = (price: number) => {
     currency: "USD",
   }).format(price);
 };
+
+export const formatDateToString = (
+  date: Date,
+  options?: Intl.DateTimeFormatOptions
+) => {
+  options = {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+
+  return new Date(date).toLocaleString("en-US", options);
+};

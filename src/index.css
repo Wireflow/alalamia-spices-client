@@ -22,7 +22,7 @@
     --muted: 31 6.7% 92.3%;
     --muted-foreground: 31 3.35% 42.3%;
 
-    --accent: 31 3.35% 96.15%;
+    --accent: 31 50% 80.15%;
     --accent-foreground: 31 5.25% 12.3%;
 
     --destructive: 0 84.2% 60.2%;
@@ -74,6 +74,25 @@
     @apply bg-background text-foreground;
   }
 }
+
 body {
   background-color: #fdfeff;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+}
+
+*::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 20px;
 }

@@ -17,14 +17,6 @@ export const MemberSchema = z.object({
 
 export type MemberType = z.infer<typeof MemberSchema>;
 
-export const MemberPhoneNumber = z.object({
-  phoneNumber: z.string(),
-});
+export const MemberSearch = z.string();
 
-export type MemberPhoneNumberType = z.infer<typeof MemberPhoneNumber>;
-
-export const MemberAddress = z.object({
-  address: z.string(),
-});
-
-export type MemberAddressType = z.infer<typeof MemberAddress>;
+export type MemberSearchType = z.infer<typeof MemberSearch>;

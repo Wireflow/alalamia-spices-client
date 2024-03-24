@@ -9,7 +9,7 @@ interface Config {
 const useBarcodeScanner = ({
   onComplete,
   onError,
-  timeToWait = 200,
+  timeToWait = 100,
 }: Config) => {
   const buffer = useRef<string>("");
   const timeout = useRef<NodeJS.Timeout | null>(null);

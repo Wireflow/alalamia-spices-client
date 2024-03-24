@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// FOR TYPE SAFETY USE ONLY, DATABASE IS HOSTED ON A SERVER.
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -27,48 +25,66 @@ enum PaymentMethod {
 }
 
 model Member {
-  id          String        @id @default(cuid())
-  name        String
-  address     String        @unique
-  city        String
-  state       String
-  zipCode     String
-  phoneNumber String        @unique
-  owedBalance Float?
-  transaction Transaction[]
+  id           String        @id @default(cuid())
+  name         String
+  address      String        @unique
+  city         String
+  state        String
+  zipCode      String
+  phoneNumber  String        @unique
+  owedBalance  Float?
+  transactions Transaction[]
+}
+
+model PurchasedProduct {
+  id               String @id @default(cuid())
+  name             String
+  price            Float
+  purchaseQuantity Int?
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  transaction   Transaction? @relation(fields: [transactionId], references: [id])
+  transactionId String?
+  product       Product      @relation(fields: [productId], references: [id])
+  productId     String
+
+  @@index([transactionId])
+  @@index([productId])
 }
 
 model Transaction {
-  id            String        @id @default(cuid())
-  totalAmount   Float
-  orderNumber   Int           @unique @default(autoincrement())
-  paymentMethod PaymentMethod
-  member        Member?       @relation(fields: [memberId], references: [id])
-  memberId      String?
-  checkNumber   Int?
-  checkAmount   Int?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  transactionId String?
-  products      Product[]     @relation("TransactionToProduct")
+  id                     String        @id @default(cuid())
+  totalAmount            Float
+  orderNumber            Int           @unique @default(autoincrement())
+  paymentMethod          PaymentMethod
+  checkNumber            Int?
+  checkAmount            Int?
+  totalQuantityPurchased Int
+
+  member            Member?            @relation(fields: [memberId], references: [id])
+  memberId          String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  purchasedProducts PurchasedProduct[]
 
   @@index([memberId])
 }
 
 model Product {
-  id           String        @id @default(cuid())
-  name         String
-  description  String?
-  price        Float
-  boxQuantity  Int?
-  quantity     Int?
-  grams        Int?
-  sku          String?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  supplier     Supplier?     @relation(fields: [supplierId], references: [id])
-  supplierId   String?
-  transactions Transaction[] @relation("TransactionToProduct")
+  id               String             @id @default(cuid())
+  name             String
+  description      String?
+  price            Float
+  boxQuantity      Int?
+  quantity         Int?
+  grams            Int?
+  sku              String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  supplier         Supplier?          @relation(fields: [supplierId], references: [id])
+  supplierId       String?
+  purchasedProduct PurchasedProduct[]
 
   @@index([supplierId])
 }
