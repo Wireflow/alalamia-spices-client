@@ -3,8 +3,8 @@ import useBarcodeScanner from "@/hooks/useBarcodeScanner";
 import { useGetProducts } from "@/hooks/useGetProducts";
 import { ShoppingBasket } from "lucide-react";
 import SelectMemberForm from "../forms/SelectMemberForm";
-import HomePageProducts from "./homepage/HomePageProducts";
-import HomePageProductsSearchBox from "./homepage/HomePageProductsSearchBox";
+import HomePageProducts from "../Pages/homepage/HomePageProducts";
+import HomePageProductsSearchBox from "../Pages/homepage/HomePageProductsSearchBox";
 
 const HomePage = () => {
   const { data: products } = useGetProducts();

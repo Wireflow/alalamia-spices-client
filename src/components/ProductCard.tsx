@@ -40,11 +40,11 @@ const ProductCard = ({ product }: ProductProps) => {
             <ShoppingCart color="brown" />
           </div>
         ) : null}
-        <p className="text-lg font-bold text-center ">{product.name}</p>
+        <p className="text-lg font-bold text-center w-20">{product.name}</p>
         <p>{currencyFormatter(product.price)}</p>
         <Badge
           variant={"outline"}
-          className={cn("h-7 text-base mt-2 text-black", {
+          className={cn("h-7 text-base mt-2 text-black whitespace-nowrap", {
             "bg-green-300 border-green-600 border-2 ":
               product.boxQuantity && product.boxQuantity >= 50,
             "bg-orange-200 border-orange-400 border-2 ":

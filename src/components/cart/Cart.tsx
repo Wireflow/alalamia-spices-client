@@ -64,7 +64,7 @@ const Cart = () => {
         </div>
       </div>
 
-      <div className="bg-white border 2xl:max-h-[450px] max-h-[350px] flex flex-col gap-2 overflow-hidden overflow-y-scroll">
+      <div className="bg-white border h-[650px] max-h-[650px] flex flex-col gap-2 overflow-hidden overflow-y-scroll">
         {cart.map((cartItem) => {
           const totalQtyPrice =
             cartItem.price * (cartItem.purchaseQuantity || 0);

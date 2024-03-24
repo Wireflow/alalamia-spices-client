@@ -1,4 +1,4 @@
-import HomePage from "./pages/HomePage";
+import HomePage from "./Pages/HomePage";
 import Cart from "./cart/Cart";
 
 const CheckoutBar = () => {

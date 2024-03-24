@@ -72,6 +72,7 @@ const InventoryTable = () => {
     },
     {
       id: "actions",
+      header: 'Action',
       enableHiding: false,
       cell: ({row}) => {
         return <EditInventoryDialog product={row.original} />;
@@ -110,7 +111,8 @@ const InventoryTable = () => {
         {/* <SearchMembers table={table} /> */}
         <div className="w-full flex gap-2">
           {/* <FilterMembersColumns table={table} /> */}
-          <NewProductDialog />
+           <NewProductDialog /> 
+          
         </div>
       </div>
 
