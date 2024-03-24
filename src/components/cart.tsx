@@ -126,6 +126,8 @@ const Cart = () => {
 
                             );
                         })
+                        // Extracting an array of IDs from the cart
+                        //  cartIds = cart.map((product) => product.id);
 
 
                     }
@@ -161,7 +163,12 @@ const Cart = () => {
                             </SheetTrigger>
 
                             <SheetContent>
-                                <NewTransactionForm setOpen={() => true} paymentMethod={selectedPaymentMethod} totalAmount={totalPrice}  />
+                                <NewTransactionForm 
+                                    setOpen={() => true} 
+                                    paymentMethod={selectedPaymentMethod} 
+                                    totalAmount={totalPrice} 
+                                    memberId={"clu5uovwo000711bciyby0ic9"} 
+                                    products={cart.map((product) => product.id)}  />
                                 {/* {selectedPaymentMethod == 'CASH' ? <p>cash</p> : <p>check</p>} */}
                                 {/* <div className="grid gap-4 py-4">
                                     <div className="grid grid-cols-4 items-center gap-4">

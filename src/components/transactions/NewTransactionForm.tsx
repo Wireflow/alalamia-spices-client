@@ -13,12 +13,15 @@ import { Input } from "@components/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import submitNewTransaction from "@/use-cases/submitNewTransaction";
 import { Button } from "@components/ui/button";
+import { HandCoins } from "lucide-react";
 
 
 type NewTransactionFormProps = {
   setOpen: (isOpen: boolean) => void;
   paymentMethod: any;
   totalAmount: number;
+  memberId:string;
+  products:string[];
 };
 
 const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransactionFormProps) => {
@@ -37,9 +40,9 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
     defaultValues: {
       totalAmount: totalAmount,
       paymentMethod: paymentMethod,
-      memberId: undefined,
-      checkNumber: undefined,
-      checkAmount: undefined,
+      memberId: "",
+      checkNumber: 0,
+      checkAmount: 0,
       products: []
     },
   });
@@ -56,7 +59,7 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
           <FormField
             control={form.control}
             name="paymentMethod"
-            disabled
+            // disabled
             rules={{ required: true, pattern: /^[0-9]+$/, maxLength: 5 }}
             render={({ field }) => (
               <FormItem className="w-full">
@@ -65,7 +68,7 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
                   <Input
                     {...field}
                     type="text"
-
+                    readOnly
                   />
                 </FormControl>
                 <FormMessage />
@@ -76,12 +79,15 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
           <FormField
             control={form.control}
             name="totalAmount"
-            disabled
+            // disabled
+          
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Total Amount</FormLabel>
                 <FormControl>
                   <Input {...field} type="number"
+                  // defaultValue={totalAmount}
+                  readOnly
                     onChange={(e) => field.onChange(parseFloat(e.target.value))} />
                 </FormControl>
                 <FormMessage />
@@ -90,7 +96,7 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
           />
 
           {/* check number */}
-          {paymentMethod == "CHECK" && (<FormField
+          {/* {paymentMethod == "CHECK" && (<FormField
             control={form.control}
             name="checkNumber"
             render={({ field }) => (
@@ -104,9 +110,13 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
               </FormItem>
             )}
           />
-          )}
+          )} */}
           <Button type="submit" className="w-full mt-4" disabled={isPending}>
-            {isPending ? "Adding..." : "Add"}
+            <div className="lex items-center justify-center space-x-2">
+              <span className="mr-2">{isPending ? "Validating..." : "Pay"}</span>
+              
+              </div>
+            <HandCoins color="white"/>
           </Button>
         </div>
       </form>
