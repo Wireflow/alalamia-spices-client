@@ -1,6 +1,6 @@
 import { useCart } from "@/State/store";
 import { Product } from "@prisma/client";
-import { CircleX, DeleteIcon, Minus, Plus, Trash, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash, Trash2 } from "lucide-react";
 import HomeImage from "../assets/HomeImage.png";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -9,16 +9,13 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
 // import { PaymentMethods } from "./PaymentMethods";
+import { currencyFormatter } from "@/lib/utils";
 import { useState } from "react";
 import PaymentMethods from "./PaymentMethods";
-import formatCurrency from "@/lib/utils";
 
 const Cart = () => {
   const { cart, setCart } = useCart(); // Retrieve cart and setCart from the useCart hook
@@ -83,7 +80,7 @@ const Cart = () => {
 
         <div className="bg-white border 2xl:h-[450px] h-[350px] flex flex-col gap-2 overflow-hidden overflow-y-scroll">
           {cart.map((cartItem: Product) => {
-            let totalQtyPrice = cartItem.price * (cartItem.quantity || 0);
+            const totalQtyPrice = cartItem.price * (cartItem.quantity || 0);
             totalPrice += totalQtyPrice;
             return (
               <div
@@ -117,7 +114,7 @@ const Cart = () => {
 
                 <div className="flex flex-col items-center justify-center gap-2">
                   <p className="font-medium text-lg">
-                    {formatCurrency(totalQtyPrice)}
+                    {currencyFormatter(totalQtyPrice)}
                   </p>
                   <p className="bg-gray-200 rounded-full p-3 flex justify-center  items-center">
                     <Trash
@@ -136,7 +133,7 @@ const Cart = () => {
           <p className="font-medium text-lg">
             Total Amount :
             <span className="inline-block ml-2 px-2 py-1 text-lg font-semibold bg-blue-500 text-white rounded">
-              {formatCurrency(totalPrice)}
+              {currencyFormatter(totalPrice)}
             </span>{" "}
           </p>
         </div>
