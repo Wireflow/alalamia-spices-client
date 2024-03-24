@@ -61,7 +61,8 @@ const NewExpenseForm = ({ setOpen }: NewExpenseFormProps) => {
                     <FormField
                         control={form.control}
                         name="amount"
-                        rules={{ required: true, pattern: /^[0-9]+$/ }}
+                        rules={{ required: true, pattern: /^[0-9]+$/ ,maxLength: 5,}}
+                        
                         render={({ field }) => (
                             <FormItem className="w-full">
                                 <FormLabel>amount</FormLabel>
@@ -74,7 +75,7 @@ const NewExpenseForm = ({ setOpen }: NewExpenseFormProps) => {
                             </FormItem>
                         )}
                     />
-                    <Button className="w-full mt-4" disabled={isPending}>
+                    <Button type="submit" className="w-full mt-4" disabled={isPending}>
                         {isPending ? "Adding..." : "Add"}
                     </Button>
                 </div>

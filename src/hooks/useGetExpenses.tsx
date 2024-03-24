@@ -5,7 +5,7 @@ export const useGetExpenses = () => {
   return useQuery({
     queryKey: ["Expenses"],
     queryFn: async () => {
-      const { data } = await api.get("/Expenses");
+      const { data } = await api.get("/expenses");
 
       return data.data;
     },

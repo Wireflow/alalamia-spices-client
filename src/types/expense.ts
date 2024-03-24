@@ -8,9 +8,7 @@ export const ExpenseSchema = z.object({
 });
 export type ExpenseType = z.infer<typeof ExpenseSchema>;
 
-export const ExpenseId = z.object({
-  id: z.string(),
-});
+
 
 export const ExpenseName = z.object({
   name: z.string(),

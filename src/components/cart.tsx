@@ -1,8 +1,12 @@
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Sheet, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import HomeImage from "../assets/HomeImage.png";
 import { useCart } from "@/State/store";
 import { Product } from "@prisma/client";
+import { SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import { Dialog } from "@radix-ui/react-dialog";
 
 const Cart = () => {
     const { cart, setCart } = useCart(); // Retrieve cart and setCart from the useCart hook
@@ -69,19 +73,55 @@ const Cart = () => {
                     ))}
                 </div>
                 <div>
+                    
+                    <Sheet key="right">
+                        
+                            {/* <SheetTrigger >
+                                {cart.length > 0 && (
+                                    <Button
+                                        className=" flex gap-1 rounded-full w-full m-2 p-2"
+                                        onClick={handleCheckout}
+                                    >
+                                        Checkout ({cart.length}) products
+                                    </Button>
+                                )}
+                            </SheetTrigger> */}
+                            <SheetHeader>
+                                <SheetTitle>Checkout</SheetTitle>
+                                <SheetDescription>
+                                    Make changes to your profile here. Click save when you're done.
+                                </SheetDescription>
+                            </SheetHeader>
+                            <SheetContent>
+                                <div className="grid gap-4 py-4">
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="name" className="text-right">
+                                            Name
+                                        </Label>
+                                        <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                                    </div>
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="username" className="text-right">
+                                            Username
+                                        </Label>
+                                        <Input id="username" value="@peduarte" className="col-span-3" />
+                                    </div>
+                                </div>
+                                <SheetFooter>
+                                    <SheetClose asChild>
+                                        <Button type="submit">Save changes</Button>
+                                    </SheetClose>
+                                </SheetFooter>
+                            </SheetContent>
+                        
+                    </Sheet>
 
-                {cart.length > 0 && (
-                    <Button
-                        className=" flex gap-1 rounded-full w-full m-2 p-2"
-                        onClick={handleCheckout}
-                    >
-                        Checkout ({cart.length}) products
-                    </Button>
 
-                )}
+
                 </div>
             </div>
         </div>
+
     );
 };
 
