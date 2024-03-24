@@ -1,24 +1,18 @@
 import { useCart } from "@/State/store";
 import { Product } from "@prisma/client";
-import { CircleX, DeleteIcon, Minus, Plus, Trash, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash, Trash2 } from "lucide-react";
 import HomeImage from "../assets/HomeImage.png";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import {
     Sheet,
-    SheetClose,
     SheetContent,
-    SheetDescription,
-    SheetFooter,
-    SheetHeader,
-    SheetTitle,
     SheetTrigger,
 } from "./ui/sheet";
 // import { PaymentMethods } from "./PaymentMethods";
 import { useState } from "react";
 import PaymentMethods from "./PaymentMethods";
 import formatCurrency from "@/lib/utils";
+import NewTransactionForm from "./transactions/NewTransactionForm";
 
 const Cart = () => {
     const { cart, setCart } = useCart(); // Retrieve cart and setCart from the useCart hook
@@ -167,8 +161,9 @@ const Cart = () => {
                             </SheetTrigger>
 
                             <SheetContent>
+                                <NewTransactionForm setOpen={() => true} paymentMethod={selectedPaymentMethod} totalAmount={totalPrice}  />
                                 {/* {selectedPaymentMethod == 'CASH' ? <p>cash</p> : <p>check</p>} */}
-                                <div className="grid gap-4 py-4">
+                                {/* <div className="grid gap-4 py-4">
                                     <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor="name" className="text-right">
                                             Amount
@@ -198,12 +193,12 @@ const Cart = () => {
                                     }
 
 
-                                </div>
-                                <SheetFooter>
+                                </div> */}
+                                {/* <SheetFooter>
                                     <SheetClose asChild>
                                         <Button type="submit">Save changes</Button>
                                     </SheetClose>
-                                </SheetFooter>
+                                </SheetFooter> */}
                             </SheetContent>
                         </Sheet>
                     </div>

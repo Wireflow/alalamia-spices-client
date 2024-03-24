@@ -1,4 +1,4 @@
-import {  BaggageClaim, Plus, ShoppingCart } from "lucide-react";
+import {  BaggageClaim, Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import formatCurrency from "@/lib/utils";
 
@@ -33,7 +33,7 @@ const ProductCard = (product: ProductProps) => {
       <p>{product.boxes}</p>
       <Button
         onClick={product.addToCart}
-        className="absolute right-0 bottom-0 bg-[#4a392c] p-4 rounded-tl-lg"
+        className="absolute right-0 bottom-0 bg-[#4a392c] p-2 rounded-tl-lg rounded-tr-none rounded-bl-none rounded-br-lg shadow-lg"
       >
         <Plus color="white" />
       </Button>

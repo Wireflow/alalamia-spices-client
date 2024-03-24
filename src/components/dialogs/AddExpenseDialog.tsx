@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import AddExpense from "../pages/Expenses/AddExpense";
+import AddExpense from "../Pages/Expenses/AddExpenseForm";
 
 const NewExpenseDialog = () => {
   const [open, setOpen] = useState(false);
