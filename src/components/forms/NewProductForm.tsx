@@ -16,6 +16,14 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useGetSuppliers } from "@/hooks/useGetSuppliers";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type NewProductFormProps = {
   setOpen: (isOpen: boolean) => void;
@@ -28,6 +36,7 @@ const NewProductForm = ({
   isEdit = false,
   product,
 }: NewProductFormProps) => {
+  const { data: suppliers } = useGetSuppliers();
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
@@ -69,7 +78,11 @@ const NewProductForm = ({
                 <FormItem className="flex-1">
                   <FormLabel>Product Name</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" />
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="New product name"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -88,6 +101,7 @@ const NewProductForm = ({
                       onChange={(e) =>
                         field.onChange(parseFloat(e.target.value))
                       }
+                      placeholder="ex. $10.99"
                     />
                   </FormControl>
                   <FormMessage />
@@ -108,6 +122,7 @@ const NewProductForm = ({
                       {...field}
                       type="number"
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      placeholder="Boxes in stock"
                     />
                   </FormControl>
                   <FormMessage />
@@ -125,6 +140,7 @@ const NewProductForm = ({
                       {...field}
                       type="number"
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      placeholder="Quantity in a box"
                     />
                   </FormControl>
                   <FormMessage />
@@ -142,6 +158,7 @@ const NewProductForm = ({
                       {...field}
                       type="number"
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      placeholder="ex. 100"
                     />
                   </FormControl>
                   <FormMessage />
@@ -157,7 +174,7 @@ const NewProductForm = ({
                 <FormItem className="w-full">
                   <FormLabel>SKU</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" />
+                    <Input {...field} type="text" placeholder="Scan product" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -170,7 +187,22 @@ const NewProductForm = ({
                 <FormItem className="w-full">
                   <FormLabel>Supplier</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" />
+                    <Select {...field} onValueChange={field.onChange}>
+                      <SelectTrigger className="capitalize bg-white">
+                        <SelectValue placeholder="Product Supplier" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {suppliers?.map((supplier) => (
+                          <SelectItem
+                            key={supplier.id}
+                            className="capitalize"
+                            value={supplier.id}
+                          >
+                            {supplier.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -184,7 +216,12 @@ const NewProductForm = ({
               <FormItem className="w-full">
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea {...field} className="max-h-[150px]" rows={3} />
+                  <Textarea
+                    {...field}
+                    className="max-h-[150px]"
+                    rows={3}
+                    placeholder="ex. This product comes from..."
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

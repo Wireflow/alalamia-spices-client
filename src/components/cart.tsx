@@ -48,11 +48,11 @@ const Cart = () => {
           {cart.map((cartItem: Product) => (
             <div
               key={cartItem.id}
-              className="flex justify-between px-5 py-2 border"
+              className="flex justify-between px-5 py-2 border w-full"
             >
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 w-full">
                 <p className="text-lg font-bold">{cartItem.name}</p>
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center w-full">
                   <Button
                     className="p-3 rounded-full"
                     onClick={() =>
@@ -62,7 +62,7 @@ const Cart = () => {
                     <Minus color="white" strokeWidth={3} size={20} />{" "}
                   </Button>
 
-                  <p className="bg-secondary py-1 border-2 rounded-full font-bold text-center w-full max-w-30">
+                  <p className="bg-secondary py-1  border-2 rounded-full font-bold text-center w-full max-w-20">
                     {cartItem.quantity}
                   </p>
 
@@ -80,13 +80,13 @@ const Cart = () => {
                 <p className="font-medium text-lg">
                   {currencyFormatter(cartItem.price)}
                 </p>
-                <p className="bg-gray-200 rounded-full p-3 flex justify-center  items-center">
-                  <Trash2
-                    color="red"
-                    size={15}
-                    onClick={() => removeItemFromCart(cartItem)}
-                  />
-                </p>
+                <Button
+                  variant={"destructive"}
+                  className="rounded-full p-3 flex justify-center  items-center"
+                  onClick={() => removeItemFromCart(cartItem)}
+                >
+                  <Trash2 size={15} />
+                </Button>
               </div>
             </div>
           ))}

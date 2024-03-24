@@ -42,13 +42,13 @@ const Sidebar = () => {
   return (
     <div className="bg-white h-screen flex flex-col gap-5   shadow-black shadow-lg justify-between ">
       <div className="h-full flex flex-col justify-between">
-        <div className="flex flex-col  gap-5">
+        <div className="flex flex-col  gap-10">
           <Link to={"/home"}>
             <div className="shadow-md p-3 cursor-pointer">
               <img src={logo} alt="Logo" className="w-[80px]" />
             </div>
           </Link>
-          <div className="ml-2">
+          <div className="ml-2 grid gap-8">
             {navLinks.map((link, index) => (
               <NavLink
                 to={link.to}
