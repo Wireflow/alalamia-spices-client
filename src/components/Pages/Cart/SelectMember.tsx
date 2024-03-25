@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,10 @@ export const SelectMemberComboBox = () => {
   const { data } = useGetMembers();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  console.log(data);
+  // console.log(data);
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -40,7 +43,9 @@ export const SelectMemberComboBox = () => {
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder="Search members..." className="h-9" />
-          {data ? (
+          {
+         
+          data!=undefined ? (
             <CommandGroup>
               {data.map((member) => (
                 <CommandItem
@@ -68,6 +73,7 @@ export const SelectMemberComboBox = () => {
       </PopoverContent>
     </Popover>
   );
+  
 };
 
 export default SelectMemberComboBox;

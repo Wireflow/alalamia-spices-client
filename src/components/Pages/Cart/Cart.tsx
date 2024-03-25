@@ -6,9 +6,7 @@ import { useEffect } from "react";
 
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetFooter,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import PaymentMethods from "@/components/PaymentMethods";
@@ -17,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import NewTransactionForm from "@/components/transactions/NewTransactionForm";
 import SelectMemberComboBox from "./SelectMember";
+import PrintButton from "@/components/ui/printbutton";
 
 const Cart = () => {
   const {
@@ -50,6 +49,7 @@ const Cart = () => {
           {/* <p className="text-md font-semibold">Select a member</p> */}
           <SelectMemberComboBox />
           <Button variant={"outline"}>Add</Button>
+          <PrintButton/>
         </div>
         <div className="flex px-4 py-3 justify-between items-center">
           <div className="inline-flex items-end justify-center gap-2">
@@ -135,11 +135,11 @@ const Cart = () => {
             </span>
           </p>
         </div>
-        <PaymentMethods />
+        {cart.length != 0 && (<PaymentMethods />)}
 
         <Sheet>
           <SheetTrigger className="p-2 w-full">
-            <Button
+            <Button disabled={cart.length == 0}
               size={"lg"}
               className="flex-1 w-full h-14 text-xl "
               onClick={handleCheckout}
@@ -149,11 +149,12 @@ const Cart = () => {
           </SheetTrigger>
           <SheetContent>
             {/* {selectedPaymentMethod == 'CASH' ? <p>cash</p> : <p>check</p>} */}
+            
             <NewTransactionForm setOpen={()=>true} 
-              paymentMethod={selectedPaymentMethod} 
-              totalAmount={totalPrice} 
+            
+              
               memberId={""} 
-              products={cart.map((item)=>item.productId)} />
+               />
             {/* <SheetFooter>
               <SheetClose asChild>
                 <Button type="submit">Save changes</Button>

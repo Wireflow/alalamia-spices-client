@@ -18,8 +18,8 @@ const PrintButton = () => {
         </body>
       </html>
     `);
-    printWindow.document.close();
     printWindow.print();
+    printWindow.document.close();
     }
   };
 

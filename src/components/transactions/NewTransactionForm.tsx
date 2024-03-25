@@ -1,4 +1,4 @@
-import { TransactionSchema, TransactionType } from "@/types/transaction";
+import { PurchasedProductType, TransactionSchema, TransactionType } from "@/types/transaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -16,19 +16,20 @@ import submitNewTransaction from "@/use-cases/submitNewTransaction";
 import { HandCoins } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useCart } from "@/State/store";
 
 
 type NewTransactionFormProps = {
   setOpen: (isOpen: boolean) => void;
-  paymentMethod: any;
-  totalAmount: number;
+  
+ 
   memberId:string;
-  products:string[];
+  
 };
 
-const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransactionFormProps) => {
+const NewTransactionForm = ({ setOpen, }: NewTransactionFormProps) => {
   const queryClient = useQueryClient();
-
+  const {getProducts, selectedPaymentMethod, totalAmount} = useCart();
   const { mutate, isPending } = useMutation({
     mutationFn: submitNewTransaction,
     onSuccess: () => {
@@ -40,12 +41,13 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
   const form = useForm<TransactionType>({
     resolver: zodResolver(TransactionSchema),
     defaultValues: {
-      totalAmount: totalAmount,
-      paymentMethod: paymentMethod,
+      totalAmount: totalAmount(),
+      paymentMethod: selectedPaymentMethod,
       memberId: "",
       checkNumber: 0,
       checkAmount: 0,
-      purchasedProducts: []
+      purchasedProducts: getProducts()
+      
     },
   });
 
@@ -98,7 +100,7 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
           />
 
           {/* check number */}
-          {/* {paymentMethod == "CHECK" && (<FormField
+          {selectedPaymentMethod == "CHECK" && (<FormField
             control={form.control}
             name="checkNumber"
             render={({ field }) => (
@@ -112,7 +114,22 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
               </FormItem>
             )}
           />
-          )} */}
+          )}
+          {selectedPaymentMethod == "CHECK" && (<FormField
+            control={form.control}
+            name="checkAmount"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Check Amount</FormLabel>
+                <FormControl>
+                  <Input {...field} type="number"
+                    onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          )}
           <Button type="submit" className="w-full mt-4" disabled={isPending}>
             <div className="lex items-center justify-center space-x-2">
               <span className="mr-2">{isPending ? "Validating..." : "Pay"}</span>

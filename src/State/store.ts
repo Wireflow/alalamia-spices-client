@@ -15,6 +15,8 @@ type CartStoreType = {
   isProductInCart: (productId: string) => boolean;
   selectedPaymentMethod: PaymentMethodsType;
   setSelectedPaymentMethod: (selectedPaymentMethod: PaymentMethodsType) => void;
+  getProducts: () => PurchasedProductType[];
+  totalAmount: ()=>number;
 };
 
 export const useCart = create<CartStoreType>((set, get) => ({
@@ -28,6 +30,7 @@ export const useCart = create<CartStoreType>((set, get) => ({
       productId: product.id,
       purchaseQuantity: 1,
     };
+
 
     const cartItem = get().cart.find(
       (item) => item.productId === purchasedProduct.productId
@@ -74,4 +77,16 @@ export const useCart = create<CartStoreType>((set, get) => ({
 
   memberId: "",
   setMember: (memberId) => set({ memberId }),
+   getProducts : () => {
+    const purchasedProducts = get().cart.map((item) => ({
+      productId: item.productId,
+      purchaseQuantity: item.purchaseQuantity,
+      price: item.price,
+      name: item.name,
+    }));
+    return purchasedProducts;
+  },
+  totalAmount: () => get().cart.reduce((accumulator, item) => accumulator + item.price * item.purchaseQuantity, 0),
+  
+
 }));
