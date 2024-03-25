@@ -21,15 +21,15 @@ import { useCart } from "@/State/store";
 
 type NewTransactionFormProps = {
   setOpen: (isOpen: boolean) => void;
-  
- 
-  memberId:string;
-  
+
+
+  memberId: string;
+
 };
 
 const NewTransactionForm = ({ setOpen, }: NewTransactionFormProps) => {
   const queryClient = useQueryClient();
-  const {getProducts, selectedPaymentMethod, totalAmount} = useCart();
+  const { getProducts, selectedPaymentMethod, totalAmount } = useCart();
   const { mutate, isPending } = useMutation({
     mutationFn: submitNewTransaction,
     onSuccess: () => {
@@ -47,11 +47,12 @@ const NewTransactionForm = ({ setOpen, }: NewTransactionFormProps) => {
       checkNumber: 0,
       checkAmount: 0,
       purchasedProducts: getProducts()
-      
+
     },
   });
 
   const onSubmit = async (data: TransactionType) => {
+    console.log(data);
     mutate(data);
   };
 
@@ -84,14 +85,14 @@ const NewTransactionForm = ({ setOpen, }: NewTransactionFormProps) => {
             control={form.control}
             name="totalAmount"
             // disabled
-          
+
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Total Amount</FormLabel>
                 <FormControl>
                   <Input {...field} type="number"
-                  // defaultValue={totalAmount}
-                  readOnly
+                    // defaultValue={totalAmount}
+                    readOnly
                     onChange={(e) => field.onChange(parseFloat(e.target.value))} />
                 </FormControl>
                 <FormMessage />
@@ -108,7 +109,7 @@ const NewTransactionForm = ({ setOpen, }: NewTransactionFormProps) => {
                 <FormLabel>Check Number</FormLabel>
                 <FormControl>
                   <Input {...field} type="number"
-                    onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                    onChange={(e) => e.target.value? field.onChange(parseFloat(e.target.value)) : field.onChange(0)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,19 +124,18 @@ const NewTransactionForm = ({ setOpen, }: NewTransactionFormProps) => {
                 <FormLabel>Check Amount</FormLabel>
                 <FormControl>
                   <Input {...field} type="number"
-                    onChange={(e) => field.onChange(parseFloat(e.target.value))} />
+                    onChange={(e) => e.target.value? field.onChange(parseFloat(e.target.value)) : field.onChange(0)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           )}
-          <Button type="submit" className="w-full mt-4" disabled={isPending}>
+          <Button className="w-full mt-4" disabled={isPending}>
             <div className="lex items-center justify-center space-x-2">
               <span className="mr-2">{isPending ? "Validating..." : "Pay"}</span>
-              
-              </div>
-            <HandCoins color="white"/>
+            </div>
+            <HandCoins color="white" />
           </Button>
         </div>
       </form>
