@@ -1,17 +1,23 @@
 import { useViewTransaction } from "@/hooks/useViewTransaction";
 import { Button } from "../ui/button";
 import { formatDateToString } from "@/lib/utils";
+import useGetMemberById from "@/hooks/useGetMemberById";
 
 type transactionProp = {
   transactionId: string;
+  memberId: string;
 };
 
-const ViewTransaction = ({ transactionId }: transactionProp) => {
+const ViewTransaction = ({ transactionId , memberId }: transactionProp) => {
   const { data: transaction } = useViewTransaction({ id: transactionId });
+  const {data} = useGetMemberById({id: memberId})
 
   if (!transaction) return <p>Unable to obtain transaction info</p>;
 
   const createdAtDate = new Date(transaction?.createdAt);
+
+
+
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import { Member, Transaction } from "@prisma/client";
+import {  Transaction } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../services/axiosInstance";
 

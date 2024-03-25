@@ -30,6 +30,7 @@ import { formatDateToString } from "@/lib/utils";
 
 const TransactionTable = () => {
   const { data, isLoading } = useGetTransactions();
+  console.log(data)
 
   const columns: ColumnDef<Transaction>[] = [
     {
@@ -79,7 +80,7 @@ const TransactionTable = () => {
               <Button>View</Button>
             </DialogTrigger>
             <DialogContent>
-              <ViewTransaction transactionId={row.original.id} />
+            <ViewTransaction memberId={row.getValue('memberId')} transactionId={row.original.id} />
             </DialogContent>
           </Dialog>
         );

@@ -12,4 +12,4 @@ export const api = axios.create({
   },
 });
 
-console.log(token);
+

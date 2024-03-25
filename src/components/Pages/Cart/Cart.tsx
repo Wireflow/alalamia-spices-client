@@ -2,21 +2,15 @@ import { useCart } from "@/State/store";
 import { currencyFormatter } from "@/lib/utils";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useEffect } from "react";
- import HomeImage from "@/assets/HomeImage.png";
+import HomeImage from "@/assets/HomeImage.png";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import PaymentMethods from "@/components/PaymentMethods";
 import { Button } from "@/components/ui/button";
 
 import { Badge } from "@/components/ui/badge";
 import NewTransactionForm from "@/components/transactions/NewTransactionForm";
-import SelectMemberComboBox from "./SelectMember";
+import SelectMemberDialog from "@/components/dialogs/SelectMemberDialog";
 
 const Cart = () => {
   const {
@@ -46,11 +40,7 @@ const Cart = () => {
             className="2xl:h-[100px] h-[100px] w-full"
           />
         </div>
-        <div className="flex justify-between items-center py-2 px-3 gap-3 m-3">
-          {/* <p className="text-md font-semibold">Select a member</p> */}
-          <SelectMemberComboBox />
-          <Button variant={"outline"}>Add</Button>
-        </div>
+        <SelectMemberDialog />
         <div className="flex px-4 py-3 justify-between items-center">
           <div className="inline-flex items-end justify-center gap-2">
             <h2 className="text-4xl font-semibold">Cart</h2>
@@ -149,11 +139,13 @@ const Cart = () => {
           </SheetTrigger>
           <SheetContent>
             {/* {selectedPaymentMethod == 'CASH' ? <p>cash</p> : <p>check</p>} */}
-            <NewTransactionForm setOpen={()=>true} 
-              paymentMethod={selectedPaymentMethod} 
-              totalAmount={totalPrice} 
-              memberId={""} 
-              products={cart.map((item)=>item.productId)} />
+            <NewTransactionForm
+              setOpen={() => true}
+              paymentMethod={selectedPaymentMethod}
+              totalAmount={totalPrice}
+              memberId={""}
+              products={cart.map((item) => item.productId)}
+            />
             {/* <SheetFooter>
               <SheetClose asChild>
                 <Button type="submit">Save changes</Button>
