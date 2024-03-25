@@ -45,7 +45,7 @@ const Cart = () => {
             <h2 className="text-4xl font-semibold">Cart</h2>
             <Badge
               variant={"destructive"}
-              className="text-lg rounded-full w-10 justify-center"
+              className="text-lg rounded-full w-8 h-8 justify-center"
             >
               {cart.length}
             </Badge>
@@ -108,7 +108,7 @@ const Cart = () => {
 
               <div className="flex flex-col items-center justify-center gap-2">
                 <p className="font-medium text-lg">
-                  {currencyFormatter(getTotalQuantity())}
+                  {/* {currencyFormatter(getTotalQuantity())} */}
                 </p>
                 <Button
                   variant={"destructive"}
@@ -127,7 +127,7 @@ const Cart = () => {
         <div className="flex flex-col mr-4 mt-2 text-right gap-2">
           <p className="font-medium text-lg">
             Total Amount :
-            <span className="inline-block ml-2 px-2 py-1 text-lg font-semibold bg-blue-500 text-white rounded">
+            <span className="inline-block ml-2 px-2 py-1 text-lg font-semibold bg-yellow-950 text-white rounded">
               {currencyFormatter(getTotal())}
             </span>
           </p>

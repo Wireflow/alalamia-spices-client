@@ -8,16 +8,13 @@ type transactionProp = {
   memberId: string;
 };
 
-const ViewTransaction = ({ transactionId , memberId }: transactionProp) => {
+const ViewTransaction = ({ transactionId, memberId }: transactionProp) => {
   const { data: transaction } = useViewTransaction({ id: transactionId });
-  const {data} = useGetMemberById({id: memberId})
+  const { data } = useGetMemberById({ id: memberId });
 
   if (!transaction) return <p>Unable to obtain transaction info</p>;
 
   const createdAtDate = new Date(transaction?.createdAt);
-
-
-
 
   return (
     <div>
@@ -34,7 +31,6 @@ const ViewTransaction = ({ transactionId , memberId }: transactionProp) => {
             Order total: ${transaction?.totalAmount}
           </p>
         </div>
-        <Button>View Member</Button>
       </div>
       {transaction?.checkAmount === null ? null : (
         <p className="text-sm text-gray-600">
@@ -46,6 +42,12 @@ const ViewTransaction = ({ transactionId , memberId }: transactionProp) => {
           Check number: {transaction?.checkNumber}
         </p>
       )}
+         {transaction?.memberId === null ? null : (
+        <p className="text-sm text-gray-600">
+          MemberId: {transaction?.memberId}
+        </p>
+      )}
+      <Button className="mt-2">Print Receipt</Button>
     </div>
   );
 };

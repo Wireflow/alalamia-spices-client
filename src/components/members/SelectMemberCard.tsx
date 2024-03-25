@@ -27,13 +27,15 @@ const SelectMemberCard = ({ member, viewOnly = false }: Props) => {
         }
       }}
     >
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>
-          {member.address} <span>({member.name})</span>
-        </CardTitle>
-        <CardDescription className="flex items-center gap-2">
-          <Phone className="w-3 h-3" /> {member.phoneNumber}
-        </CardDescription>
+      <CardHeader className="flex flex-row  items-center justify-between">
+        <div className="flex flex-col gap-2 justify-end">
+          <CardTitle>
+            {member.address} <span>({member.name})</span>
+          </CardTitle>
+          <CardDescription className="flex items-center gap-2">
+            <Phone className="w-3 h-3" /> {member.phoneNumber}
+          </CardDescription>
+        </div>
         {viewOnly && (
           <Button
             variant={"destructive"}
