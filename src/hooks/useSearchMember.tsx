@@ -1,30 +1,31 @@
 import { Member } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../services/axiosInstance";
+import { SearchOptions } from "@/constants/cart";
 
 type SearchMemberProps = {
-  address?: string;
-  phoneNumber?: string;
-  isSearching: boolean;
+  searchTerm?: string;
+  searchType?: SearchOptions;
 };
 
 export const useSearchMember = (options: SearchMemberProps) => {
-  const { address, phoneNumber, isSearching } = options;
+  const { searchTerm, searchType } = options;
+
   const searchOption =
-    address && address.length >= 3
-      ? `get-by-address?address=${address}`
-      : phoneNumber && phoneNumber.length >= 4
-      ? `get-by-phone?phoneNumber=${phoneNumber}`
+    searchTerm && searchTerm.length >= 3
+      ? `get-by-address?address=${searchTerm}`
+      : searchType === "phone number" && searchTerm && searchTerm.length >= 4
+      ? `get-by-phone?phoneNumber=${searchTerm}`
       : null;
 
-  const confirmSearch = searchOption ? true : false;
-
-  return useQuery({
+  return useQuery<Member[]>({
     queryKey: ["searchMember", searchOption],
-    queryFn: async (): Promise<Member[]> => {
+    queryFn: async () => {
+      if (!searchOption) {
+        return null;
+      }
       const { data } = await api.get(`/members/${searchOption}`);
       return data.data;
     },
-    enabled: isSearching,
   });
 };

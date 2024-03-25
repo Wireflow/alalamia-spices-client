@@ -15,6 +15,7 @@ import {
   SheetFooter,
   SheetTrigger,
 } from "../ui/sheet";
+import SelectMemberDialog from "../dialogs/SelectMemberDialog";
 
 const Cart = () => {
   const {
@@ -44,10 +45,7 @@ const Cart = () => {
             className="2xl:h-[100px] h-[100px] w-full"
           />
         </div>
-        <div className="flex justify-between items-center py-2 px-3 gap-3 m-3">
-          <p className="text-md font-semibold">Select a member</p>
-          <Button variant={"outline"}>Add</Button>
-        </div>
+        <SelectMemberDialog />
         <div className="flex px-4 py-3 justify-between items-center">
           <div className="inline-flex items-end justify-center gap-2">
             <h2 className="text-4xl font-semibold">Cart</h2>

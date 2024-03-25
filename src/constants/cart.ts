@@ -6,8 +6,8 @@ export const PAYMENT_METHODS: readonly ["CASH", "CHECK", "CARD"] = [
 
 export type PaymentMethodsType = (typeof PAYMENT_METHODS)[number];
 
-export const SEARCH_OPTIONS: readonly ["address", "phoneNumber"] = [
+export const SEARCH_OPTIONS: readonly ["address", "phone number"] = [
   "address",
-  "phoneNumber",
+  "phone number",
 ];
 export type SearchOptions = (typeof SEARCH_OPTIONS)[number];
