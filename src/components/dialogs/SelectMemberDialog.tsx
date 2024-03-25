@@ -17,7 +17,7 @@ const SelectMemberDialog = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger className="w-full">
-        <Button size={"lg"} variant={"outline"} className="w-full">
+        <Button size={"lg"} className="w-full text-base h-14">
           Select Member <Plus className="w-4 h-4 ml-2" />
         </Button>
       </DialogTrigger>

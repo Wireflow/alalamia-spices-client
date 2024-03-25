@@ -1,40 +1,28 @@
 import { useCart } from "@/State/store";
 import { currencyFormatter } from "@/lib/utils";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { useEffect } from "react";
 import HomeImage from "../../assets/HomeImage.png";
 import PaymentMethods from "../PaymentMethods";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetTrigger,
-} from "../ui/sheet";
+
+import ConfirmCheckoutSheet from "./ConfirmCheckoutSheet";
 import SelectMemberDialog from "../dialogs/SelectMemberDialog";
+import SelectMemberCard from "../members/SelectMemberCard";
+import { useGetProducts } from "@/hooks/useGetProducts";
 
 const Cart = () => {
+  const { data: products } = useGetProducts();
   const {
     cart,
     removeItemFromCart,
     updateItemQuantity,
-    clearCart,
-    selectedPaymentMethod,
+    resetCart,
+    member,
+    getTotal,
+    getTotalQuantity,
   } = useCart();
 
-  const handleCheckout = () => {
-    // Logic for handling the checkout action
-  };
-
-  useEffect(() => {
-    console.log(cart);
-  }, [cart]);
-
-  let totalPrice = 0;
   return (
     <div className="shadow-2xl flex flex-col justify-between border-black shadow-black w-[600px] h-[calc(100%-70px)]">
       <div>
@@ -45,7 +33,13 @@ const Cart = () => {
             className="2xl:h-[100px] h-[100px] w-full"
           />
         </div>
-        <SelectMemberDialog />
+        <div className="p-2">
+          {member ? (
+            <SelectMemberCard member={member} viewOnly />
+          ) : (
+            <SelectMemberDialog />
+          )}
+        </div>
         <div className="flex px-4 py-3 justify-between items-center">
           <div className="inline-flex items-end justify-center gap-2">
             <h2 className="text-4xl font-semibold">Cart</h2>
@@ -56,17 +50,14 @@ const Cart = () => {
               {cart.length}
             </Badge>
           </div>
-          <Button onClick={clearCart} className=" flex gap-1 rounded-full">
-            Empty <Trash2 color="white" size={15} />
+          <Button onClick={resetCart} className=" flex gap-1 rounded-full">
+            Reset <Trash2 color="white" size={15} />
           </Button>
         </div>
       </div>
 
       <div className="bg-white border h-[650px] max-h-[650px] flex flex-col gap-2 overflow-hidden overflow-y-scroll">
         {cart.map((cartItem) => {
-          const totalQtyPrice =
-            cartItem.price * (cartItem.purchaseQuantity || 0);
-          totalPrice += totalQtyPrice;
           return (
             <div
               key={cartItem.productId}
@@ -92,12 +83,23 @@ const Cart = () => {
                   </p>
                   <Button
                     className="p-3 rounded-full"
-                    onClick={() =>
-                      updateItemQuantity(
-                        cartItem,
-                        (cartItem.purchaseQuantity || 1) + 1
-                      )
-                    }
+                    onClick={() => {
+                      const product =
+                        products &&
+                        products.find((p) => p.id === cartItem.productId);
+
+                      if (!product?.boxQuantity) return;
+
+                      if (
+                        cartItem.purchaseQuantity &&
+                        cartItem.purchaseQuantity < product.boxQuantity
+                      ) {
+                        updateItemQuantity(
+                          cartItem,
+                          cartItem.purchaseQuantity + 1
+                        );
+                      }
+                    }}
                   >
                     <Plus color="white" size={15} />
                   </Button>
@@ -106,7 +108,7 @@ const Cart = () => {
 
               <div className="flex flex-col items-center justify-center gap-2">
                 <p className="font-medium text-lg">
-                  {currencyFormatter(totalQtyPrice)}
+                  {currencyFormatter(getTotalQuantity())}
                 </p>
                 <Button
                   variant={"destructive"}
@@ -126,53 +128,12 @@ const Cart = () => {
           <p className="font-medium text-lg">
             Total Amount :
             <span className="inline-block ml-2 px-2 py-1 text-lg font-semibold bg-blue-500 text-white rounded">
-              {currencyFormatter(totalPrice)}
+              {currencyFormatter(getTotal())}
             </span>
           </p>
         </div>
         <PaymentMethods />
-
-        <Sheet>
-          <SheetTrigger className="p-2 w-full">
-            <Button
-              size={"lg"}
-              className="flex-1 w-full h-14 text-xl "
-              onClick={handleCheckout}
-            >
-              Checkout ({cart.length})
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            {/* {selectedPaymentMethod == 'CASH' ? <p>cash</p> : <p>check</p>} */}
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Amount
-                </Label>
-                <Input
-                  id="totalAmount"
-                  value={totalPrice}
-                  className="col-span-3"
-                  disabled
-                />
-              </div>
-
-              {selectedPaymentMethod == "CHECK" && (
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Check Number :
-                  </Label>
-                  <Input id="checkNumber" className="col-span-3" />
-                </div>
-              )}
-            </div>
-            <SheetFooter>
-              <SheetClose asChild>
-                <Button type="submit">Save changes</Button>
-              </SheetClose>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
+        <ConfirmCheckoutSheet key={getTotal()} />
       </div>
     </div>
   );

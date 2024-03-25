@@ -6,7 +6,6 @@ const submitNewTransaction = async (
   transaction: TransactionType
 ): Promise<Transaction | null> => {
   try {
-    console.log(transaction);
     const response = await api.post("/transactions", transaction);
     return response.data.data;
   } catch (error) {

@@ -1,14 +1,18 @@
 import { PaymentMethodsType } from "@/constants/cart";
 import { PurchasedProductType } from "@/types/transaction";
-import { Product } from "@prisma/client";
+import { Member, Product } from "@prisma/client";
 import { create } from "zustand";
 
 type CartStoreType = {
   cart: PurchasedProductType[];
   memberId: string;
-  setMember: (memberId: string) => void;
+  member: Member | null;
+  getTotal: () => number;
+  getTotalQuantity: () => number;
+  setMember: (member: Member) => void;
+  clearMember: () => void;
   setCart: (newCart: PurchasedProductType[]) => void;
-  clearCart: () => void;
+  resetCart: () => void;
   addItemToCart: (product: Product) => void;
   removeItemFromCart: (product: PurchasedProductType) => void;
   updateItemQuantity: (product: PurchasedProductType, quantity: number) => void;
@@ -20,7 +24,20 @@ type CartStoreType = {
 export const useCart = create<CartStoreType>((set, get) => ({
   cart: [],
   setCart: (newCart) => set({ cart: newCart }),
-  clearCart: () => set({ cart: [] }),
+  getTotal: () => {
+    return get().cart.reduce(
+      (total, product) =>
+        total + (product.price || 0) * (product.purchaseQuantity || 0),
+      0
+    );
+  },
+  getTotalQuantity: () => {
+    return get().cart.reduce(
+      (total, product) => total + (product.purchaseQuantity || 0),
+      0
+    );
+  },
+  resetCart: () => set({ cart: [], member: null, memberId: "" }),
   addItemToCart: (product) => {
     const purchasedProduct: PurchasedProductType = {
       name: product.name,
@@ -73,5 +90,7 @@ export const useCart = create<CartStoreType>((set, get) => ({
     set({ selectedPaymentMethod }),
 
   memberId: "",
-  setMember: (memberId) => set({ memberId }),
+  member: null,
+  setMember: (member) => set({ memberId: member.id, member }),
+  clearMember: () => set({ member: null }),
 }));
