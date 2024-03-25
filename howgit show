@@ -1,0 +1,139 @@
+[33mcommit 13510187608aad367dd11fb86ccf28f66ab12a74[m
+Author: Mohamme Albazel <albazel2004@gmail.com>
+Date:   Mon Mar 25 00:12:32 2024 +0300
+
+    apply payment logic in checkout form
+
+[1mdiff --git a/src/components/cart.tsx b/src/components/cart.tsx[m
+[1mindex 998928c..653b35f 100644[m
+[1m--- a/src/components/cart.tsx[m
+[1m+++ b/src/components/cart.tsx[m
+[36m@@ -126,6 +126,8 @@[m [mconst Cart = () => {[m
+ [m
+                             );[m
+                         })[m
+[32m+[m[32m                        // Extracting an array of IDs from the cart[m
+[32m+[m[32m                        //  cartIds = cart.map((product) => product.id);[m
+ [m
+ [m
+                     }[m
+[36m@@ -161,7 +163,12 @@[m [mconst Cart = () => {[m
+                             </SheetTrigger>[m
+ [m
+                             <SheetContent>[m
+[31m-                                <NewTransactionForm setOpen={() => true} paymentMethod={selectedPaymentMethod} totalAmount={totalPrice}  />[m
+[32m+[m[32m                                <NewTransactionForm[m[41m [m
+[32m+[m[32m                                    setOpen={() => true}[m[41m [m
+[32m+[m[32m                                    paymentMethod={selectedPaymentMethod}[m[41m [m
+[32m+[m[32m                                    totalAmount={totalPrice}[m[41m [m
+[32m+[m[32m                                    memberId={"clu5uovwo000711bciyby0ic9"}[m[41m [m
+[32m+[m[32m                                    products={cart.map((product) => product.id)}  />[m
+                                 {/* {selectedPaymentMethod == 'CASH' ? <p>cash</p> : <p>check</p>} */}[m
+                                 {/* <div className="grid gap-4 py-4">[m
+                                     <div className="grid grid-cols-4 items-center gap-4">[m
+[1mdiff --git a/src/components/transactions/NewTransactionForm.tsx b/src/components/transactions/NewTransactionForm.tsx[m
+[1mindex c0f1a3e..9658c68 100644[m
+[1m--- a/src/components/transactions/NewTransactionForm.tsx[m
+[1m+++ b/src/components/transactions/NewTransactionForm.tsx[m
+[36m@@ -13,12 +13,15 @@[m [mimport { Input } from "@components/ui/input";[m
+ import { useMutation, useQueryClient } from "@tanstack/react-query";[m
+ import submitNewTransaction from "@/use-cases/submitNewTransaction";[m
+ import { Button } from "@components/ui/button";[m
+[32m+[m[32mimport { HandCoins } from "lucide-react";[m
+ [m
+ [m
+ type NewTransactionFormProps = {[m
+   setOpen: (isOpen: boolean) => void;[m
+   paymentMethod: any;[m
+   totalAmount: number;[m
+[32m+[m[32m  memberId:string;[m
+[32m+[m[32m  products:string[];[m
+ };[m
+ [m
+ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransactionFormProps) => {[m
+[36m@@ -37,9 +40,9 @@[m [mconst NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact[m
+     defaultValues: {[m
+       totalAmount: totalAmount,[m
+       paymentMethod: paymentMethod,[m
+[31m-      memberId: undefined,[m
+[31m-      checkNumber: undefined,[m
+[31m-      checkAmount: undefined,[m
+[32m+[m[32m      memberId: "",[m
+[32m+[m[32m      checkNumber: 0,[m
+[32m+[m[32m      checkAmount: 0,[m
+       products: [][m
+     },[m
+   });[m
+[36m@@ -56,7 +59,7 @@[m [mconst NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact[m
+           <FormField[m
+             control={form.control}[m
+             name="paymentMethod"[m
+[31m-            disabled[m
+[32m+[m[32m            // disabled[m
+             rules={{ required: true, pattern: /^[0-9]+$/, maxLength: 5 }}[m
+             render={({ field }) => ([m
+               <FormItem className="w-full">[m
+[36m@@ -65,7 +68,7 @@[m [mconst NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact[m
+                   <Input[m
+                     {...field}[m
+                     type="text"[m
+[31m-[m
+[32m+[m[32m                    readOnly[m
+                   />[m
+                 </FormControl>[m
+                 <FormMessage />[m
+[36m@@ -76,12 +79,15 @@[m [mconst NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact[m
+           <FormField[m
+             control={form.control}[m
+             name="totalAmount"[m
+[31m-            disabled[m
+[32m+[m[32m            // disabled[m
+[32m+[m[41m          [m
+             render={({ field }) => ([m
+               <FormItem className="w-full">[m
+                 <FormLabel>Total Amount</FormLabel>[m
+                 <FormControl>[m
+                   <Input {...field} type="number"[m
+[32m+[m[32m                  // defaultValue={totalAmount}[m
+[32m+[m[32m                  readOnly[m
+                     onChange={(e) => field.onChange(parseFloat(e.target.value))} />[m
+                 </FormControl>[m
+                 <FormMessage />[m
+[36m@@ -90,7 +96,7 @@[m [mconst NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact[m
+           />[m
+ [m
+           {/* check number */}[m
+[31m-          {paymentMethod == "CHECK" && (<FormField[m
+[32m+[m[32m          {/* {paymentMethod == "CHECK" && (<FormField[m
+             control={form.control}[m
+             name="checkNumber"[m
+             render={({ field }) => ([m
+[36m@@ -104,9 +110,13 @@[m [mconst NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact[m
+               </FormItem>[m
+             )}[m
+           />[m
+[31m-          )}[m
+[32m+[m[32m          )} */}[m
+           <Button type="submit" className="w-full mt-4" disabled={isPending}>[m
+[31m-            {isPending ? "Adding..." : "Add"}[m
+[32m+[m[32m            <div className="lex items-center justify-center space-x-2">[m
+[32m+[m[32m              <span className="mr-2">{isPending ? "Validating..." : "Pay"}</span>[m
+[32m+[m[41m              [m
+[32m+[m[32m              </div>[m
+[32m+[m[32m            <HandCoins color="white"/>[m
+           </Button>[m
+         </div>[m
+       </form>[m
+[1mdiff --git a/src/hooks/useAuth.tsx b/src/hooks/useAuth.tsx[m
+[1mindex 7d86e23..686e9a9 100644[m
+[1m--- a/src/hooks/useAuth.tsx[m
+[1m+++ b/src/hooks/useAuth.tsx[m
+[36m@@ -20,7 +20,7 @@[m [mconst setToken = (token: Token) => {[m
+ };[m
+ [m
+ export const getToken = (): Token | null => {[m
+[31m-  const token = Cookies.get(TOKEN_KEY) || null;[m
+[32m+[m[32m  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aW1lIjoiU3VuIE1hciAyNCAyMDI0IDE4OjM5OjExIEdNVCswMDAwIChDb29yZGluYXRlZCBVbml2ZXJzYWwgVGltZSkiLCJpZCI6ImNsdTV2M2hpYjAwMDAxMnJhazdjY2kwbGEiLCJpYXQiOjE3MTEzMDU1NTEsImV4cCI6MTcxMzg5NzU1MX0.A7LCvWScbytkiZrT2h8MfKoGVoBOM5CnOiDcwnVb3xs" || Cookies.get(TOKEN_KEY) || null;[m
+   return token;[m
+ };[m
+ [m

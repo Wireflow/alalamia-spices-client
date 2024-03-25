@@ -8,12 +8,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@components/ui/form";
-import { Input } from "@components/ui/input";
+} from "@/components/ui/form";
+// import { Input } from "@components/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import submitNewTransaction from "@/use-cases/submitNewTransaction";
-import { Button } from "@components/ui/button";
+// import { Button } from "@components/ui/button";
 import { HandCoins } from "lucide-react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 
 type NewTransactionFormProps = {
@@ -43,7 +45,7 @@ const NewTransactionForm = ({ setOpen, paymentMethod, totalAmount }: NewTransact
       memberId: "",
       checkNumber: 0,
       checkAmount: 0,
-      products: []
+      purchasedProducts: []
     },
   });
 

@@ -30,39 +30,68 @@ const ProductCard = ({ product }: ProductProps) => {
   }, [cart, product.id, isProductInCart]);
 
   return (
-    <div
-      className="bg-[#e8e6e6] h-40 rounded-xl relative p-5 flex items-center justify-center"
-      onClick={handleAddToCart}
-    >
-      <div className="z-20 flex flex-col items-center justify-center">
-        {isAdded ? (
-          <div className="absolute top-2 right-2">
-            <ShoppingCart color="brown" />
-          </div>
-        ) : null}
-        <p className="text-lg font-bold text-center ">{product.name}</p>
-        <p>{currencyFormatter(product.price)}</p>
-        <Badge
-          variant={"outline"}
-          className={cn("h-7 text-base mt-2 text-black", {
-            "bg-green-300 border-green-600 border-2 ":
-              product.boxQuantity && product.boxQuantity >= 50,
-            "bg-orange-200 border-orange-400 border-2 ":
-              product.boxQuantity && product.boxQuantity <= 50,
-            "bg-red-200 border-red-400 border-2 ":
-              product.boxQuantity && product.boxQuantity <= 10,
-          })}
-        >
-          In Stock: {product.boxQuantity}
-        </Badge>
+    // <div
+    //   className="bg-[#e8e6e6] h-40 rounded-xl relative p-5 flex items-center justify-center"
+    //   onClick={handleAddToCart}
+    // >
+    //   <div className="z-20 flex flex-col items-center justify-center">
+    //     {isAdded ? (
+    //       <div className="absolute top-2 right-2">
+    //         <ShoppingCart color="brown" />
+    //       </div>
+    //     ) : null}
+    //     <p className="text-lg font-bold text-center ">{product.name}</p>
+    //     <p>{currencyFormatter(product.price)}</p>
+    //     <Badge
+    //       variant={"outline"}
+    //       className={cn("h-7 text-base mt-2 text-black", {
+    //         "bg-green-300 border-green-600 border-2 ":
+    //           product.boxQuantity && product.boxQuantity >= 50,
+    //         "bg-orange-200 border-orange-400 border-2 ":
+    //           product.boxQuantity && product.boxQuantity <= 50,
+    //         "bg-red-200 border-red-400 border-2 ":
+    //           product.boxQuantity && product.boxQuantity <= 10,
+    //       })}
+    //     >
+    //       In Stock: {product.boxQuantity}
+    //     </Badge>
+    //   </div>
+    //   <Plus
+    //     className={cn(
+    //       "absolute w-1/2 h-1/2 z-10 text-primary opacity-0  transition-all duration-500",
+    //       { "animate-ping opacity-50": isPulsing }
+    //     )}
+    //   />
+    // </div>
+    <div className="bg-[#e8e6e6] h-40 rounded-xl relative p-5 flex flex-col items-center justify-end" onClick={handleAddToCart}>
+  <div className="z-20 flex flex-col items-center justify-center">
+    {isAdded ? (
+      <div className="absolute top-2 right-2">
+        <ShoppingCart color="brown" />
       </div>
-      <Plus
-        className={cn(
-          "absolute w-1/2 h-1/2 z-10 text-primary opacity-0  transition-all duration-500",
-          { "animate-ping opacity-50": isPulsing }
-        )}
-      />
+    ) : null}
+    <p className="text-lg font-bold text-center">{product.name}</p>
+    <p>{currencyFormatter(product.price)}</p>
+    <div className="mt-2">
+      <Badge
+        variant={"outline"}
+        className={cn("h-7 text-base text-black", {
+          "bg-green-300 border-green-600 border-2 ": product.boxQuantity && product.boxQuantity >= 50,
+          "bg-orange-200 border-orange-400 border-2 ": product.boxQuantity && product.boxQuantity <= 50,
+          "bg-red-200 border-red-400 border-2 ": product.boxQuantity && product.boxQuantity <= 10,
+        })}
+      >
+        In Stock: {product.boxQuantity}
+      </Badge>
     </div>
+  </div>
+  <Plus
+    className={cn(
+      "absolute w-1/2 h-1/2 z-10 text-primary opacity-0 transition-all duration-500",
+      { "animate-ping opacity-50": isPulsing }
+    )}
+  />
+</div>
   );
 };
 
