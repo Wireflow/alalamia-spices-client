@@ -2,8 +2,8 @@ import { useCart } from "@/State/store";
 import useBarcodeScanner from "@/hooks/useBarcodeScanner";
 import { useGetProducts } from "@/hooks/useGetProducts";
 import { ShoppingBasket } from "lucide-react";
-import HomePageProductsSearchBox from "./homepage/HomePageProductsSearchBox";
-import HomePageProducts from "./homepage/HomePageProducts";
+import HomePageProducts from "../pages/homepage/HomePageProducts";
+import HomePageProductsSearchBox from "../pages/homepage/HomePageProductsSearchBox";
 
 const HomePage = () => {
   const { data: products } = useGetProducts();
