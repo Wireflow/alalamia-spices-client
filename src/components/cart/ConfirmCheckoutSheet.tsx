@@ -5,7 +5,7 @@ import submitNewTransaction from "@/use-cases/submitNewTransaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import { Check, Loader2 } from "lucide-react";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import {
@@ -22,8 +22,14 @@ import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
 
 import ReactToPrint from "react-to-print";
 import ReceiptToPrint from "../transactions/Receipt";
+import { Transaction } from "@prisma/client";
+import useGetTransaction from "@/hooks/useGetTransaction";
 
 const ConfirmCheckoutSheet = () => {
+  const [transactionData, setTransactionData] = useState<Transaction>();
+  const { data: transaction } = useGetTransaction({
+    id: transactionData?.id || "",
+  });
   const {
     cart,
     getTotal,
@@ -36,12 +42,14 @@ const ConfirmCheckoutSheet = () => {
 
   const queryClient = new QueryClient();
   const componentRef = useRef(null);
-  
-  
+
   const { mutate, isPending } = useMutation({
     mutationFn: submitNewTransaction,
-    onSuccess: () => {
+    onSuccess: (data) => {
       resetCart();
+      data?.id && setTransactionData(data);
+      data?.id && queryClient.setQueryData([data.id], data);
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       return queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
   });
@@ -102,16 +110,12 @@ const ConfirmCheckoutSheet = () => {
         {/* <ReceiptToPrint /> */}
         <ReceiptToPrint forwardedRef={componentRef} />
 
-        <ReactToPrint 
-            trigger = {()=><Button>Print</Button>}
-            content= {reactToPrintContent}
-            
-            removeAfterPrint
-            pageStyle={pageStyle}
-
-
-
-            />
+        <ReactToPrint
+          trigger={() => <Button>Print</Button>}
+          content={reactToPrintContent}
+          removeAfterPrint
+          pageStyle={pageStyle}
+        />
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -131,6 +135,7 @@ const ConfirmCheckoutSheet = () => {
               </div>
             </div>
             <div>
+              {JSON.stringify(transaction)}
               {selectedPaymentMethod == "CHECK" && (
                 <div className="flex flex-col gap-2">
                   <div>

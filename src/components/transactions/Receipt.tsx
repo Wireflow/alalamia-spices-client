@@ -1,6 +1,6 @@
 import { useCart } from "@/State/store";
 import { currencyFormatter } from "@/lib/utils";
-import { ForwardedRef, forwardRef } from "react";
+import { ForwardedRef, forwardRef, useRef } from "react";
 import Logo from "../../assets/Logo.png";
 import {
   Table,
