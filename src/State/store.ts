@@ -14,6 +14,10 @@ type CartStoreType = {
   setCart: (newCart: PurchasedProductType[]) => void;
   resetCart: () => void;
   addItemToCart: (product: Product) => void;
+  increaseProductQuantity: (
+    product: PurchasedProductType,
+    defaultProduct: Product
+  ) => void;
   removeItemFromCart: (product: PurchasedProductType) => void;
   updateItemQuantity: (product: PurchasedProductType, quantity: number) => void;
   isProductInCart: (productId: string) => boolean;
@@ -62,6 +66,7 @@ export const useCart = create<CartStoreType>((set, get) => ({
       set({ cart: [...get().cart, purchasedProduct] });
     }
   },
+  increaseProductQuantity: (productToUpdate, defaultProduct) => {},
   removeItemFromCart: (product) => {
     const updatedCart = get().cart.filter(
       (item) => item.productId !== product.productId
