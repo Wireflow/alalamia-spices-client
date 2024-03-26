@@ -13,11 +13,12 @@ type CartStoreType = {
   clearMember: () => void;
   setCart: (newCart: PurchasedProductType[]) => void;
   resetCart: () => void;
-  addItemToCart: (product: Product) => void;
+  addItemToCart: (product: Product, allProducts: Product[]) => void;
   increaseProductQuantity: (
     product: PurchasedProductType,
-    defaultProduct: Product
+    allProducts: Product[]
   ) => void;
+  decreaseProductQuantity: (product: PurchasedProductType) => void;
   removeItemFromCart: (product: PurchasedProductType) => void;
   updateItemQuantity: (product: PurchasedProductType, quantity: number) => void;
   isProductInCart: (productId: string) => boolean;
@@ -42,7 +43,12 @@ export const useCart = create<CartStoreType>((set, get) => ({
     );
   },
   resetCart: () => set({ cart: [], member: null, memberId: "" }),
-  addItemToCart: (product) => {
+
+  addItemToCart: (product, allProducts) => {
+    const productQuantity = (product.boxQuantity && product.boxQuantity) || 0;
+
+    if (productQuantity < 1) return;
+
     const purchasedProduct: PurchasedProductType = {
       name: product.name,
       price: product.price,
@@ -55,18 +61,46 @@ export const useCart = create<CartStoreType>((set, get) => ({
     );
 
     if (cartItem) {
-      const newCart = get().cart.map((item) =>
-        item.productId === purchasedProduct.productId
-          ? { ...item, purchaseQuantity: (item.purchaseQuantity || 0) + 1 }
-          : item
-      );
-
-      set({ cart: newCart });
+      get().increaseProductQuantity(cartItem, allProducts);
     } else {
       set({ cart: [...get().cart, purchasedProduct] });
     }
   },
-  increaseProductQuantity: (productToUpdate, defaultProduct) => {},
+  increaseProductQuantity: (productToUpdate, allProducts) => {
+    const defaultProduct =
+      allProducts &&
+      allProducts.find((p) => p.id === productToUpdate.productId);
+
+    if (!defaultProduct) return;
+
+    const productQuantity = defaultProduct.boxQuantity
+      ? defaultProduct.boxQuantity
+      : 0;
+
+    if (productToUpdate.purchaseQuantity < productQuantity) {
+      const updatedCart = get().cart.map((item) =>
+        item.productId === productToUpdate.productId
+          ? { ...item, purchaseQuantity: item.purchaseQuantity + 1 }
+          : item
+      );
+
+      set({ cart: updatedCart });
+    }
+  },
+
+  decreaseProductQuantity: (productToUpdate) => {
+    if (productToUpdate.purchaseQuantity === 1) {
+      return;
+    }
+
+    const updatedCart = get().cart.map((item) =>
+      item.productId === productToUpdate.productId
+        ? { ...item, purchaseQuantity: item.purchaseQuantity - 1 }
+        : item
+    );
+
+    set({ cart: updatedCart });
+  },
   removeItemFromCart: (product) => {
     const updatedCart = get().cart.filter(
       (item) => item.productId !== product.productId

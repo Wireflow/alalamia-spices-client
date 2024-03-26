@@ -17,7 +17,8 @@ const Cart = () => {
   const {
     cart,
     removeItemFromCart,
-    updateItemQuantity,
+    increaseProductQuantity,
+    decreaseProductQuantity,
     resetCart,
     member,
     getTotal,
@@ -68,12 +69,7 @@ const Cart = () => {
                 <div className="flex gap-2 items-start justify-start">
                   <Button
                     className="p-3 rounded-full"
-                    onClick={() =>
-                      updateItemQuantity(
-                        cartItem,
-                        (cartItem.purchaseQuantity || 1) - 1
-                      )
-                    }
+                    onClick={() => decreaseProductQuantity(cartItem)}
                   >
                     <Minus color="white" size={15} />{" "}
                   </Button>
@@ -86,21 +82,7 @@ const Cart = () => {
                   <Button
                     className="p-3 rounded-full"
                     onClick={() => {
-                      const product =
-                        products &&
-                        products.find((p) => p.id === cartItem.productId);
-
-                      if (!product?.boxQuantity) return;
-
-                      if (
-                        cartItem.purchaseQuantity &&
-                        cartItem.purchaseQuantity < product.boxQuantity
-                      ) {
-                        updateItemQuantity(
-                          cartItem,
-                          cartItem.purchaseQuantity + 1
-                        );
-                      }
+                      products && increaseProductQuantity(cartItem, products);
                     }}
                   >
                     <Plus color="white" size={15} />

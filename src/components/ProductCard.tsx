@@ -4,6 +4,7 @@ import { Product } from "@prisma/client";
 import { Plus, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "./ui/badge";
+import { useGetProducts } from "@/hooks/useGetProducts";
 
 type ProductProps = {
   product: Product;
@@ -11,17 +12,30 @@ type ProductProps = {
 
 const ProductCard = ({ product }: ProductProps) => {
   const [isPulsing, setIsPulsing] = useState(false);
+  const [isQuantityError, setIsQuantityError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
+
+  const { data: products } = useGetProducts();
 
   const addToCart = useCart((state) => state.addItemToCart);
   const isProductInCart = useCart((state) => state.isProductInCart);
   const cart = useCart((state) => state.cart);
+  const productQuantity = (product.boxQuantity && product.boxQuantity) || 0;
 
   const handleAddToCart = () => {
     setIsPulsing(true);
-    addToCart(product);
+    if (productQuantity < 1) {
+      setIsQuantityError(true);
+    }
+    if (productQuantity >= 1) {
+      products && addToCart(product, products);
+      setIsSuccess(true);
+    }
     setTimeout(() => {
       setIsPulsing(false);
+      setIsSuccess(false);
+      setIsQuantityError(false);
     }, 500);
   };
 
@@ -31,7 +45,13 @@ const ProductCard = ({ product }: ProductProps) => {
 
   return (
     <div
-      className="bg-[#e8e6e6] h-40 rounded-xl  relative flex items-center justify-center"
+      className={cn(
+        "bg-[#e8e6e6] h-40  rounded-xl relative flex items-center justify-center",
+        {
+          "bg-red-200": isQuantityError,
+          "bg-green-200": isSuccess,
+        }
+      )}
       onClick={handleAddToCart}
     >
       <div className="z-20 flex flex-col items-center justify-center w-full h-full">
@@ -51,9 +71,10 @@ const ProductCard = ({ product }: ProductProps) => {
               product.boxQuantity && product.boxQuantity >= 50,
             "bg-orange-200 border-orange-400 border-2 ":
               product.boxQuantity && product.boxQuantity <= 50,
-            "bg-red-200 border-red-400 border-2 ":
+            "bg-red-200 border-red-400 border-2":
               (product.boxQuantity && product.boxQuantity <= 10) ||
               !product.boxQuantity,
+            "bg-red-500": isQuantityError,
           })}
         >
           In Stock: {product.boxQuantity || 0}
