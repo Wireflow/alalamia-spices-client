@@ -1,6 +1,6 @@
 import { useCart } from "@/State/store";
-import useGetTransaction from "@/hooks/useGetTransaction";
 import { currencyFormatter, formatDateToString } from "@/lib/utils";
+import { PurchasedProduct, Transaction } from "@prisma/client";
 import { ForwardedRef } from "react";
 import Logo from "../../assets/Logo.png";
 import {
@@ -15,21 +15,15 @@ import {
 
 interface ReceiptToPrintProps {
   forwardedRef: ForwardedRef<HTMLDivElement>;
-  transactionId: string;
+  data: Transaction & { purchasedProducts: PurchasedProduct[] };
 }
 
-const ReceiptToPrint = ({
-  forwardedRef,
-  transactionId,
-}: ReceiptToPrintProps) => {
+const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
   const { cart, getTotal, selectedPaymentMethod, member } = useCart();
-  const { data: transaction } = useGetTransaction({ id: transactionId });
 
-  const transactionData = transaction
-    ? transaction
-    : { purchasedProducts: cart };
+  const transactionData = data ? data : { purchasedProducts: cart };
 
-  const isTransactionNotEmpty = Boolean(transaction);
+  const isTransactionNotEmpty = Boolean(data);
 
   return (
     <div ref={forwardedRef} className="p-5">
@@ -42,10 +36,10 @@ const ReceiptToPrint = ({
       {/* Phone */}
       <p>Phone: {member?.phoneNumber}</p>
       {/* Invoice No */}
-      {isTransactionNotEmpty && <p>Invoice#: INV-{transaction?.orderNumber}</p>}
+      {isTransactionNotEmpty && <p>Invoice#: INV-{data?.orderNumber}</p>}
       {/* Transaction Date */}
       {isTransactionNotEmpty && (
-        <p>{formatDateToString(transaction?.createdAt || new Date())}</p>
+        <p>{formatDateToString(data?.createdAt || new Date())}</p>
       )}
       {/* Member Name */}
       <p>{member?.name}</p>

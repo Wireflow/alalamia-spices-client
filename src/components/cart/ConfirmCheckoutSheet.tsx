@@ -23,11 +23,15 @@ import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
 import { Transaction } from "@prisma/client";
 import ReactToPrint from "react-to-print";
 import ReceiptToPrint from "../transactions/Receipt";
+import useGetTransaction from "@/hooks/useGetTransaction";
 
 const ConfirmCheckoutSheet = () => {
   const [transactionData, setTransactionData] = useState<Transaction | null>(
     null
   );
+  const { data: transaction } = useGetTransaction({
+    id: transactionData?.id ? transactionData?.id : "",
+  });
   const {
     cart,
     getTotal,
@@ -93,7 +97,7 @@ const ConfirmCheckoutSheet = () => {
   useEffect(() => {
     form.setValue("purchasedProducts", [...cart]);
   }, [cart, form]);
-  
+
   const pageStyle = `@page {
     size: 85mm 50mm;
     }
@@ -162,9 +166,7 @@ const ConfirmCheckoutSheet = () => {
       </SheetTrigger>
       <SheetContent className="w-[500px] h-full">
         {/* <ReceiptToPrint /> */}
-        <ReceiptToPrint
-          forwardedRef={componentRef}
-          transactionId={transactionData && transactionData?.id}
+
         <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
 
         <ReactToPrint
