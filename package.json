@@ -1,9 +1,17 @@
 {
   "name": "alalamia-spices-client",
   "private": true,
+  "author": {
+    "name": "WireFlow",
+    "email": "wireflowllc@gmail.com"
+  },
   "version": "0.0.0",
+  "description": "An app for managing the point of sale of alalamia spices",
   "build": {
-    "appId": "alalamia.wireflow.us"
+    "appId": "alalamia.wireflow.us",
+    "win": {
+      "icon": "./src/assets/logo.png"
+    }
   },
   "scripts": {
     "dev": "vite",
@@ -58,9 +66,10 @@
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
+    "@vitejs/plugin-react": "^4.0.4",
     "electron": "^29.1.5",
     "electron-builder": "^24.13.3",
-    "@vitejs/plugin-react": "^4.0.4",
+    "electron-winstaller": "^5.3.0",
     "eslint": "^8.48.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
