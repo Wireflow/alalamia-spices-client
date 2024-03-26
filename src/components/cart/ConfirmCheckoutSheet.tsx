@@ -5,7 +5,7 @@ import submitNewTransaction from "@/use-cases/submitNewTransaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import { Check, Loader2 } from "lucide-react";
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import {

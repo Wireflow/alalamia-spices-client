@@ -40,7 +40,7 @@ const ProductCard = ({ product }: ProductProps) => {
             <ShoppingCart color="brown" />
           </div>
         ) : null}
-        <p className="text-[1.075rem] font-bold text-center w-20">
+        <p className=" font-bold text-center w-40">
           {product.name}
         </p>
         <p>{currencyFormatter(product.price)}</p>
