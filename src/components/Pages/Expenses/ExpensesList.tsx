@@ -21,7 +21,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@components/ui/table";
+} from "@/components/ui/table";
 import SearchExpenses from "./SearchExpenses";
 
 // import SearchExpenses from "./SearchExpenses";
