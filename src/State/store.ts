@@ -24,6 +24,8 @@ type CartStoreType = {
   isProductInCart: (productId: string) => boolean;
   selectedPaymentMethod: PaymentMethodsType;
   setSelectedPaymentMethod: (selectedPaymentMethod: PaymentMethodsType) => void;
+  isCheckingOut: boolean;
+  setIsCheckingOut: (isCheckingOut: boolean) => void;
 };
 
 export const useCart = create<CartStoreType>((set, get) => ({
@@ -43,6 +45,13 @@ export const useCart = create<CartStoreType>((set, get) => ({
     );
   },
   resetCart: () => set({ cart: [], member: null, memberId: "" }),
+
+  isCheckingOut: false,
+
+  setIsCheckingOut: (isCheckingOut) =>
+    set({
+      isCheckingOut,
+    }),
 
   addItemToCart: (product, allProducts) => {
     const productQuantity = (product.boxQuantity && product.boxQuantity) || 0;

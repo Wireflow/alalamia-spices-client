@@ -84,7 +84,7 @@ const InventoryTable = () => {
   );
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 13,
+    pageSize: 10,
   });
 
   const table = useReactTable({
@@ -105,8 +105,8 @@ const InventoryTable = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div>
-      <div className="flex items-center py-4">
+    <div className=" ">
+      <div className="flex items-center py-4 ">
         {/* <SearchMembers table={table} /> */}
         <div className="w-full flex gap-2">
           {/* <FilterMembersColumns table={table} /> */}
@@ -114,7 +114,7 @@ const InventoryTable = () => {
         </div>
       </div>
 
-      <div className="rounded-lg border">
+      <div className="rounded-lg border ">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

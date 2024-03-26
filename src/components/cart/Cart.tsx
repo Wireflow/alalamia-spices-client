@@ -22,9 +22,12 @@ const Cart = () => {
     resetCart,
     member,
     getTotal,
+    setIsCheckingOut,
+    isCheckingOut,
   } = useCart();
+  const isCartEmpty = cart.length > 0;
 
-  return (
+  return !isCheckingOut ? (
     <div className="shadow-2xl flex flex-col justify-between border-black shadow-black w-[600px] h-[calc(100%-70px)]">
       <div>
         <div className="bg-zinc-800">
@@ -117,9 +120,19 @@ const Cart = () => {
           </p>
         </div>
         <PaymentMethods />
-        <ConfirmCheckoutSheet key={getTotal()} />
+        <Button
+          disabled={!isCartEmpty}
+          size={"lg"}
+          className="flex-1 w-full h-14 text-xl "
+          onClick={() => setIsCheckingOut(true)}
+        >
+          Checkout ({cart.length})
+        </Button>
       </div>
     </div>
+  ) : (
+    
+    <ConfirmCheckoutSheet key={getTotal()} />
   );
 };
 

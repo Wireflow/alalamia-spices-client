@@ -39,7 +39,10 @@ const ConfirmCheckoutSheet = () => {
     getTotalQuantity,
     memberId,
     resetCart,
+    isCheckingOut,
+    setIsCheckingOut,
   } = useCart();
+
   const isCartEmpty = cart.length > 0;
 
   const queryClient = new QueryClient();
@@ -48,7 +51,6 @@ const ConfirmCheckoutSheet = () => {
   const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: submitNewTransaction,
     onSuccess: (data) => {
-      resetCart();
       form.reset();
       data?.id && setTransactionData(data);
       data?.id && queryClient.setQueryData([data.id], data);
@@ -116,144 +118,148 @@ const ConfirmCheckoutSheet = () => {
   const renderConfirmButton = () => {
     if (form.formState.isSubmitting)
       return (
+        <>
+          <Button
+            type="submit"
+            className="w-full h-14 text-lg"
+            disabled={isPending}
+          >
+            <Loader2 className="animate-spin w-6 h-6" />{" "}
+          </Button>
+        </>
+      );
+    if (isSuccess)
+      return (
+        <>
+          <div className="flex items-center">
+            <ReactToPrint
+              trigger={() => (
+                <Button
+                  type="button"
+                  className="w-full h-14 text-lg bg-green-700 "
+                  disabled={isPending}
+                >
+                  Print Reciept
+                  <ReceiptTextIcon className="ml-2" />
+                </Button>
+              )}
+              content={reactToPrintContent}
+              pageStyle={pageStyle}
+            />
+            <Button
+              className="h-14 text-lg w-full "
+              onClick={() => {
+                setIsCheckingOut(false);
+                resetCart();
+              }}
+            >
+              Done
+            </Button>
+          </div>
+        </>
+      );
+    return (
+      <>
         <Button
           type="submit"
           className="w-full h-14 text-lg"
           disabled={isPending}
+          onClick={() => setIsCheckingOut(true)}
         >
-          <Loader2 className="animate-spin w-6 h-6" />{" "}
+          Confirm Checkout ({currencyFormatter(getTotal())})
+          <Check className="ml-2" />
         </Button>
-      );
-    if (isSuccess)
-      return (
-        <ReactToPrint
-          trigger={() => (
-            <Button
-              type="submit"
-              className="w-full h-14 text-lg bg-green-700 "
-              disabled={isPending}
-            >
-              Print Reciept
-              <ReceiptTextIcon className="ml-2" />
-            </Button>
-          )}
-          content={reactToPrintContent}
-          removeAfterPrint
-          pageStyle={pageStyle}
-        />
-      );
-    return (
-      <Button
-        type="submit"
-        className="w-full h-14 text-lg"
-        disabled={isPending}
-      >
-        Confirm Checkout ({currencyFormatter(getTotal())})
-        <Check className="ml-2" />
-      </Button>
+        <Button
+          className="h-14 text-lg w-full mt-3"
+          onClick={() => setIsCheckingOut(false)}
+        >
+          Restart
+        </Button>
+      </>
     );
   };
   return (
-    <Sheet>
-      <SheetTrigger className="p-2 w-full" disabled={!isCartEmpty}>
-        <Button
-          disabled={!isCartEmpty}
-          size={"lg"}
-          className="flex-1 w-full h-14 text-xl "
+    <div className="shadow-2xl flex flex-col  border-black shadow-black w-[600px]  overflow-y-scroll">
+      {/* <ReceiptToPrint /> */}
+      <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
+
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className=" flex flex-col p-5  "
         >
-          Checkout ({cart.length})
-        </Button>
-      </SheetTrigger>
-      <SheetContent className="w-[500px] h-full">
-        {/* <ReceiptToPrint /> */}
-
-        <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
-
-        <ReactToPrint
-          trigger={() => <Button>Print</Button>}
-          content={reactToPrintContent}
-          removeAfterPrint
-          pageStyle={pageStyle}
-        />
-
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="h-full flex flex-col "
-          >
-            <div className="grid gap-4 py-4">
-              <div className="mt-4">
-                <p className="text-lg font-bold">Confirm Products</p>
-                <div className="grid gap-8 mt-4">
-                  {cart.map((product) => (
-                    <ConfirmCheckoutItemCard
-                      key={product.productId}
-                      product={product}
-                    />
-                  ))}
-                </div>
+          {/* <div className="grid gap-4 py-4">
+            <div className="mt-4">
+              <p className="text-lg font-bold">Confirm Products</p>
+              <div className="grid gap-8 mt-4">
+                {cart.map((product) => (
+                  <ConfirmCheckoutItemCard
+                    key={product.productId}
+                    product={product}
+                  />
+                ))}
               </div>
             </div>
-            <div>
-              {/* {JSON.stringify(transaction)} */}
-              {selectedPaymentMethod == "CHECK" && (
-                <div className="flex flex-col gap-2">
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="checkNumber"
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel>Check Number</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="number"
-                              onChange={(e) =>
-                                field.onChange(parseFloat(e.target.value))
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="checkAmount"
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel>Check Amount</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              type="number"
-                              onChange={(e) =>
-                                field.onChange(parseFloat(e.target.value))
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+          </div> */}
+          <div>
+            {/* {JSON.stringify(transaction)} */}
+            {selectedPaymentMethod == "CHECK" && (
+              <div className="flex flex-col gap-2">
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="checkNumber"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel>Check Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="number"
+                            onChange={(e) =>
+                              field.onChange(parseFloat(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-              )}
-              <div className="flex items-center justify-between mt-4">
-                <p className="text-lg font-semibold">Final Total</p>
-                <p className="text-lg font-semibold">
-                  {currencyFormatter(getTotal())}
-                </p>
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="checkAmount"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel>Check Amount</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="number"
+                            onChange={(e) =>
+                              field.onChange(parseFloat(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
-              <div>{renderConfirmButton()}</div>
+            )}
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-lg font-semibold">Final Total</p>
+              <p className="text-lg font-semibold">
+                {currencyFormatter(getTotal())}
+              </p>
             </div>
-          </form>
-        </Form>
-      </SheetContent>
-    </Sheet>
+            <div>{renderConfirmButton()}</div>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 };
 

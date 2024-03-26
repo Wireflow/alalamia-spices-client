@@ -2,7 +2,7 @@ import { useCart } from "@/State/store";
 import { currencyFormatter, formatDateToString } from "@/lib/utils";
 import { PurchasedProduct, Transaction } from "@prisma/client";
 import { ForwardedRef } from "react";
-import Logo from "../../assets/Logo.png";
+import Logo from "../../assets/signInLogo.png";
 import {
   Table,
   TableBody,
@@ -26,23 +26,25 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
   const isTransactionNotEmpty = Boolean(data);
 
   return (
-    <div ref={forwardedRef} className="p-5">
+    <div ref={forwardedRef} className="p-5 flex flex-col gap-2  ">
       {/* Logo */}
       <div className="flex justify-center items-center">
-        <img src={Logo} alt="seasoning" className="2xl:h-[100px] h-[100px]" />
+        <img src={Logo} alt="seasoning" className=" h-[150px]" />
+      </div>{" "}
+      <div>
+        {/* Member Name */}
+        <p>Member Name: {member?.name}</p>
+        {/* Address */}
+        <p>Address: {member?.address}</p>
+        {/* Phone */}
+        <p>Phone: {member?.phoneNumber}</p>
+        {/* Invoice No */}
+        {isTransactionNotEmpty && <p>Invoice #: INV-{data?.orderNumber}</p>}
+        {/* Transaction Date */}
+        {isTransactionNotEmpty && (
+          <p>Invoice Date: {formatDateToString(data?.createdAt || new Date())}</p>
+        )}
       </div>
-      {/* Address */}
-      <p>Address: {member?.address}</p>
-      {/* Phone */}
-      <p>Phone: {member?.phoneNumber}</p>
-      {/* Invoice No */}
-      {isTransactionNotEmpty && <p>Invoice#: INV-{data?.orderNumber}</p>}
-      {/* Transaction Date */}
-      {isTransactionNotEmpty && (
-        <p>{formatDateToString(data?.createdAt || new Date())}</p>
-      )}
-      {/* Member Name */}
-      <p>{member?.name}</p>
       {/* Items */}
       {/* Product Name | Price | Qty | Qty Price */}
       <Table className="border">
@@ -82,10 +84,9 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
           </TableRow>
         </TableFooter>
       </Table>
-
       {/* Payment Method */}
-      <div className="p-5">
-        <p>{selectedPaymentMethod}</p>
+      <div className="">
+        <p>Payment Method: {selectedPaymentMethod}</p>
       </div>
     </div>
   );
