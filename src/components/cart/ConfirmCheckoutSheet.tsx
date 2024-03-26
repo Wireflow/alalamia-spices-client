@@ -24,6 +24,7 @@ import { Transaction } from "@prisma/client";
 import ReactToPrint from "react-to-print";
 import ReceiptToPrint from "../transactions/Receipt";
 import useGetTransaction from "@/hooks/useGetTransaction";
+import { useGetProducts } from "@/hooks/useGetProducts";
 
 const ConfirmCheckoutSheet = () => {
   const [transactionData, setTransactionData] = useState<Transaction | null>(
@@ -43,6 +44,8 @@ const ConfirmCheckoutSheet = () => {
     setIsCheckingOut,
   } = useCart();
 
+  const { refetch } = useGetProducts();
+
   const isCartEmpty = cart.length > 0;
 
   const queryClient = new QueryClient();
@@ -54,7 +57,7 @@ const ConfirmCheckoutSheet = () => {
       form.reset();
       data?.id && setTransactionData(data);
       data?.id && queryClient.setQueryData([data.id], data);
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      refetch()
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
   });
@@ -121,7 +124,7 @@ const ConfirmCheckoutSheet = () => {
         <>
           <Button
             type="submit"
-            className="w-full h-14 text-lg"
+            className="w-full h-14 text-lg "
             disabled={isPending}
           >
             <Loader2 className="animate-spin w-6 h-6" />{" "}
@@ -131,31 +134,29 @@ const ConfirmCheckoutSheet = () => {
     if (isSuccess)
       return (
         <>
-          <div className="flex items-center">
-            <ReactToPrint
-              trigger={() => (
-                <Button
-                  type="button"
-                  className="w-full h-14 text-lg bg-green-700 "
-                  disabled={isPending}
-                >
-                  Print Reciept
-                  <ReceiptTextIcon className="ml-2" />
-                </Button>
-              )}
-              content={reactToPrintContent}
-              pageStyle={pageStyle}
-            />
-            <Button
-              className="h-14 text-lg w-full "
-              onClick={() => {
-                setIsCheckingOut(false);
-                resetCart();
-              }}
-            >
-              Done
-            </Button>
-          </div>
+          <ReactToPrint
+            trigger={() => (
+              <Button
+                type="button"
+                className="w-full h-14 text-lg bg-green-700 "
+                disabled={isPending}
+              >
+                Print Reciept
+                <ReceiptTextIcon className="ml-2" />
+              </Button>
+            )}
+            content={reactToPrintContent}
+            pageStyle={pageStyle}
+          />
+          <Button
+            className="h-14 text-lg w-full mt-2"
+            onClick={() => {
+              setIsCheckingOut(false);
+              resetCart();
+            }}
+          >
+            Done
+          </Button>
         </>
       );
     return (
@@ -173,13 +174,13 @@ const ConfirmCheckoutSheet = () => {
           className="h-14 text-lg w-full mt-3"
           onClick={() => setIsCheckingOut(false)}
         >
-          Restart
+          Go Back
         </Button>
       </>
     );
   };
   return (
-    <div className="shadow-2xl flex flex-col  border-black shadow-black w-[600px]  overflow-y-scroll">
+    <div className="shadow-2xl flex flex-col  border-black shadow-black w-[600px] ">
       {/* <ReceiptToPrint /> */}
       <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
 

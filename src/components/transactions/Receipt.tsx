@@ -25,24 +25,33 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
 
   const isTransactionNotEmpty = Boolean(data);
 
+  const CheckAmount = data?.checkAmount;
+
   return (
-    <div ref={forwardedRef} className="p-5 flex flex-col gap-2  ">
+    <div
+      ref={forwardedRef}
+      className="p-5 flex flex-col gap-2 h-[500px] "
+    >
       {/* Logo */}
       <div className="flex justify-center items-center">
-        <img src={Logo} alt="seasoning" className=" h-[150px]" />
+        <img src={Logo} alt="seasoning" className=" h-[100px]" />
       </div>{" "}
       <div>
         {/* Member Name */}
-        <p>Member Name: {member?.name}</p>
+        <p className="font-semibold">Member Name: {member?.name}</p>
         {/* Address */}
-        <p>Address: {member?.address}</p>
+        <p className="font-semibold">Address: {member?.address}</p>
         {/* Phone */}
-        <p>Phone: {member?.phoneNumber}</p>
+        <p className="font-semibold">Phone: {member?.phoneNumber}</p>
         {/* Invoice No */}
-        {isTransactionNotEmpty && <p>Invoice #: INV-{data?.orderNumber}</p>}
+        {isTransactionNotEmpty && (
+          <p className="font-semibold">Invoice #: INV-{data?.orderNumber}</p>
+        )}
         {/* Transaction Date */}
         {isTransactionNotEmpty && (
-          <p>Invoice Date: {formatDateToString(data?.createdAt || new Date())}</p>
+          <p className="font-semibold">
+            Invoice Date: {formatDateToString(data?.createdAt || new Date())}
+          </p>
         )}
       </div>
       {/* Items */}
@@ -58,7 +67,7 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
         </TableHeader>
 
         {transactionData.purchasedProducts.map((item) => (
-          <TableBody key={item.productId}>
+          <TableBody key={item.productId} className=" ">
             <TableRow>
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.purchaseQuantity}</TableCell>
@@ -86,7 +95,15 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
       </Table>
       {/* Payment Method */}
       <div className="">
-        <p>Payment Method: {selectedPaymentMethod}</p>
+        <p className="font-semibold">Payment Method: {selectedPaymentMethod}</p>
+        {isTransactionNotEmpty && (
+          <p className="font-semibold">Check Number: {data?.checkNumber}</p>
+        )}
+        {isTransactionNotEmpty && (
+          <p className="font-semibold">
+            Check Amount: {currencyFormatter(CheckAmount)}
+          </p>
+        )}
       </div>
     </div>
   );
