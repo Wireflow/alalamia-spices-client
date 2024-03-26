@@ -1,7 +1,6 @@
 import { Session, Token } from "@/hooks/useAuth";
 import { api } from "@/services/axiosInstance";
 import { SignInType } from "@/types/user";
-import { toast } from "sonner";
 
 type UserSignInReturnType = {
   token: Token;

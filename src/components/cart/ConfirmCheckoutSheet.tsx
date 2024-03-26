@@ -25,10 +25,10 @@ import {
 } from "../ui/form";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import submitNewTransaction from "@/use-cases/submitNewTransaction";
-import React, { forwardRef, Ref, useRef } from 'react';
+import React, { forwardRef, Ref, useRef } from "react";
 
 import ReceiptToPrint from "../transactions/Receipt";
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 
 const ConfirmCheckoutSheet = () => {
   const {
@@ -40,7 +40,7 @@ const ConfirmCheckoutSheet = () => {
     resetCart,
   } = useCart();
   const isCartEmpty = cart.length > 0;
-  
+
   const queryClient = new QueryClient();
   const componentRef = useRef(null);
   
@@ -66,17 +66,13 @@ const ConfirmCheckoutSheet = () => {
     },
   });
 
-
-
   // const handlePrint = useReactToPrint({
   //   content: () => componentRef.current,
   // });
 
-
   const onSubmit = (data: TransactionType) => {
     mutate(data);
     // handlePrint();
-
   };
 
   const reactToPrintContent = React.useCallback(() => {

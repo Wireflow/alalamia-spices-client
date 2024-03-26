@@ -27,6 +27,7 @@ const SignInForm = () => {
       if (data?.token && data?.session) {
         signIn({ token: data.token, session: data.session });
         toast.success("Signed in Successfully");
+        navigate("/home");
       }
     },
     onError: () => {
@@ -47,7 +48,7 @@ const SignInForm = () => {
   };
 
   useEffect(() => {
-    if (session && isSuccess) {
+    if (session) {
       navigate("/home");
     }
   }, [session, navigate, isSuccess]);

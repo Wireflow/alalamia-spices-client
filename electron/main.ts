@@ -29,7 +29,6 @@ function createWindow() {
     },
   });
 
-
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
@@ -39,6 +38,7 @@ function createWindow() {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {
     // win.loadFile('dist/index.html')
+    // win.loadFile(`../../../index.html`);
     win.loadFile(path.join(process.env.DIST, "index.html"));
   }
 }

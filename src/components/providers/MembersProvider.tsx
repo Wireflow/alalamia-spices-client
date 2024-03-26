@@ -4,7 +4,7 @@ import {
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
 
 type Props = {
   children: React.ReactNode;

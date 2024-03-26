@@ -2,6 +2,9 @@
   "name": "alalamia-spices-client",
   "private": true,
   "version": "0.0.0",
+  "build": {
+    "appId": "alalamia.wireflow.us"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",
@@ -30,7 +33,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
-    "electron": "^29.1.5",
     "electron-pos-printer": "^1.3.7",
     "js-cookie": "^3.0.5",
     "lucide": "^0.359.0",
@@ -56,6 +58,8 @@
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
+    "electron": "^29.1.5",
+    "electron-builder": "^24.13.3",
     "@vitejs/plugin-react": "^4.0.4",
     "eslint": "^8.48.0",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -1,5 +1,5 @@
 import { useCart } from "@/State/store";
-import { currencyFormatter } from "@/lib/utils";
+
 import { Minus, Plus, Trash2 } from "lucide-react";
 import HomeImage from "../../assets/HomeImage.png";
 import PaymentMethods from "../PaymentMethods";
@@ -10,6 +10,7 @@ import ConfirmCheckoutSheet from "./ConfirmCheckoutSheet";
 import SelectMemberDialog from "../dialogs/SelectMemberDialog";
 import SelectMemberCard from "../members/SelectMemberCard";
 import { useGetProducts } from "@/hooks/useGetProducts";
+import { currencyFormatter } from "@/lib/utils";
 
 const Cart = () => {
   const { data: products } = useGetProducts();
@@ -20,7 +21,6 @@ const Cart = () => {
     resetCart,
     member,
     getTotal,
-    getTotalQuantity,
   } = useCart();
 
   return (
