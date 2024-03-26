@@ -18,8 +18,11 @@ interface ReceiptToPrintProps {
 
 const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
   const { cart, getTotal, selectedPaymentMethod, member } = useCart();
+
+  const ref = useRef();
+  console.log(ref);
   return (
-    <div ref={forwardedRef}>
+    <div ref={forwardedRef} className="p-5">
       {/* Logo */}
       <div className="flex justify-center items-center">
         <img src={Logo} alt="seasoning" className="2xl:h-[100px] h-[100px]" />
@@ -72,7 +75,9 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
       </Table>
 
       {/* Payment Method */}
-      <p>{selectedPaymentMethod}</p>
+      <div className="p-5">
+        <p>{selectedPaymentMethod}</p>
+      </div>
     </div>
   );
 };

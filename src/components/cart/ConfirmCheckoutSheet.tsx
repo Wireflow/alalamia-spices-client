@@ -35,8 +35,9 @@ const ConfirmCheckoutSheet = () => {
   const isCartEmpty = cart.length > 0;
 
   const queryClient = new QueryClient();
-  const componentRef = React.useRef(null);
-
+  const componentRef = useRef(null);
+  
+  
   const { mutate, isPending } = useMutation({
     mutationFn: submitNewTransaction,
     onSuccess: () => {
@@ -72,6 +73,20 @@ const ConfirmCheckoutSheet = () => {
     return componentRef.current;
   }, [componentRef]);
 
+  const pageStyle = `@page {
+    size: 85mm 50mm;
+    }
+    @media print {
+        @page {   size: a5 ;
+          margin: 0mm !important;
+      }
+    @media all {
+                    .pagebreak {
+                      overflow: visible; 
+                    }
+                }
+            }
+        }`;
   return (
     <Sheet>
       <SheetTrigger className="p-2 w-full" disabled={!isCartEmpty}>
@@ -87,10 +102,16 @@ const ConfirmCheckoutSheet = () => {
         {/* <ReceiptToPrint /> */}
         <ReceiptToPrint forwardedRef={componentRef} />
 
-        <ReactToPrint
-          trigger={() => <Button>Print</Button>}
-          content={reactToPrintContent}
-        />
+        <ReactToPrint 
+            trigger = {()=><Button>Print</Button>}
+            content= {reactToPrintContent}
+            
+            removeAfterPrint
+            pageStyle={pageStyle}
+
+
+
+            />
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
