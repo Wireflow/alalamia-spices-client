@@ -2,7 +2,7 @@ import { Product } from "@prisma/client";
 import { create } from "zustand";
 
 type useHomeProductFilterType = {
-  search: string;
+  search: string | null;
   setSearch: (newSearch: string) => void;
   products: Product[];
   setProducts: (products: Product[]) => void;
@@ -13,16 +13,16 @@ type useHomeProductFilterType = {
 
 export const useHomeProductFilter = create<useHomeProductFilterType>(
   (set, get) => ({
-    search: "",
+    search: null,
     setSearch: (newSearch) => set({ search: newSearch }),
     products: [],
     setProducts: (products) => set({ products }),
     filteredProducts: [],
     setFilteredProducts: (products) => set({ filteredProducts: products }),
     filterProducts: () => {
-      const search = get().search.toLowerCase();
+      const search = get().search?.toLowerCase();
       const filteredProducts = get().products.filter((product) =>
-        product.name.toLowerCase().includes(search)
+        product.name.toLowerCase().includes(search!)
       );
 
       set({ filteredProducts });
