@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Sheet, SheetContent, SheetFooter, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
 
 import { Transaction } from "@prisma/client";
@@ -90,11 +90,10 @@ const ConfirmCheckoutSheet = () => {
   const reactToPrintContent = React.useCallback(() => {
     return componentRef.current;
   }, [componentRef]);
-
   useEffect(() => {
     form.setValue("purchasedProducts", [...cart]);
   }, [cart, form]);
-
+  
   const pageStyle = `@page {
     size: 85mm 50mm;
     }
@@ -166,6 +165,13 @@ const ConfirmCheckoutSheet = () => {
         <ReceiptToPrint
           forwardedRef={componentRef}
           transactionId={transactionData && transactionData?.id}
+        <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
+
+        <ReactToPrint
+          trigger={() => <Button>Print</Button>}
+          content={reactToPrintContent}
+          removeAfterPrint
+          pageStyle={pageStyle}
         />
 
         <Form {...form}>
@@ -187,6 +193,7 @@ const ConfirmCheckoutSheet = () => {
               </div>
             </div>
             <div>
+              {/* {JSON.stringify(transaction)} */}
               {selectedPaymentMethod == "CHECK" && (
                 <div className="flex flex-col gap-2">
                   <div>
