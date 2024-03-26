@@ -1,6 +1,7 @@
 import { useCart } from "@/State/store";
-import { currencyFormatter } from "@/lib/utils";
-import { ForwardedRef, forwardRef, useRef } from "react";
+import useGetTransaction from "@/hooks/useGetTransaction";
+import { currencyFormatter, formatDateToString } from "@/lib/utils";
+import { ForwardedRef } from "react";
 import Logo from "../../assets/Logo.png";
 import {
   Table,
@@ -14,11 +15,21 @@ import {
 
 interface ReceiptToPrintProps {
   forwardedRef: ForwardedRef<HTMLDivElement>;
+  transactionId: string;
 }
 
-const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
+const ReceiptToPrint = ({
+  forwardedRef,
+  transactionId,
+}: ReceiptToPrintProps) => {
   const { cart, getTotal, selectedPaymentMethod, member } = useCart();
+  const { data: transaction } = useGetTransaction({ id: transactionId });
 
+  const transactionData = transaction
+    ? transaction
+    : { purchasedProducts: cart };
+
+  const isTransactionNotEmpty = Boolean(transaction);
 
   return (
     <div ref={forwardedRef} className="p-5">
@@ -31,9 +42,11 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
       {/* Phone */}
       <p>Phone: {member?.phoneNumber}</p>
       {/* Invoice No */}
-      <p>Invoice#: INV902</p>
+      {isTransactionNotEmpty && <p>Invoice#: INV-{transaction?.orderNumber}</p>}
       {/* Transaction Date */}
-      <p>Date: 2024-10-09</p>
+      {isTransactionNotEmpty && (
+        <p>{formatDateToString(transaction?.createdAt || new Date())}</p>
+      )}
       {/* Member Name */}
       <p>{member?.name}</p>
       {/* Items */}
@@ -48,7 +61,7 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
           </TableRow>
         </TableHeader>
 
-        {cart.map((item) => (
+        {transactionData.purchasedProducts.map((item) => (
           <TableBody key={item.productId}>
             <TableRow>
               <TableCell>{item.name}</TableCell>
@@ -57,7 +70,10 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
                 {currencyFormatter(item.price)}
               </TableCell>
               <TableCell className="text-right">
-                {currencyFormatter(item.price * item.purchaseQuantity)}
+                {currencyFormatter(
+                  item.price *
+                    (item.purchaseQuantity ? item.purchaseQuantity : 1)
+                )}
               </TableCell>
             </TableRow>
           </TableBody>
@@ -80,9 +96,5 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
     </div>
   );
 };
-
-export const FunctionalComponentToPrint = forwardRef<HTMLDivElement>(
-  (_, ref) => <ReceiptToPrint forwardedRef={ref} />
-);
 
 export default ReceiptToPrint;

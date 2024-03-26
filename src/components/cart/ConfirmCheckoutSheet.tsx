@@ -4,8 +4,8 @@ import { TransactionSchema, TransactionType } from "@/types/transaction";
 import submitNewTransaction from "@/use-cases/submitNewTransaction";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { QueryClient, useMutation } from "@tanstack/react-query";
-import { Check, Loader2 } from "lucide-react";
-import React, { useRef, useState } from "react";
+import { Check, Loader2, ReceiptTextIcon } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import {
@@ -20,16 +20,14 @@ import { Input } from "../ui/input";
 import { Sheet, SheetContent, SheetFooter, SheetTrigger } from "../ui/sheet";
 import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
 
+import { Transaction } from "@prisma/client";
 import ReactToPrint from "react-to-print";
 import ReceiptToPrint from "../transactions/Receipt";
-import { Transaction } from "@prisma/client";
-import useGetTransaction from "@/hooks/useGetTransaction";
 
 const ConfirmCheckoutSheet = () => {
-  const [transactionData, setTransactionData] = useState<Transaction>();
-  const { data: transaction } = useGetTransaction({
-    id: transactionData?.id || "",
-  });
+  const [transactionData, setTransactionData] = useState<Transaction | null>(
+    null
+  );
   const {
     cart,
     getTotal,
@@ -43,14 +41,15 @@ const ConfirmCheckoutSheet = () => {
   const queryClient = new QueryClient();
   const componentRef = useRef(null);
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, isSuccess } = useMutation({
     mutationFn: submitNewTransaction,
     onSuccess: (data) => {
       resetCart();
+      form.reset();
       data?.id && setTransactionData(data);
       data?.id && queryClient.setQueryData([data.id], data);
       queryClient.invalidateQueries({ queryKey: ["products"] });
-      return queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
   });
 
@@ -63,7 +62,7 @@ const ConfirmCheckoutSheet = () => {
       checkNumber: undefined,
       totalQuantityPurchased: getTotalQuantity(),
       memberId: memberId,
-      purchasedProducts: cart,
+      purchasedProducts: [],
     },
   });
 
@@ -72,14 +71,29 @@ const ConfirmCheckoutSheet = () => {
   // });
 
   const onSubmit = (data: TransactionType) => {
+    if (
+      selectedPaymentMethod === "CHECK" &&
+      !form.getValues("checkNumber") &&
+      !form.getValues("checkAmount")
+    ) {
+      form.setError("checkAmount", { message: "Please include check amount" });
+      return form.setError("checkNumber", {
+        message: "Please include check number",
+      });
+    }
+
     mutate(data);
+    setTransactionData(null);
     // handlePrint();
   };
 
   const reactToPrintContent = React.useCallback(() => {
-    console.log(componentRef);
     return componentRef.current;
   }, [componentRef]);
+
+  useEffect(() => {
+    form.setValue("purchasedProducts", [...cart]);
+  }, [cart, form]);
 
   const pageStyle = `@page {
     size: 85mm 50mm;
@@ -95,6 +109,47 @@ const ConfirmCheckoutSheet = () => {
                 }
             }
         }`;
+
+  const renderConfirmButton = () => {
+    if (form.formState.isSubmitting)
+      return (
+        <Button
+          type="submit"
+          className="w-full h-14 text-lg"
+          disabled={isPending}
+        >
+          <Loader2 className="animate-spin w-6 h-6" />{" "}
+        </Button>
+      );
+    if (isSuccess)
+      return (
+        <ReactToPrint
+          trigger={() => (
+            <Button
+              type="submit"
+              className="w-full h-14 text-lg bg-green-700 "
+              disabled={isPending}
+            >
+              Print Reciept
+              <ReceiptTextIcon className="ml-2" />
+            </Button>
+          )}
+          content={reactToPrintContent}
+          removeAfterPrint
+          pageStyle={pageStyle}
+        />
+      );
+    return (
+      <Button
+        type="submit"
+        className="w-full h-14 text-lg"
+        disabled={isPending}
+      >
+        Confirm Checkout ({currencyFormatter(getTotal())})
+        <Check className="ml-2" />
+      </Button>
+    );
+  };
   return (
     <Sheet>
       <SheetTrigger className="p-2 w-full" disabled={!isCartEmpty}>
@@ -108,18 +163,15 @@ const ConfirmCheckoutSheet = () => {
       </SheetTrigger>
       <SheetContent className="w-[500px] h-full">
         {/* <ReceiptToPrint /> */}
-        <ReceiptToPrint forwardedRef={componentRef} />
-
-        <ReactToPrint
-          trigger={() => <Button>Print</Button>}
-          content={reactToPrintContent}
-          removeAfterPrint
-          pageStyle={pageStyle}
+        <ReceiptToPrint
+          forwardedRef={componentRef}
+          transactionId={transactionData && transactionData?.id}
         />
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="h-full flex flex-col justify-between"
+            className="h-full flex flex-col "
           >
             <div className="grid gap-4 py-4">
               <div className="mt-4">
@@ -135,7 +187,6 @@ const ConfirmCheckoutSheet = () => {
               </div>
             </div>
             <div>
-              {JSON.stringify(transaction)}
               {selectedPaymentMethod == "CHECK" && (
                 <div className="flex flex-col gap-2">
                   <div>
@@ -144,7 +195,7 @@ const ConfirmCheckoutSheet = () => {
                       name="checkNumber"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel>Checkout Number</FormLabel>
+                          <FormLabel>Check Number</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
@@ -165,7 +216,7 @@ const ConfirmCheckoutSheet = () => {
                       name="checkAmount"
                       render={({ field }) => (
                         <FormItem className="w-full">
-                          <FormLabel>Checkout Amount</FormLabel>
+                          <FormLabel>Check Amount</FormLabel>
                           <FormControl>
                             <Input
                               {...field}
@@ -188,22 +239,7 @@ const ConfirmCheckoutSheet = () => {
                   {currencyFormatter(getTotal())}
                 </p>
               </div>
-              <SheetFooter className="mt-2">
-                <Button
-                  type="submit"
-                  className="w-full h-14 text-lg"
-                  disabled={isPending}
-                >
-                  {isPending ? (
-                    <Loader2 className="animate-spin w-6 h-6" />
-                  ) : (
-                    <>
-                      Confirm Checkout ({currencyFormatter(getTotal())})
-                      <Check className="ml-2" />
-                    </>
-                  )}
-                </Button>
-              </SheetFooter>
+              <div>{renderConfirmButton()}</div>
             </div>
           </form>
         </Form>

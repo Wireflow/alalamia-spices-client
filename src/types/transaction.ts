@@ -11,7 +11,7 @@ export const TransactionSchema = z.object({
     .object({
       productId: z.string(),
       purchaseQuantity: z.number(),
-      price: z.number(),
+      price: z.number().optional(),
       name: z.string(),
     })
     .array(),
