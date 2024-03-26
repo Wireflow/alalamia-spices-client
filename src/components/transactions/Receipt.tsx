@@ -1,5 +1,9 @@
 import { useCart } from "@/State/store";
-import { currencyFormatter } from "@/lib/utils";
+import {
+  currencyFormatter,
+  dateFormatter,
+  formatDateToString,
+} from "@/lib/utils";
 import { ForwardedRef, forwardRef, useRef } from "react";
 import Logo from "../../assets/Logo.png";
 import {
@@ -11,14 +15,15 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Transaction } from "@prisma/client";
 
 interface ReceiptToPrintProps {
   forwardedRef: ForwardedRef<HTMLDivElement>;
+  data: Transaction;
 }
 
-const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
+const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
   const { cart, getTotal, selectedPaymentMethod, member } = useCart();
-
 
   return (
     <div ref={forwardedRef} className="p-5">
@@ -26,16 +31,16 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
       <div className="flex justify-center items-center">
         <img src={Logo} alt="seasoning" className="2xl:h-[100px] h-[100px]" />
       </div>
-      {/* Address */}
-      <p>Address: {member?.address}</p>
-      {/* Phone */}
-      <p>Phone: {member?.phoneNumber}</p>
-      {/* Invoice No */}
-      <p>Invoice#: INV902</p>
-      {/* Transaction Date */}
-      <p>Date: 2024-10-09</p>
       {/* Member Name */}
-      <p>{member?.name}</p>
+      <p>Member Name: {member?.name}</p>
+      {/* Address */}
+      <p>Member Address: {member?.address}</p>
+      {/* Phone */}
+      <p>Member Phone: {member?.phoneNumber}</p>
+      {/* Invoice No */}
+      <p>Invoice#: {data?.orderNumber}</p>
+      {/* Transaction Date */}
+      <p>Date: {formatDateToString(data?.createdAt)}</p>
       {/* Items */}
       {/* Product Name | Price | Qty | Qty Price */}
       <Table className="border">
@@ -72,7 +77,6 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
           </TableRow>
         </TableFooter>
       </Table>
-
       {/* Payment Method */}
       <div className="p-5">
         <p>{selectedPaymentMethod}</p>
@@ -82,7 +86,7 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
 };
 
 export const FunctionalComponentToPrint = forwardRef<HTMLDivElement>(
-  (_, ref) => <ReceiptToPrint forwardedRef={ref} />
+  (_, ref) => <ReceiptToPrint  forwardedRef={ref} />
 );
 
 export default ReceiptToPrint;

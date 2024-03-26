@@ -7,7 +7,7 @@ export const useGetTransaction = ({ id }: { id: string }) => {
     queryFn: async () => {
       if (!id) return;
 
-      const { data } = await api.get(`/transactions/${id}`);
+      const { data } = await api.get(`/transactions/${id}?products=true`);
       return data.data;
     },
   });

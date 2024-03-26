@@ -54,6 +54,8 @@ const ConfirmCheckoutSheet = () => {
     },
   });
 
+console.log(transaction)
+  
   const form = useForm<TransactionType>({
     resolver: zodResolver(TransactionSchema),
     defaultValues: {
@@ -81,6 +83,7 @@ const ConfirmCheckoutSheet = () => {
     return componentRef.current;
   }, [componentRef]);
 
+  
   const pageStyle = `@page {
     size: 85mm 50mm;
     }
@@ -108,7 +111,7 @@ const ConfirmCheckoutSheet = () => {
       </SheetTrigger>
       <SheetContent className="w-[500px] h-full">
         {/* <ReceiptToPrint /> */}
-        <ReceiptToPrint forwardedRef={componentRef} />
+        <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
 
         <ReactToPrint
           trigger={() => <Button>Print</Button>}
@@ -119,7 +122,7 @@ const ConfirmCheckoutSheet = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="h-full flex flex-col justify-between"
+            className="h-full flex flex-col "
           >
             <div className="grid gap-4 py-4">
               <div className="mt-4">
@@ -135,7 +138,7 @@ const ConfirmCheckoutSheet = () => {
               </div>
             </div>
             <div>
-              {JSON.stringify(transaction)}
+              {/* {JSON.stringify(transaction)} */}
               {selectedPaymentMethod == "CHECK" && (
                 <div className="flex flex-col gap-2">
                   <div>
