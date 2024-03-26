@@ -2,7 +2,7 @@ import { api } from "@/services/axiosInstance";
 import { Transaction, PurchasedProduct } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 
-type TransactionWithProducts = Transaction & {
+export type TransactionWithProducts = Transaction & {
   purchasedProducts: PurchasedProduct[];
 };
 

@@ -1,6 +1,5 @@
 import { useCart } from "@/State/store";
 import { currencyFormatter, formatDateToString } from "@/lib/utils";
-import { PurchasedProduct, Transaction } from "@prisma/client";
 import { ForwardedRef } from "react";
 import Logo from "../../assets/signInLogo.png";
 import {
@@ -12,10 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-
+import { TransactionWithProducts } from '@/hooks/useGetTransaction';
 interface ReceiptToPrintProps {
   forwardedRef: ForwardedRef<HTMLDivElement>;
-  data: Transaction & { purchasedProducts: PurchasedProduct[] };
+  // data:  Transaction & { purchasedProducts: PurchasedProduct[] };
+  data: TransactionWithProducts | undefined | null;
 }
 
 const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
@@ -35,7 +35,7 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
       {/* Logo */}
       <div className="flex justify-center flex-col items-center gap-1 mb-5">
         <img src={Logo} alt="seasoning" className=" h-[100px]" />
-        <p className="font-semibold">Alalamia Spices</p>
+        <p className="font-semibold uppercase">Alalamia Spices</p>
       </div>{" "}
       <div>
         <h4 className="font-bold">Transaction Details:</h4>
