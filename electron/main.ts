@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
 
 // The built directory structure
@@ -60,5 +60,11 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+
+  // Event handler for printing the receipt
+  ipcMain.on("print-receipt", () => {
+    win?.webContents.print({ silent: true });
+  });
 
 app.whenReady().then(createWindow);

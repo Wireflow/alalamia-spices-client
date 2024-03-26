@@ -1,12 +1,20 @@
 import { useCart } from "@/State/store";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetTrigger,
+} from "../ui/sheet";
+import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
+import { Check, Loader2 } from "lucide-react";
 import { currencyFormatter } from "@/lib/utils";
 import { TransactionSchema, TransactionType } from "@/types/transaction";
-import submitNewTransaction from "@/use-cases/submitNewTransaction";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { QueryClient, useMutation } from "@tanstack/react-query";
-import { Check, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -15,9 +23,12 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Input } from "../ui/input";
-import { Sheet, SheetContent, SheetFooter, SheetTrigger } from "../ui/sheet";
-import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
+import { QueryClient, useMutation } from "@tanstack/react-query";
+import submitNewTransaction from "@/use-cases/submitNewTransaction";
+import React, { forwardRef, Ref, useRef } from "react";
+
+import ReceiptToPrint from "../transactions/Receipt";
+import ReactToPrint, { useReactToPrint } from "react-to-print";
 
 const ConfirmCheckoutSheet = () => {
   const {
@@ -31,6 +42,8 @@ const ConfirmCheckoutSheet = () => {
   const isCartEmpty = cart.length > 0;
 
   const queryClient = new QueryClient();
+  const componentRef = React.useRef(null);
+
   const { mutate, isPending } = useMutation({
     mutationFn: submitNewTransaction,
     onSuccess: () => {
@@ -52,9 +65,19 @@ const ConfirmCheckoutSheet = () => {
     },
   });
 
+  // const handlePrint = useReactToPrint({
+  //   content: () => componentRef.current,
+  // });
+
   const onSubmit = (data: TransactionType) => {
     mutate(data);
+    // handlePrint();
   };
+
+  const reactToPrintContent = React.useCallback(() => {
+    console.log(componentRef);
+    return componentRef.current;
+  }, [componentRef.current]);
 
   return (
     <Sheet>
@@ -68,6 +91,13 @@ const ConfirmCheckoutSheet = () => {
         </Button>
       </SheetTrigger>
       <SheetContent className="w-[500px] h-full">
+        {/* <ReceiptToPrint /> */}
+        <ReceiptToPrint forwardedRef={componentRef} />
+
+        <ReactToPrint
+          trigger={() => <Button>Print</Button>}
+          content={reactToPrintContent}
+        />
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
