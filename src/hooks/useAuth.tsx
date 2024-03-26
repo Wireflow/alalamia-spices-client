@@ -1,12 +1,9 @@
 import Cookies from "js-cookie";
-import electron from "electron";
 
 export type Session = {
   email: string;
   id: string;
 };
-
-const cookies = electron.session.defaultSession;
 
 export type Token = string;
 
