@@ -17,9 +17,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
-
 import { Transaction } from "@prisma/client";
 import ReactToPrint from "react-to-print";
 import ReceiptToPrint from "../transactions/Receipt";
@@ -40,13 +37,10 @@ const ConfirmCheckoutSheet = () => {
     getTotalQuantity,
     memberId,
     resetCart,
-    isCheckingOut,
     setIsCheckingOut,
   } = useCart();
 
   const { refetch } = useGetProducts();
-
-  const isCartEmpty = cart.length > 0;
 
   const queryClient = new QueryClient();
   const componentRef = useRef(null);
@@ -57,7 +51,7 @@ const ConfirmCheckoutSheet = () => {
       form.reset();
       data?.id && setTransactionData(data);
       data?.id && queryClient.setQueryData([data.id], data);
-      refetch()
+      refetch();
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
   });
@@ -131,9 +125,32 @@ const ConfirmCheckoutSheet = () => {
           </Button>
         </>
       );
-    if (isSuccess)
-      return (
+    return (
+      !isSuccess && (
         <>
+          <Button
+            type="submit"
+            className="w-full h-14 text-lg"
+            disabled={isPending}
+            onClick={() => setIsCheckingOut(true)}
+          >
+            Confirm Checkout ({currencyFormatter(getTotal())})
+            <Check className="ml-2" />
+          </Button>
+          <Button
+            className="h-14 text-lg w-full mt-3"
+            onClick={() => setIsCheckingOut(false)}
+          >
+            Go Back
+          </Button>
+        </>
+      )
+    );
+  };
+  return (
+    <div className="shadow-2xl flex flex-col  border-black shadow-black w-[600px] ">
+      {isSuccess ? (
+        <div className="p-5">
           <ReactToPrint
             trigger={() => (
               <Button
@@ -157,32 +174,13 @@ const ConfirmCheckoutSheet = () => {
           >
             Done
           </Button>
-        </>
-      );
-    return (
-      <>
-        <Button
-          type="submit"
-          className="w-full h-14 text-lg"
-          disabled={isPending}
-          onClick={() => setIsCheckingOut(true)}
-        >
-          Confirm Checkout ({currencyFormatter(getTotal())})
-          <Check className="ml-2" />
-        </Button>
-        <Button
-          className="h-14 text-lg w-full mt-3"
-          onClick={() => setIsCheckingOut(false)}
-        >
-          Go Back
-        </Button>
-      </>
-    );
-  };
-  return (
-    <div className="shadow-2xl flex flex-col  border-black shadow-black w-[600px] ">
+        </div>
+      ) : null}
+
       {/* <ReceiptToPrint /> */}
-      <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
+      {transaction && (
+        <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
+      )}
 
       <Form {...form}>
         <form
@@ -204,7 +202,8 @@ const ConfirmCheckoutSheet = () => {
           </div> */}
           <div>
             {/* {JSON.stringify(transaction)} */}
-            {selectedPaymentMethod == "CHECK" && (
+
+            {selectedPaymentMethod == "CHECK" && !isSuccess && (
               <div className="flex flex-col gap-2">
                 <div>
                   <FormField
@@ -250,13 +249,13 @@ const ConfirmCheckoutSheet = () => {
                 </div>
               </div>
             )}
-            <div className="flex items-center justify-between mt-4">
+            {/* <div className="flex items-center justify-between my-4">
               <p className="text-lg font-semibold">Final Total</p>
               <p className="text-lg font-semibold">
                 {currencyFormatter(getTotal())}
               </p>
-            </div>
-            <div>{renderConfirmButton()}</div>
+            </div> */}
+            <div className="mt-5">{renderConfirmButton()}</div>
           </div>
         </form>
       </Form>

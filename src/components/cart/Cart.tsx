@@ -119,15 +119,17 @@ const Cart = () => {
             </span>
           </p>
         </div>
-        <PaymentMethods />
-        <Button
-          disabled={!isCartEmpty}
-          size={"lg"}
-          className="flex-1 w-full h-14 text-xl p-2"
-          onClick={() => setIsCheckingOut(true)}
-        >
-          Checkout ({cart.length})
-        </Button>
+        <div className="p-5">
+          <PaymentMethods />
+          <Button
+            disabled={!isCartEmpty}
+            size={"lg"}
+            className="flex-1 w-full h-14 text-xl  "
+            onClick={() => setIsCheckingOut(true)}
+          >
+            Checkout ({cart.length})
+          </Button>
+        </div>
       </div>
     </div>
   ) : (

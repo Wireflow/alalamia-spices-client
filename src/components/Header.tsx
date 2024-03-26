@@ -1,7 +1,6 @@
 
 
 const Header = () => {
-  const todayDate = new Date();
 
   return (
     <div className="p-1">

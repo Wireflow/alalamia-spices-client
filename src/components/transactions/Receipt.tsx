@@ -30,13 +30,15 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
   return (
     <div
       ref={forwardedRef}
-      className="p-5 flex flex-col gap-2 h-[500px] "
+      className={`p-5 flex flex-col gap-2  ${isTransactionNotEmpty ? 'h-full' : 'h-[500px]' }` }
     >
       {/* Logo */}
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center flex-col items-center gap-1 mb-5">
         <img src={Logo} alt="seasoning" className=" h-[100px]" />
+        <p className="font-semibold">Alalamia Spices</p>
       </div>{" "}
       <div>
+        <h4 className="font-bold">Transaction Details:</h4>
         {/* Member Name */}
         <p className="font-semibold">Member Name: {member?.name}</p>
         {/* Address */}
@@ -96,12 +98,12 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
       {/* Payment Method */}
       <div className="">
         <p className="font-semibold">Payment Method: {selectedPaymentMethod}</p>
-        {isTransactionNotEmpty && (
+        {data?.paymentMethod === 'CHECK' && (
           <p className="font-semibold">Check Number: {data?.checkNumber}</p>
         )}
-        {isTransactionNotEmpty && (
+        {data?.paymentMethod === 'CHECK' && (
           <p className="font-semibold">
-            Check Amount: {currencyFormatter(CheckAmount)}
+            Check Amount:  {CheckAmount && currencyFormatter(CheckAmount)}
           </p>
         )}
       </div>

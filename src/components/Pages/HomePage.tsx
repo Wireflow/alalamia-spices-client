@@ -12,8 +12,8 @@ const HomePage = () => {
   useBarcodeScanner({
     onComplete: (sku) => {
       const product = products?.find((product) => product.sku === sku);
-      if (product) {
-        addToCart(product);
+      if (product && products) {
+        addToCart(product, products);
       } else {
         console.log(sku);
       }
