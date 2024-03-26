@@ -31,16 +31,18 @@ const ProductCard = ({ product }: ProductProps) => {
 
   return (
     <div
-      className="bg-[#e8e6e6] h-40 rounded-xl relative p-5 flex items-center justify-center"
+      className="bg-[#e8e6e6] h-40 rounded-xl  relative flex items-center justify-center"
       onClick={handleAddToCart}
     >
-      <div className="z-20 flex flex-col items-center justify-center">
+      <div className="z-20 flex flex-col items-center justify-center w-full h-full">
         {isAdded ? (
           <div className="absolute top-2 right-2">
             <ShoppingCart color="brown" />
           </div>
         ) : null}
-        <p className="text-lg font-bold text-center w-20">{product.name}</p>
+        <p className="text-[1.075rem] font-bold text-center w-20">
+          {product.name}
+        </p>
         <p>{currencyFormatter(product.price)}</p>
         <Badge
           variant={"outline"}
@@ -50,10 +52,11 @@ const ProductCard = ({ product }: ProductProps) => {
             "bg-orange-200 border-orange-400 border-2 ":
               product.boxQuantity && product.boxQuantity <= 50,
             "bg-red-200 border-red-400 border-2 ":
-              product.boxQuantity && product.boxQuantity <= 10,
+              (product.boxQuantity && product.boxQuantity <= 10) ||
+              !product.boxQuantity,
           })}
         >
-          In Stock: {product.boxQuantity}
+          In Stock: {product.boxQuantity || 0}
         </Badge>
       </div>
       <Plus

@@ -65,7 +65,7 @@ const Cart = () => {
             >
               <div className="flex flex-col gap-2">
                 <p className="text-md font-semibold">{cartItem.name}</p>
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-start justify-start">
                   <Button
                     className="p-3 rounded-full"
                     onClick={() =>
@@ -78,9 +78,11 @@ const Cart = () => {
                     <Minus color="white" size={15} />{" "}
                   </Button>
 
-                  <p className="bg-secondary border-2 py-1 rounded-full font-bold px-10 w-full max-w-30">
-                    {cartItem.purchaseQuantity}
-                  </p>
+                  <div className=" max-w-20 bg-secondary border-2 py-1 rounded-full w-full flex items-center justify-center">
+                    <p className="font-bold px-10">
+                      {cartItem.purchaseQuantity}
+                    </p>
+                  </div>
                   <Button
                     className="p-3 rounded-full"
                     onClick={() => {

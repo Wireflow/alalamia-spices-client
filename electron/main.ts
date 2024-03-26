@@ -27,6 +27,7 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
+    // autoHideMenuBar: true, // PRODUCTION
   });
 
   // Test active push message to Renderer-process.
@@ -37,8 +38,7 @@ function createWindow() {
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {
-    // win.loadFile('dist/index.html')
-    // win.loadFile(`../../../index.html`);
+    // win.loadFile(`../../../index.html`); // PRODUCTION
     win.loadFile(path.join(process.env.DIST, "index.html"));
   }
 }
@@ -61,10 +61,9 @@ app.on("activate", () => {
   }
 });
 
-
-  // Event handler for printing the receipt
-  ipcMain.on("print-receipt", () => {
-    win?.webContents.print({ silent: true });
-  });
+// Event handler for printing the receipt
+ipcMain.on("print-receipt", () => {
+  win?.webContents.print({ silent: true });
+});
 
 app.whenReady().then(createWindow);
