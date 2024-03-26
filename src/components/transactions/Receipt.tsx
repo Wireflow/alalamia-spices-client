@@ -14,7 +14,7 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
     const ref = useRef();
     console.log(ref);
     return (
-        <div ref={ref}>
+        <div ref={forwardedRef} className='p-5'>
             {/* Logo */}
             <div className="flex justify-center items-center">
                 <img
@@ -71,7 +71,10 @@ const ReceiptToPrint = ({ forwardedRef }: ReceiptToPrintProps) => {
             </Table>
 
             {/* Payment Method */}
+            <div className='p-5'>
             <p>{selectedPaymentMethod}</p>
+
+            </div>
         </div>
     );
 };
