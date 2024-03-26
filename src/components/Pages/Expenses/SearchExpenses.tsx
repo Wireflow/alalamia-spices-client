@@ -1,6 +1,6 @@
 import { Expense } from "@prisma/client";
 import { Table } from "@tanstack/react-table";
-import { Input } from "@components/ui/input";
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 type SearchExpensesType = {
   table: Table<Expense>;
@@ -27,8 +28,8 @@ const SearchExpenses = ({ table }: SearchExpensesType) => {
       <Input
         placeholder={`Search expenses by ${renderFilterBy}...`}
         value={(table.getColumn(filterBy)?.getFilterValue() as string) ?? ""}
-        onChange={(event) => {
-          table.getColumn(filterBy)?.setFilterValue(event.target.value);
+        onChange={(e) => {
+          table.getColumn(filterBy)?.setFilterValue(e?.target?.value);
         }}
         className="max-w-sm"
         type={filterBy === "amount" ? "number" : "text"}

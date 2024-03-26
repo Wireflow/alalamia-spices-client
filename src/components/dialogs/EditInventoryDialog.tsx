@@ -7,17 +7,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Edit, Plus } from "lucide-react";
+import { Product } from "@prisma/client";
+import { Edit } from "lucide-react";
 import { useState } from "react";
 import NewProductForm from "../forms/NewProductForm";
-import { Product } from "@prisma/client";
 
 type Props = {
-    product: Product;
-  };
-  
+  product: Product;
+};
 
-const EditInventoryDialog = ({product}: Props) => {
+const EditInventoryDialog = ({ product }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -34,7 +33,7 @@ const EditInventoryDialog = ({product}: Props) => {
             Change any of the Product's data and hit save!
           </DialogDescription>
         </DialogHeader>
-        <NewProductForm setOpen={setOpen} isEdit product={product}/>
+        <NewProductForm setOpen={setOpen} isEdit product={product} />
       </DialogContent>
     </Dialog>
   );

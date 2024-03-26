@@ -11,7 +11,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React from "react";
-import NewMemberDialog from "../dialogs/NewMemberDialog";
+import EditInventoryDialog from "../dialogs/EditInventoryDialog";
+import NewProductDialog from "../dialogs/NewProductDialog";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -21,8 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import NewProductDialog from "../dialogs/NewProductDialog";
-import EditInventoryDialog from "../dialogs/EditInventoryDialog";
 
 const InventoryTable = () => {
   const { data, isLoading } = useGetProducts();
@@ -72,9 +71,9 @@ const InventoryTable = () => {
     },
     {
       id: "actions",
-      header: 'Action',
+      header: "Action",
       enableHiding: false,
-      cell: ({row}) => {
+      cell: ({ row }) => {
         return <EditInventoryDialog product={row.original} />;
       },
     },
@@ -111,8 +110,7 @@ const InventoryTable = () => {
         {/* <SearchMembers table={table} /> */}
         <div className="w-full flex gap-2">
           {/* <FilterMembersColumns table={table} /> */}
-           <NewProductDialog /> 
-          
+          <NewProductDialog />
         </div>
       </div>
 

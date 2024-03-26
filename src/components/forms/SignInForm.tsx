@@ -27,6 +27,7 @@ const SignInForm = () => {
       if (data?.token && data?.session) {
         signIn({ token: data.token, session: data.session });
         toast.success("Signed in Successfully");
+        navigate("/home");
       }
     },
     onError: () => {

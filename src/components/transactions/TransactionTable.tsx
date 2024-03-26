@@ -1,4 +1,6 @@
-import { Product } from "@prisma/client";
+import useGetTransactions from "@/hooks/useGetTransactions";
+import { formatDateToString } from "@/lib/utils";
+import { Transaction } from "@prisma/client";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,9 +12,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React from "react";
-import NewMemberDialog from "../dialogs/NewMemberDialog";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import {
   Table,
   TableBody,
@@ -21,16 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import NewProductDialog from "../dialogs/NewProductDialog";
-import useGetTransactions from "@/hooks/useGetTransactions";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import { Transaction } from "@prisma/client";
 import ViewTransaction from "./ViewTransaction";
-import { formatDateToString } from "@/lib/utils";
 
 const TransactionTable = () => {
   const { data, isLoading } = useGetTransactions();
-  console.log(data)
+  console.log(data);
 
   const columns: ColumnDef<Transaction>[] = [
     {
@@ -80,7 +76,10 @@ const TransactionTable = () => {
               <Button>View</Button>
             </DialogTrigger>
             <DialogContent>
-            <ViewTransaction memberId={row.getValue('memberId')} transactionId={row.original.id} />
+              <ViewTransaction
+                memberId={row.getValue("memberId")}
+                transactionId={row.original.id}
+              />
             </DialogContent>
           </Dialog>
         );

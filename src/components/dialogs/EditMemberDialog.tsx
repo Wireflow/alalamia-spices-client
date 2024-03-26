@@ -7,10 +7,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Edit, Plus } from "lucide-react";
+import { Member } from "@prisma/client";
+import { Edit } from "lucide-react";
 import { useState } from "react";
 import NewMemberForm from "../forms/NewMemberForm";
-import { Member } from "@prisma/client";
 
 type Props = {
   member: Member;

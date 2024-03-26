@@ -12,11 +12,10 @@ import { useState } from "react";
 import NewMemberForm from "../forms/NewMemberForm";
 
 type Props = {
-  isVisible: boolean;
-  isOpen?: boolean;
+  isVisible?: boolean;
 };
 
-const NewMemberDialog = ({ isVisible = true, isOpen }: Props) => {
+const NewMemberDialog = ({ isVisible = true }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (

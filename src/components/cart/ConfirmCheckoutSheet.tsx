@@ -1,20 +1,12 @@
 import { useCart } from "@/State/store";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetFooter,
-  SheetTrigger,
-} from "../ui/sheet";
-import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
-import { Check, Loader2 } from "lucide-react";
 import { currencyFormatter } from "@/lib/utils";
 import { TransactionSchema, TransactionType } from "@/types/transaction";
-import { useForm } from "react-hook-form";
+import submitNewTransaction from "@/use-cases/submitNewTransaction";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { QueryClient, useMutation } from "@tanstack/react-query";
+import { Check, Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -23,9 +15,9 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { QueryClient, useMutation } from "@tanstack/react-query";
-import submitNewTransaction from "@/use-cases/submitNewTransaction";
-import { useEffect } from "react";
+import { Input } from "../ui/input";
+import { Sheet, SheetContent, SheetFooter, SheetTrigger } from "../ui/sheet";
+import ConfirmCheckoutItemCard from "./ConfirmCheckoutItemCard";
 
 const ConfirmCheckoutSheet = () => {
   const {
@@ -63,8 +55,6 @@ const ConfirmCheckoutSheet = () => {
   const onSubmit = (data: TransactionType) => {
     mutate(data);
   };
-
-
 
   return (
     <Sheet>
