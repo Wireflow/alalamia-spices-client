@@ -48,7 +48,7 @@ const SignInForm = () => {
   };
 
   useEffect(() => {
-    if (session && isSuccess) {
+    if (session) {
       navigate("/home");
     }
   }, [session, navigate, isSuccess]);
