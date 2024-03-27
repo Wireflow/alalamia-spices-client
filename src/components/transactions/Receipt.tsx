@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { TransactionWithProducts } from '@/hooks/useGetTransaction';
+import { TransactionWithProducts } from "@/hooks/useGetTransaction";
 interface ReceiptToPrintProps {
   forwardedRef: ForwardedRef<HTMLDivElement>;
   // data:  Transaction & { purchasedProducts: PurchasedProduct[] };
@@ -30,7 +30,9 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
   return (
     <div
       ref={forwardedRef}
-      className={`p-5 flex flex-col gap-2  ${isTransactionNotEmpty ? 'h-full' : 'h-[500px]' }` }
+      className={`p-5 flex flex-col gap-2  ${
+        isTransactionNotEmpty ? "h-full" : "h-[500px]"
+      }`}
     >
       {/* Logo */}
       <div className="flex justify-center flex-col items-center gap-1 mb-5">
@@ -98,12 +100,12 @@ const ReceiptToPrint = ({ forwardedRef, data }: ReceiptToPrintProps) => {
       {/* Payment Method */}
       <div className="">
         <p className="font-semibold">Payment Method: {selectedPaymentMethod}</p>
-        {data?.paymentMethod === 'CHECK' && (
+        {data?.paymentMethod === "CHECK" && (
           <p className="font-semibold">Check Number: {data?.checkNumber}</p>
         )}
-        {data?.paymentMethod === 'CHECK' && (
+        {data?.paymentMethod === "CHECK" && (
           <p className="font-semibold">
-            Check Amount:  {CheckAmount && currencyFormatter(CheckAmount)}
+            Check Amount: {CheckAmount && currencyFormatter(CheckAmount)}
           </p>
         )}
       </div>

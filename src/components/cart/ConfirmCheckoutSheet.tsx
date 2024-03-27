@@ -1,12 +1,18 @@
 import { useCart } from "@/State/store";
+import { useGetProducts } from "@/hooks/useGetProducts";
+import useGetTransaction from "@/hooks/useGetTransaction";
+import { handlePrint } from "@/lib/print";
 import { currencyFormatter } from "@/lib/utils";
 import { TransactionSchema, TransactionType } from "@/types/transaction";
 import submitNewTransaction from "@/use-cases/submitNewTransaction";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Transaction } from "@prisma/client";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import { Check, Loader2, ReceiptTextIcon } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import ReactToPrint from "react-to-print";
+import ReceiptToPrint from "../transactions/Receipt";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -17,11 +23,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Transaction } from "@prisma/client";
-import ReactToPrint from "react-to-print";
-import ReceiptToPrint from "../transactions/Receipt";
-import useGetTransaction from "@/hooks/useGetTransaction";
-import { useGetProducts } from "@/hooks/useGetProducts";
 
 const ConfirmCheckoutSheet = () => {
   const [transactionData, setTransactionData] = useState<Transaction | null>(
@@ -93,6 +94,7 @@ const ConfirmCheckoutSheet = () => {
   const reactToPrintContent = React.useCallback(() => {
     return componentRef.current;
   }, [componentRef]);
+
   useEffect(() => {
     form.setValue("purchasedProducts", [...cart]);
   }, [cart, form]);
@@ -164,6 +166,8 @@ const ConfirmCheckoutSheet = () => {
             )}
             content={reactToPrintContent}
             pageStyle={pageStyle}
+            print={handlePrint}
+            documentTitle="Testing"
           />
           <Button
             className="h-14 text-lg w-full mt-2"
@@ -178,31 +182,14 @@ const ConfirmCheckoutSheet = () => {
       ) : null}
 
       {/* <ReceiptToPrint /> */}
-      
-        <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
-      
+      <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
 
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className=" flex flex-col p-5  "
         >
-          {/* <div className="grid gap-4 py-4">
-            <div className="mt-4">
-              <p className="text-lg font-bold">Confirm Products</p>
-              <div className="grid gap-8 mt-4">
-                {cart.map((product) => (
-                  <ConfirmCheckoutItemCard
-                    key={product.productId}
-                    product={product}
-                  />
-                ))}
-              </div>
-            </div>
-          </div> */}
           <div>
-            {/* {JSON.stringify(transaction)} */}
-
             {selectedPaymentMethod == "CHECK" && !isSuccess && (
               <div className="flex flex-col gap-2">
                 <div>
