@@ -8,7 +8,7 @@
   "version": "0.0.1",
   "description": "An app for managing the point of sale of alalamia spices",
   "build": {
-    "appId": "alalamia.wireflow.us",
+    "appId": "com.Wireflow.AlalamiaPOS",
     "win": {
       "target": [
         "nsis"
@@ -59,6 +59,7 @@
     "lucide": "^0.359.0",
     "lucide-react": "^0.359.0",
     "next-themes": "^0.3.0",
+    "pdf-to-printer": "^5.6.0",
     "postcss": "^8.4.36",
     "prisma": "^5.11.0",
     "react": "^18.2.0",
