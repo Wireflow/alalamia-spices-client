@@ -22,7 +22,7 @@ const NewMemberDialog = ({ isVisible = true }: Props) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         {isVisible ? (
-          <Button size={"lg"}>
+          <Button size={"lg"} className="mt-4">
             Add New Member <Plus className="w-4 h-4 ml-2" />
           </Button>
         ) : null}
