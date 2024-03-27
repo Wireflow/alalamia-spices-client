@@ -1,7 +1,7 @@
 import { ExpenseSchema, ExpenseType } from "@/types/expense";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "../../ui/button";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -9,31 +9,40 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
-import { Input } from "../../ui/input";
+} from "../ui/form";
+import { Input } from "../ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import submitNewExpense from "../../../use-cases/submitNewExpense";
+import submitNewExpense from "../../use-cases/submitNewExpense";
+import { FormMode } from "@/types/form";
+import { Expense } from "@prisma/client";
+import updateExpense from "@/use-cases/updateExpense";
 
-type NewExpenseFormProps = {
+type AddEditViewExpenseFormProps = {
   setOpen: (isOpen: boolean) => void;
+  mode: FormMode;
+  expense?: Expense;
 };
 
-const NewExpenseForm = ({ setOpen }: NewExpenseFormProps) => {
+const AddEditViewExpenseForm = ({
+  setOpen,
+  mode,
+  expense,
+}: AddEditViewExpenseFormProps) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: submitNewExpense,
+    mutationFn: mode === "edit" ? updateExpense : submitNewExpense,
     onSuccess: () => {
       setOpen(false);
-      return queryClient.invalidateQueries({ queryKey: ["expenses"] });
+      queryClient.invalidateQueries({ queryKey: ["expenses"] });
     },
   });
 
   const form = useForm<ExpenseType>({
     resolver: zodResolver(ExpenseSchema),
     defaultValues: {
-      name: undefined,
-      amount: 0.0,
+      name: expense?.name ? expense.name : undefined,
+      amount: expense?.amount ? expense.amount : 0.0,
     },
   });
 
@@ -41,9 +50,38 @@ const NewExpenseForm = ({ setOpen }: NewExpenseFormProps) => {
     mutate(data);
   };
 
+  const renderModeButton = () => {
+    if (mode === "add")
+      return (
+        <Button type="submit" className="w-full mt-4" disabled={isPending}>
+          Add
+        </Button>
+      );
+
+    if (mode === "edit")
+      return (
+        <Button type="submit" className="w-full mt-4" disabled={isPending}>
+          Edit
+        </Button>
+      );
+
+    if (mode === "view")
+      return (
+        <Button
+          type="button"
+          className="w-full mt-4"
+          onClick={() => setOpen(false)}
+        >
+          Close
+        </Button>
+      );
+
+    return null;
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className=" w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <div className="grid gap-4">
           <FormField
             control={form.control}
@@ -52,7 +90,7 @@ const NewExpenseForm = ({ setOpen }: NewExpenseFormProps) => {
               <FormItem className="w-full">
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input {...field} type="text" />
+                  <Input {...field} type="text" mode={mode} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -70,19 +108,18 @@ const NewExpenseForm = ({ setOpen }: NewExpenseFormProps) => {
                     {...field}
                     type="number"
                     onChange={(e) => field.onChange(parseFloat(e.target.value))}
+                    mode={mode}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full mt-4" disabled={isPending}>
-            {isPending ? "Adding..." : "Add"}
-          </Button>
+          {renderModeButton()}
         </div>
       </form>
     </Form>
   );
 };
 
-export default NewExpenseForm;
+export default AddEditViewExpenseForm;

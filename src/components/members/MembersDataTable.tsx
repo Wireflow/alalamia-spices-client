@@ -1,5 +1,5 @@
-import { useGetExpenses } from "@/hooks/useGetExpenses";
-import { Expense } from "@prisma/client";
+import { useGetMembers } from "@/hooks/useGetMembers";
+import { Member } from "@prisma/client";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -8,12 +8,10 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Edit } from "lucide-react";
 import React from "react";
-import FilterExpensesColumns from "./FilterExpensesColumns";
-// import SearchExpenses from "./SearchExpenses";
-// import EditMemberDialog from "../dialogs/EditMemberDialog";
-// import NewMemberDialog from "../dialogs/NewMemberDialog";
-import NewExpenseDialog from "@/components/dialogs/AddExpenseDialog";
+import MemberDialog from "../dialogs/MemberDialog";
+import { Button } from "../ui/button";
 import {
   Table,
   TableBody,
@@ -21,51 +19,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import SearchExpenses from "./SearchExpenses";
+} from "../ui/table";
+import FilterMembersColumns from "./FilterMembersColumns";
+import SearchMembers from "./SearchMembers";
 
-// import SearchExpenses from "./SearchExpenses";
-
-const ExpensesTable = () => {
-  const { data, isLoading } = useGetExpenses();
-
-  const columns: ColumnDef<Expense>[] = [
-    {
-      accessorKey: "name",
-      header: "Name",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
-      ),
-    },
-
-    {
-      accessorKey: "amount",
-      header: "Amount",
-      cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("amount"));
-
-        const formattedAmount = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(amount);
-
-        return <div className="capitalize">{formattedAmount}</div>;
-      },
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      //   cell: ({ row }) => {
-      //     return <EditMemberDialog member={row.original} />;
-      //   },
-    },
-  ];
-
+const MembersDataTable = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
-  const table = useReactTable<Expense>({
+  const { data } = useGetMembers();
+
+  const table = useReactTable({
     data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -76,16 +41,13 @@ const ExpensesTable = () => {
     },
   });
 
-  if (!data?.length) return <div>No Expenses</div>;
-  if (isLoading) return <div>Loading...</div>;
-
   return (
     <div>
       <div className="flex items-center py-4">
-        <SearchExpenses table={table} />
+        <SearchMembers table={table} />
         <div className="w-full flex gap-2">
-          <FilterExpensesColumns table={table} />
-          <NewExpenseDialog />
+          <FilterMembersColumns table={table} />
+          <MemberDialog mode="add" />
         </div>
       </div>
 
@@ -140,4 +102,58 @@ const ExpensesTable = () => {
   );
 };
 
-export default ExpensesTable;
+export default MembersDataTable;
+
+const columns: ColumnDef<Member>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "address",
+    header: "Address",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("address")}</div>
+    ),
+  },
+  {
+    accessorKey: "phoneNumber",
+    header: "Phone Number",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("phoneNumber")}</div>
+    ),
+  },
+  {
+    accessorKey: "owedBalance",
+    header: "Balance",
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("owedBalance"));
+
+      const formattedAmount = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return <div className="capitalize">{formattedAmount}</div>;
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    header: "Action",
+    cell: ({ row }) => {
+      return (
+        <MemberDialog
+          member={row.original}
+          mode="edit"
+          trigger={
+            <Button size={"lg"}>
+              <Edit className="w-[18px] h-[18px]" />
+            </Button>
+          }
+        />
+      );
+    },
+  },
+];

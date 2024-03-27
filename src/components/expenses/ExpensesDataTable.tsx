@@ -1,5 +1,5 @@
-import { useGetMembers } from "@/hooks/useGetMembers";
-import { Member } from "@prisma/client";
+import { useGetExpenses } from "@/hooks/useGetExpenses";
+import { Expense } from "@prisma/client";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -9,10 +9,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React from "react";
-import FilterMembersColumns from "./FilterMembersColumns";
-import SearchMembers from "./SearchMembers";
-import EditMemberDialog from "../dialogs/EditMemberDialog";
-import NewMemberDialog from "../dialogs/NewMemberDialog";
+import FilterExpensesColumns from "./FilterExpensesColumns";
+import AddEditViewExpenseDialog from "@/components/dialogs/ExpenseDialog";
 import {
   Table,
   TableBody,
@@ -20,61 +18,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
+} from "@/components/ui/table";
+import SearchExpenses from "./SearchExpenses";
 
-const MembersTable = () => {
-  const { data, isLoading } = useGetMembers();
+// import SearchExpenses from "./SearchExpenses";
 
-  const columns: ColumnDef<Member>[] = [
-    {
-      accessorKey: "name",
-      header: "Name",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
-      ),
-    },
-    {
-      accessorKey: "address",
-      header: "Address",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("address")}</div>
-      ),
-    },
-    {
-      accessorKey: "phoneNumber",
-      header: "Phone Number",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("phoneNumber")}</div>
-      ),
-    },
-    {
-      accessorKey: "owedBalance",
-      header: "Balance",
-      cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("owedBalance"));
-
-        const formattedAmount = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(amount);
-
-        return <div className="capitalize">{formattedAmount}</div>;
-      },
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        return <EditMemberDialog member={row.original} />;
-      },
-    },
-  ];
-
+const ExpensesDataTable = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const { data } = useGetExpenses();
 
-  const table = useReactTable({
+  const table = useReactTable<Expense>({
     data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -85,25 +40,13 @@ const MembersTable = () => {
     },
   });
 
-  if (!data?.length)
-    return (
-      <div >
-        {" "}
-        <NewMemberDialog />
-        <div className="text-2xl flex justify-center items-center h-[700px]">
-          No Members
-        </div>
-      </div>
-    );
-  if (isLoading) return <div>Loading...</div>;
-
   return (
     <div>
       <div className="flex items-center py-4">
-        <SearchMembers table={table} />
+        <SearchExpenses table={table} />
         <div className="w-full flex gap-2">
-          <FilterMembersColumns table={table} />
-          <NewMemberDialog />
+          <FilterExpensesColumns table={table} />
+          <AddEditViewExpenseDialog mode="add" />
         </div>
       </div>
 
@@ -158,4 +101,34 @@ const MembersTable = () => {
   );
 };
 
-export default MembersTable;
+export default ExpensesDataTable;
+
+const columns: ColumnDef<Expense>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+  },
+
+  {
+    accessorKey: "amount",
+    header: "Amount",
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amount"));
+
+      const formattedAmount = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return <div className="capitalize">{formattedAmount}</div>;
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    //   cell: ({ row }) => {
+    //     return <EditMemberDialog member={row.original} />;
+    //   },
+  },
+];

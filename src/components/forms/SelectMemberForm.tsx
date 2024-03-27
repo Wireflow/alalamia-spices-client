@@ -26,23 +26,27 @@ const SelectMemberForm = () => {
     searchType,
   });
 
+  const inputType = searchType === "phone number" ? "number" : "text";
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let search = e.target.value;
+    if (searchType === "phone number" && search.length > 10) {
+      search = search.slice(0, 10);
+    }
+    setSearchTerm(search);
+  };
+
   return (
     <div className="grid gap-4">
       <div className="flex gap-2">
         <div className="flex-1">
           <Label className="capitalize">Search Member By {searchType}</Label>
           <Input
-            type={searchType === "phone number" ? "number" : "text"}
+            type={inputType}
             placeholder={`Member ${searchType}`}
             className="mt-1"
             value={searchTerm}
-            onChange={(e) => {
-              let search = e.target.value;
-              if (searchType === "phone number" && search.length > 10) {
-                search = search.slice(0, 10);
-              }
-              setSearchTerm(search);
-            }}
+            onChange={onChange}
           />
         </div>
         <div className="flex-[0.5]">

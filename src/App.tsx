@@ -3,7 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import CheckoutBar from "./components/CheckoutBar";
 import Header from "./components/Header";
-import Expenses from "./components/Pages/Expenses/ExpensesList";
+import Expenses from "./components/expenses/ExpensesDataTable";
 import Financials from "./components/Pages/Financials";
 import Inventory from "./components/Pages/Inventory";
 import Members from "./components/Pages/Members";

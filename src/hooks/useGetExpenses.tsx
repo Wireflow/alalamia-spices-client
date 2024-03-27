@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetExpenses = () => {
   return useQuery({
-    queryKey: ["Expenses"],
+    queryKey: ["expenses"],
     queryFn: async () => {
       const { data } = await api.get("/expenses");
 
