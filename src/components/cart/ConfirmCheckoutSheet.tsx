@@ -178,9 +178,8 @@ const ConfirmCheckoutSheet = () => {
       ) : null}
 
       {/* <ReceiptToPrint /> */}
-      
-        <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
-      
+
+      <ReceiptToPrint forwardedRef={componentRef} data={transaction} />
 
       <Form {...form}>
         <form

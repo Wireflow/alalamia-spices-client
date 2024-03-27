@@ -1,7 +1,7 @@
-export const PAYMENT_METHODS: readonly ["CASH", "CHECK", "CARD"] = [
+export const PAYMENT_METHODS: readonly ["CASH", "CHECK", "UNPAID"] = [
   "CASH",
   "CHECK",
-  "CARD",
+  "UNPAID",
 ];
 
 export type PaymentMethodsType = (typeof PAYMENT_METHODS)[number];

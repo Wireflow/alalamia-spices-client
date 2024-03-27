@@ -59,7 +59,6 @@ const PaymentMethods = () => {
         {PAYMENT_METHODS.map((paymentMethod) => (
           <Button
             key={paymentMethod}
-            disabled={paymentMethod === "CARD"}
             size={"lg"}
             className={cn(
               "bg-accent text-primary flex-1 h-12 rounded-xl hover:text-white",

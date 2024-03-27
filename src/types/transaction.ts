@@ -2,7 +2,7 @@ import z from "zod";
 
 export const TransactionSchema = z.object({
   totalAmount: z.number(),
-  paymentMethod: z.enum(["CASH", "CHECK", "CARD"]),
+  paymentMethod: z.enum(["CASH", "CHECK", "UNPAID"]),
   checkNumber: z.number().optional(),
   checkAmount: z.number().optional(),
   totalQuantityPurchased: z.number(),
