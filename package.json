@@ -5,12 +5,25 @@
     "name": "WireFlow",
     "email": "wireflowllc@gmail.com"
   },
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "An app for managing the point of sale of alalamia spices",
   "build": {
     "appId": "alalamia.wireflow.us",
     "win": {
+      "target": [
+        "nsis"
+      ],
       "icon": "./src/assets/logo.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "installerIcon": "./src/assets/logo.ico",
+      "uninstallerIcon": "./src/assets/logo.ico",
+      "uninstallDisplayName": "alalamia-spices-client-uninstaller",
+      "license": "license.md",
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "runAfterFinish": true
     }
   },
   "scripts": {

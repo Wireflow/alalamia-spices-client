@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain } from "electron";
+
 import path from "node:path";
 
 // The built directory structure
@@ -11,6 +12,7 @@ import path from "node:path";
 // │ │ └── preload.js
 // │
 process.env.DIST = path.join(__dirname, "../dist");
+
 process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, "../public");
@@ -26,6 +28,7 @@ function createWindow() {
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      devTools:true
     },
     autoHideMenuBar: true, // PRODUCTION
   });
@@ -39,7 +42,11 @@ function createWindow() {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {
     win.loadFile(`../../../index.html`); // PRODUCTION
-    // win.loadFile(path.join(process.env.DIST, "index.html"));
+    // This ensures that the file is treated as part of your Electron application and avoids the security restrictions
+    // win.loadURL(`file://${path.join(__dirname, 'index.html')}`); 
+
+    // win.loadURL(path.join(process.env.DIST, "index.html"));
+    // win.loadFile(path.join(__dirname, "index.html"));
   }
 }
 
