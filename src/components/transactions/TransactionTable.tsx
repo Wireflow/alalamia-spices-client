@@ -109,7 +109,7 @@ const TransactionTable = () => {
     },
   });
 
-  if (!data?.length) return <div>No Products</div>;
+  if (!data?.length) return <div className="text-2xl flex justify-center items-center h-[800px]">No Transactions Avaliable</div>;
   if (isLoading) return <div>Loading...</div>;
 
   return (

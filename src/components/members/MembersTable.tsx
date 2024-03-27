@@ -85,7 +85,16 @@ const MembersTable = () => {
     },
   });
 
-  if (!data?.length) return <div>No Members</div>;
+  if (!data?.length)
+    return (
+      <div >
+        {" "}
+        <NewMemberDialog />
+        <div className="text-2xl flex justify-center items-center h-[700px]">
+          No Members
+        </div>
+      </div>
+    );
   if (isLoading) return <div>Loading...</div>;
 
   return (

@@ -101,7 +101,16 @@ const InventoryTable = () => {
     },
   });
 
-  if (!data?.length) return <div>No Products</div>;
+  if (!data?.length)
+    return (
+      <div>
+        {" "}
+        <NewProductDialog />
+        <div className="text-2xl flex justify-center items-center h-[700px]">
+          No Products
+        </div>
+      </div>
+    );
   if (isLoading) return <div>Loading...</div>;
 
   return (
