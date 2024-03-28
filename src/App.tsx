@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
-import CheckoutBar from "./components/CheckoutBar";
-import Header from "./components/Header";
-import Expenses from "./components/expenses/ExpensesDataTable";
-import Financials from "./components/Pages/Financials";
-import Inventory from "./components/Pages/Inventory";
-import Members from "./components/Pages/Members";
-import SignIn from "./components/Pages/SignIn";
-import Transactions from "./components/Pages/Transactions";
+import Header from "./components/layout/Header";
 import Sidebar from "./components/layout/Sidebar";
+import HomePage from "./components/pages/HomePage";
+import ExpensesPage from "./components/expenses/ExpensesDataTable";
+import FinancialsPage from "./components/pages/FinancialsPage";
+import InventoryPage from "./components/pages/InventoryPage";
+import MembersPage from "./components/pages/MembersPage";
+import SignInPage from "./components/pages/SignInPage";
+import TransactionsPage from "./components/pages/TransactionsPage";
 import { getSession } from "./hooks/useAuth";
 
 function App() {
@@ -31,13 +31,13 @@ function App() {
           {session ? <Header /> : null}
 
           <Routes>
-            <Route path="/" element={<SignIn />} />
-            <Route path="/home" element={<CheckoutBar />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/transactions" element={<Transactions />} />
-            <Route path="/members" element={<Members />} />
-            <Route path="/financials" element={<Financials />} />
-            <Route path="/expenses" element={<Expenses />} />
+            <Route path="/" element={<SignInPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+            <Route path="/transactions" element={<TransactionsPage />} />
+            <Route path="/members" element={<MembersPage />} />
+            <Route path="/financials" element={<FinancialsPage />} />
+            <Route path="/expenses" element={<ExpensesPage />} />
           </Routes>
         </div>
       </div>

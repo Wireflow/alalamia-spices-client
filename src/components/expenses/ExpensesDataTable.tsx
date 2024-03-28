@@ -1,3 +1,12 @@
+import AddEditViewExpenseDialog from "@/components/dialogs/ExpenseDialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useGetExpenses } from "@/hooks/useGetExpenses";
 import { Expense } from "@prisma/client";
 import {
@@ -9,16 +18,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React from "react";
-import FilterExpensesColumns from "./FilterExpensesColumns";
-import AddEditViewExpenseDialog from "@/components/dialogs/ExpenseDialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import FilterTableColumns from "../forms/FilterTableColumns";
 import SearchExpenses from "./SearchExpenses";
 
 // import SearchExpenses from "./SearchExpenses";
@@ -45,7 +45,7 @@ const ExpensesDataTable = () => {
       <div className="flex items-center py-4">
         <SearchExpenses table={table} />
         <div className="w-full flex gap-2">
-          <FilterExpensesColumns table={table} />
+          <FilterTableColumns table={table} />
           <AddEditViewExpenseDialog mode="add" />
         </div>
       </div>

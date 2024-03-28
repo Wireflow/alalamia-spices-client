@@ -7,10 +7,10 @@ import { Button } from "../ui/button";
 
 type Props = {
   member: Member;
-  viewOnly?: boolean;
+  mode?: "view" | "add";
 };
 
-const SelectMemberCard = ({ member, viewOnly = false }: Props) => {
+const SelectMemberCard = ({ member, mode = "add" }: Props) => {
   const setMember = useCart((state) => state.setMember);
   const clearMember = useCart((state) => state.clearMember);
   const setDialogOpen = useSelectMemberStore((state) => state.setDialogOpen);
@@ -20,7 +20,7 @@ const SelectMemberCard = ({ member, viewOnly = false }: Props) => {
     <Card
       className="bg-white w-full cursor-pointer hover:bg-accent"
       onClick={() => {
-        if (!viewOnly) {
+        if (mode === "add") {
           setMember(member);
           setDialogOpen(false);
           setSearchTerm("");
@@ -36,7 +36,7 @@ const SelectMemberCard = ({ member, viewOnly = false }: Props) => {
             <Phone className="w-3 h-3" /> {member.phoneNumber}
           </CardDescription>
         </div>
-        {viewOnly && (
+        {mode === "view" && (
           <Button
             variant={"destructive"}
             size={"icon"}

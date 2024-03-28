@@ -16,18 +16,15 @@ import submitNewExpense from "../../use-cases/submitNewExpense";
 import { FormMode } from "@/types/form";
 import { Expense } from "@prisma/client";
 import updateExpense from "@/use-cases/updateExpense";
+import FormButton from "../forms/FormButton";
 
-type AddEditViewExpenseFormProps = {
+type ExpenseFormProps = {
   setOpen: (isOpen: boolean) => void;
   mode: FormMode;
   expense?: Expense;
 };
 
-const AddEditViewExpenseForm = ({
-  setOpen,
-  mode,
-  expense,
-}: AddEditViewExpenseFormProps) => {
+const ExpenseForm = ({ setOpen, mode, expense }: ExpenseFormProps) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
@@ -48,35 +45,6 @@ const AddEditViewExpenseForm = ({
 
   const onSubmit = async (data: ExpenseType) => {
     mutate(data);
-  };
-
-  const renderModeButton = () => {
-    if (mode === "add")
-      return (
-        <Button type="submit" className="w-full mt-4" disabled={isPending}>
-          Add
-        </Button>
-      );
-
-    if (mode === "edit")
-      return (
-        <Button type="submit" className="w-full mt-4" disabled={isPending}>
-          Edit
-        </Button>
-      );
-
-    if (mode === "view")
-      return (
-        <Button
-          type="button"
-          className="w-full mt-4"
-          onClick={() => setOpen(false)}
-        >
-          Close
-        </Button>
-      );
-
-    return null;
   };
 
   return (
@@ -115,11 +83,11 @@ const AddEditViewExpenseForm = ({
               </FormItem>
             )}
           />
-          {renderModeButton()}
+          <FormButton mode={mode} isPending={isPending} setOpen={setOpen} />
         </div>
       </form>
     </Form>
   );
 };
 
-export default AddEditViewExpenseForm;
+export default ExpenseForm;

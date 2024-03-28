@@ -8,16 +8,25 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { FormMode } from "@/types/form";
+import { Product } from "@prisma/client";
 import { Edit, Eye, Plus } from "lucide-react";
 import { useState } from "react";
-import ExpenseForm from "../expenses/ExpenseForm";
+import ProductForm from "./ProductForm";
 
-type ExpenseDialogProps = {
-  mode: FormMode;
+type ProductDialogAddProps = {
+  mode: Exclude<FormMode, "edit" | "view">;
   trigger?: React.ReactNode;
 };
 
-const ExpenseDialog = ({ mode, trigger }: ExpenseDialogProps) => {
+type ProductDialogEditViewProps = {
+  mode: Exclude<FormMode, "add">;
+  trigger?: React.ReactNode;
+  product: Product;
+};
+
+type ProductDialogProps = ProductDialogAddProps | ProductDialogEditViewProps;
+
+const ProductDialog = ({ mode, trigger, ...props }: ProductDialogProps) => {
   const [open, setOpen] = useState(false);
 
   const formText = {
@@ -26,6 +35,12 @@ const ExpenseDialog = ({ mode, trigger }: ExpenseDialogProps) => {
     title: titleTexts[mode],
     description: descriptionTexts[mode],
   };
+
+  let product: Product | undefined;
+
+  if ("product" in props && (mode === "edit" || mode === "view")) {
+    product = props.product;
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -43,30 +58,30 @@ const ExpenseDialog = ({ mode, trigger }: ExpenseDialogProps) => {
           <DialogTitle>{formText.title}</DialogTitle>
           <DialogDescription>{formText.description}</DialogDescription>
         </DialogHeader>
-        <ExpenseForm setOpen={setOpen} mode={mode} />
+        <ProductForm setOpen={setOpen} mode={mode} product={product} />
       </DialogContent>
     </Dialog>
   );
 };
 
-export default ExpenseDialog;
+export default ProductDialog;
 
 const triggerTexts: Record<FormMode, string> = {
-  add: "Add New Expense",
-  edit: "Edit Expense",
-  view: "View Expense",
+  add: "Add New Product",
+  edit: "Edit Product",
+  view: "View Product",
 };
 
 const titleTexts: Record<FormMode, string> = {
-  add: "Add Expense",
-  edit: "Edit Expense",
-  view: "View Expense",
+  add: "Add Product",
+  edit: "Edit Product",
+  view: "View Product",
 };
 
 const descriptionTexts: Record<FormMode, string> = {
-  add: "Fill out the form below to add new expenses!",
-  edit: "Edit the form below to update the expense details.",
-  view: "View the expense details below.",
+  add: "Fill out the form below to add new products!",
+  edit: "Edit the form below to update the product details.",
+  view: "View the product details below.",
 };
 
 const iconComponents: Record<FormMode, React.ReactNode> = {

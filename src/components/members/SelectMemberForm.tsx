@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import SelectMemberCard from "../members/SelectMemberCard";
+import SelectMemberCard from "./SelectMemberCard";
 import { cn } from "@/lib/utils";
 
 const SelectMemberForm = () => {

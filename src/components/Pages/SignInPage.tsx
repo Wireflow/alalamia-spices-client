@@ -1,4 +1,4 @@
-import SignInForm from "../forms/SignInForm";
+import SignInForm from "../auth/SignInForm";
 import {
   Card,
   CardContent,

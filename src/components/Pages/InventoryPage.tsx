@@ -1,4 +1,4 @@
-import InventoryTable from "../inventory/InventoryTable";
+import InventoryTable from "../products/ProductsDataTable";
 
 const Inventory = () => {
   return (

@@ -1,10 +1,10 @@
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/cart/ProductCard";
 import { useGetProducts } from "@/hooks/useGetProducts";
 import { useHomeProductFilter } from "@/store/useHomeProductFilterStore";
 import { Product } from "@prisma/client";
 import { useEffect } from "react";
 
-const HomePageProducts = () => {
+const CheckoutProductCatalog = () => {
   const {
     setFilteredProducts,
     filteredProducts,
@@ -36,4 +36,4 @@ const HomePageProducts = () => {
   );
 };
 
-export default HomePageProducts;
+export default CheckoutProductCatalog;

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { useSelectMemberStore } from "@/store/useSelectMemberStore";
 import { Plus } from "lucide-react";
-import SelectMemberForm from "../forms/SelectMemberForm";
+import SelectMemberForm from "../members/SelectMemberForm";
 
 const SelectMemberDialog = () => {
   const { isDialogOpen, setDialogOpen } = useSelectMemberStore();

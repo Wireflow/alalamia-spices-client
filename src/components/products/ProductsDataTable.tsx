@@ -10,9 +10,8 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React from "react";
-import EditInventoryDialog from "../dialogs/EditInventoryDialog";
-import NewProductDialog from "../dialogs/NewProductDialog";
+import React, { useState } from "react";
+import FilterMembersColumns from "../forms/FilterTableColumns";
 import { Button } from "../ui/button";
 import {
   Table,
@@ -22,63 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import ProductsDialog from "./ProductDialog";
+import SearchProducts from "./SearchProducts";
+import { Edit } from "lucide-react";
 
-const InventoryTable = () => {
-  const { data, isLoading } = useGetProducts();
-
-  const columns: ColumnDef<Product>[] = [
-    {
-      accessorKey: "name",
-      header: "Product Name",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
-      ),
-    },
-    {
-      accessorKey: "price",
-      header: "Price",
-      cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("price"));
-
-        const formattedAmount = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(amount);
-
-        return <div className="capitalize">{formattedAmount}</div>;
-      },
-    },
-    {
-      accessorKey: "boxQuantity",
-      header: "Amount of Boxes",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("boxQuantity") || 0}</div>
-      ),
-    },
-    {
-      accessorKey: "grams",
-      header: "Grams",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("grams") || 0}</div>
-      ),
-    },
-    {
-      accessorKey: "quantity",
-      header: "Quantity",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("quantity") || 0}</div>
-      ),
-    },
-    {
-      id: "actions",
-      header: "Action",
-      enableHiding: false,
-      cell: ({ row }) => {
-        return <EditInventoryDialog product={row.original} />;
-      },
-    },
-  ];
-
+const InventoryDataTable = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -86,6 +33,8 @@ const InventoryTable = () => {
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const { data } = useGetProducts();
 
   const table = useReactTable({
     data: data || [],
@@ -101,25 +50,13 @@ const InventoryTable = () => {
     },
   });
 
-  if (!data?.length)
-    return (
-      <div>
-        {" "}
-        <NewProductDialog />
-        <div className="text-2xl flex justify-center items-center h-[700px]">
-          No Products
-        </div>
-      </div>
-    );
-  if (isLoading) return <div>Loading...</div>;
-
   return (
-    <div className=" ">
-      <div className="flex items-center py-4 ">
-        {/* <SearchMembers table={table} /> */}
+    <div>
+      <div className="flex items-center py-4">
+        <SearchProducts table={table} />
         <div className="w-full flex gap-2">
-          {/* <FilterMembersColumns table={table} /> */}
-          <NewProductDialog />
+          <FilterMembersColumns table={table} />
+          <ProductsDialog mode="add" />
         </div>
       </div>
 
@@ -198,4 +135,65 @@ const InventoryTable = () => {
   );
 };
 
-export default InventoryTable;
+export default InventoryDataTable;
+
+const columns: ColumnDef<Product>[] = [
+  {
+    accessorKey: "name",
+    header: "Product Name",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "price",
+    header: "Price",
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("price"));
+
+      const formattedAmount = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return <div className="capitalize">{formattedAmount}</div>;
+    },
+  },
+  {
+    accessorKey: "boxQuantity",
+    header: "Amount of Boxes",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("boxQuantity") || 0}</div>
+    ),
+  },
+  {
+    accessorKey: "grams",
+    header: "Grams",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("grams") || 0}</div>
+    ),
+  },
+  {
+    accessorKey: "quantity",
+    header: "Quantity",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("quantity") || 0}</div>
+    ),
+  },
+  {
+    id: "actions",
+    header: "Action",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return (
+        <ProductsDialog
+          product={row.original}
+          mode="edit"
+          trigger={
+            <Button size={"icon"}>
+              <Edit className="w-[18px] h-[18px]" />
+            </Button>
+          }
+        />
+      );
+    },
+  },
+];

@@ -1,3 +1,6 @@
+import { Textarea } from "@/components/ui/textarea";
+import { useGetSuppliers } from "@/hooks/useGetSuppliers";
+import { FormMode } from "@/types/form";
 import { ProductSchema, ProductType } from "@/types/product";
 import submitNewProduct from "@/use-cases/submitNewProduct";
 import updateProduct from "@/use-cases/updateProduct";
@@ -5,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Product } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import FormButton from "../forms/FormButton";
 import {
   Form,
   FormControl,
@@ -15,8 +18,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useGetSuppliers } from "@/hooks/useGetSuppliers";
 import {
   Select,
   SelectContent,
@@ -25,22 +26,18 @@ import {
   SelectValue,
 } from "../ui/select";
 
-type NewProductFormProps = {
+type ProductFormProps = {
   setOpen: (isOpen: boolean) => void;
-  isEdit?: boolean;
+  mode: FormMode;
   product?: Product;
 };
 
-const NewProductForm = ({
-  setOpen,
-  isEdit = false,
-  product,
-}: NewProductFormProps) => {
+const ProductForm = ({ setOpen, product, mode }: ProductFormProps) => {
   const { data: suppliers } = useGetSuppliers();
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: isEdit ? updateProduct : submitNewProduct,
+    mutationFn: mode === "edit" ? updateProduct : submitNewProduct,
     onSuccess: () => {
       setOpen(false);
       return queryClient.invalidateQueries({ queryKey: ["products"] });
@@ -82,6 +79,7 @@ const NewProductForm = ({
                       {...field}
                       type="text"
                       placeholder="New product name"
+                      mode={mode}
                     />
                   </FormControl>
                   <FormMessage />
@@ -102,6 +100,7 @@ const NewProductForm = ({
                         field.onChange(parseFloat(e.target.value))
                       }
                       placeholder="ex. $10.99"
+                      mode={mode}
                     />
                   </FormControl>
                   <FormMessage />
@@ -123,6 +122,7 @@ const NewProductForm = ({
                       type="number"
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
                       placeholder="Boxes in stock"
+                      mode={mode}
                     />
                   </FormControl>
                   <FormMessage />
@@ -141,6 +141,7 @@ const NewProductForm = ({
                       type="number"
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
                       placeholder="Quantity in a box"
+                      mode={mode}
                     />
                   </FormControl>
                   <FormMessage />
@@ -159,6 +160,7 @@ const NewProductForm = ({
                       type="number"
                       onChange={(e) => field.onChange(parseInt(e.target.value))}
                       placeholder="ex. 100"
+                      mode={mode}
                     />
                   </FormControl>
                   <FormMessage />
@@ -174,7 +176,12 @@ const NewProductForm = ({
                 <FormItem className="w-full">
                   <FormLabel>SKU</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder="Scan product" />
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Scan product"
+                      mode={mode}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -187,7 +194,11 @@ const NewProductForm = ({
                 <FormItem className="w-full">
                   <FormLabel>Supplier</FormLabel>
                   <FormControl>
-                    <Select {...field} onValueChange={field.onChange}>
+                    <Select
+                      {...field}
+                      onValueChange={field.onChange}
+                      disabled={mode === "view"}
+                    >
                       <SelectTrigger className="capitalize bg-white">
                         <SelectValue placeholder="Product Supplier" />
                       </SelectTrigger>
@@ -221,25 +232,18 @@ const NewProductForm = ({
                     className="max-h-[150px]"
                     rows={3}
                     placeholder="ex. This product comes from..."
+                    mode={mode}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button className="w-full mt-4" disabled={isPending}>
-            {isPending
-              ? isEdit
-                ? "Saving..."
-                : "Adding..."
-              : isEdit
-              ? "Save Changes"
-              : "Add"}
-          </Button>
+          <FormButton mode={mode} isPending={isPending} setOpen={setOpen} />
         </div>
       </form>
     </Form>
   );
 };
 
-export default NewProductForm;
+export default ProductForm;

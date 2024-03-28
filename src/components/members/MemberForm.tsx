@@ -1,7 +1,11 @@
+import { FormMode } from "@/types/form";
 import { MemberSchema, MemberType } from "@/types/member";
+import updateMember from "@/use-cases/updateMember";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Member } from "@prisma/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import submitNewMember from "../../use-cases/submitNewMember";
 import {
   Form,
   FormControl,
@@ -11,11 +15,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import submitNewMember from "../../use-cases/submitNewMember";
-import updateMember from "@/use-cases/updateMember";
-import { Member } from "@prisma/client";
-import { FormMode } from "@/types/form";
+import FormButton from "../forms/FormButton";
 
 type MemberFormProps = {
   setOpen: (isOpen: boolean) => void;
@@ -171,7 +171,7 @@ const MemberForm = ({ setOpen, mode, member }: MemberFormProps) => {
               </FormItem>
             )}
           />
-          {renderModeButton(mode, isPending, setOpen)}
+          <FormButton mode={mode} isPending={isPending} setOpen={setOpen} />
         </div>
       </form>
     </Form>
@@ -179,35 +179,3 @@ const MemberForm = ({ setOpen, mode, member }: MemberFormProps) => {
 };
 
 export default MemberForm;
-
-const renderModeButton = (
-  mode: FormMode,
-  isPending: boolean,
-  setOpen: (isOpen: boolean) => void
-) => {
-  if (mode === "add") {
-    return (
-      <Button type="submit" className="w-full mt-4" disabled={isPending}>
-        {isPending ? "Adding..." : "Add"}
-      </Button>
-    );
-  }
-
-  if (mode === "edit") {
-    return (
-      <Button type="submit" className="w-full mt-4" disabled={isPending}>
-        {isPending ? "Saving changes..." : "Save"}
-      </Button>
-    );
-  }
-
-  if (mode === "view") {
-    return (
-      <Button className="w-full mt-4" onClick={() => setOpen(false)}>
-        Close
-      </Button>
-    );
-  }
-
-  return null;
-};

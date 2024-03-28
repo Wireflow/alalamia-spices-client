@@ -10,19 +10,21 @@ import {
 import { FormMode } from "@/types/form";
 import { Edit, Eye, Plus } from "lucide-react";
 import { useState } from "react";
-import MemberForm from "../forms/MemberForm";
+import MemberForm from "../members/MemberForm";
 import { Member } from "@prisma/client";
 
-type MemberDialogProps =
-  | {
-      mode: Exclude<FormMode, "edit">;
-      trigger?: React.ReactNode;
-    }
-  | {
-      mode: "edit";
-      trigger?: React.ReactNode;
-      member: Member;
-    };
+type MemberDialogAddProps = {
+  mode: Exclude<FormMode, "edit" | "view">;
+  trigger?: React.ReactNode;
+};
+
+type MemberDialogEditViewProps = {
+  mode: Exclude<FormMode, "add">;
+  trigger?: React.ReactNode;
+  member: Member;
+};
+
+type MemberDialogProps = MemberDialogAddProps | MemberDialogEditViewProps;
 
 const MemberDialog = ({ mode, trigger, ...props }: MemberDialogProps) => {
   const [open, setOpen] = useState(false);
@@ -34,8 +36,11 @@ const MemberDialog = ({ mode, trigger, ...props }: MemberDialogProps) => {
     description: descriptionTexts[mode],
   };
 
-  const member =
-    "member" in props && mode === "edit" ? props.member : undefined;
+  let member: Member | undefined;
+
+  if ("member" in props && (mode === "edit" || mode === "view")) {
+    member = props.member;
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

@@ -3,7 +3,7 @@ import { cn, currencyFormatter } from "@/lib/utils";
 import { Product } from "@prisma/client";
 import { Plus, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 import { useGetProducts } from "@/hooks/useGetProducts";
 
 type ProductProps = {

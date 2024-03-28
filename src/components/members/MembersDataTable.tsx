@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { Edit } from "lucide-react";
 import React from "react";
+import FilterTableColumns from "../forms/FilterTableColumns";
 import MemberDialog from "../dialogs/MemberDialog";
 import { Button } from "../ui/button";
 import {
@@ -20,7 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import FilterMembersColumns from "./FilterMembersColumns";
 import SearchMembers from "./SearchMembers";
 
 const MembersDataTable = () => {
@@ -46,7 +46,7 @@ const MembersDataTable = () => {
       <div className="flex items-center py-4">
         <SearchMembers table={table} />
         <div className="w-full flex gap-2">
-          <FilterMembersColumns table={table} />
+          <FilterTableColumns table={table} />
           <MemberDialog mode="add" />
         </div>
       </div>
@@ -148,7 +148,7 @@ const columns: ColumnDef<Member>[] = [
           member={row.original}
           mode="edit"
           trigger={
-            <Button size={"lg"}>
+            <Button size={"icon"}>
               <Edit className="w-[18px] h-[18px]" />
             </Button>
           }

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { useHomeProductFilter } from "@/store/useHomeProductFilterStore";
 
-const HomePageProductsSearchBox = () => {
+const CheckoutProductSearch = () => {
   const setSearch = useHomeProductFilter((state) => state.setSearch);
 
   return (
@@ -13,4 +13,4 @@ const HomePageProductsSearchBox = () => {
   );
 };
 
-export default HomePageProductsSearchBox;
+export default CheckoutProductSearch;

@@ -38,7 +38,7 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
       // devTools: true,
     },
-    autoHideMenuBar: true, // PRODUCTION
+    // autoHideMenuBar: true, // PRODUCTION
   });
 
   // Test active push message to Renderer-process.

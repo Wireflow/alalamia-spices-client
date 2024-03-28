@@ -25,75 +25,15 @@ import {
 import ViewTransaction from "./ViewTransaction";
 
 const TransactionTable = () => {
-  const { data, isLoading } = useGetTransactions();
-  console.log(data);
-
-  const columns: ColumnDef<Transaction>[] = [
-    {
-      accessorKey: "orderNumber",
-      header: "Order number",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("orderNumber")}</div>
-      ),
-    },
-    {
-      accessorKey: "totalAmount",
-      header: "Amount",
-      cell: ({ row }) => {
-        const amount = parseFloat(row.getValue("totalAmount"));
-
-        const formattedAmount = new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(amount);
-
-        return <div className="capitalize">{formattedAmount}</div>;
-      },
-    },
-    {
-      accessorKey: "paymentMethod",
-      header: "Payment method",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("paymentMethod")}</div>
-      ),
-    },
-    {
-      accessorKey: "createdAt",
-      header: "Transaction date",
-      cell: ({ row }) => (
-        <div className="capitalize">
-          {formatDateToString(row.getValue("createdAt"))}
-        </div>
-      ),
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        return (
-          <Dialog>
-            <DialogTrigger>
-              <Button>View</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <ViewTransaction
-                memberId={row.getValue("memberId")}
-                transactionId={row.original.id}
-              />
-            </DialogContent>
-          </Dialog>
-        );
-      },
-    },
-  ];
-
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 13,
+    pageSize: 10,
   });
+
+  const { data } = useGetTransactions();
 
   const table = useReactTable({
     data: data || [],
@@ -108,9 +48,6 @@ const TransactionTable = () => {
       pagination,
     },
   });
-
-  if (!data?.length) return <div className="text-2xl flex justify-center items-center h-[800px]">No Transactions Avaliable</div>;
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div>
@@ -190,3 +127,62 @@ const TransactionTable = () => {
 };
 
 export default TransactionTable;
+
+const columns: ColumnDef<Transaction>[] = [
+  {
+    accessorKey: "orderNumber",
+    header: "Order number",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("orderNumber")}</div>
+    ),
+  },
+  {
+    accessorKey: "totalAmount",
+    header: "Amount",
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("totalAmount"));
+
+      const formattedAmount = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return <div className="capitalize">{formattedAmount}</div>;
+    },
+  },
+  {
+    accessorKey: "paymentMethod",
+    header: "Payment method",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("paymentMethod")}</div>
+    ),
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Transaction date",
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {formatDateToString(row.getValue("createdAt"))}
+      </div>
+    ),
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return (
+        <Dialog>
+          <DialogTrigger>
+            <Button>View</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <ViewTransaction
+              memberId={row.getValue("memberId")}
+              transactionId={row.original.id}
+            />
+          </DialogContent>
+        </Dialog>
+      );
+    },
+  },
+];
