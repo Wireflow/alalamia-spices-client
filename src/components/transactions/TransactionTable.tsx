@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import ViewTransaction from "./ViewTransaction";
+import ViewTransaction from "./ViewTransactionWithProducts";
 
 const TransactionTable = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(

@@ -5,7 +5,9 @@ export const useGetTransactions = () => {
   return useQuery({
     queryKey: ["transactions"],
     queryFn: async () => {
-      const { data } = await api.get(`/transactions?pageSize=30&page=1`);
+      const { data } = await api.get(
+        `/transactions?sort=desc&pageSize=30&page=1`
+      );
       return data.data;
     },
   });

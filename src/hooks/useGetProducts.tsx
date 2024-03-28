@@ -6,7 +6,7 @@ export const useGetProducts = () => {
   return useQuery({
     queryKey: ["products"],
     queryFn: async (): Promise<Product[]> => {
-      const { data } = await api.get("/products?pageSize=50");
+      const { data } = await api.get("/products?pageSize=50&sort=asc");
 
       return data.data;
     },
